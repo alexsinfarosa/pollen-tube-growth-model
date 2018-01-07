@@ -1,14 +1,33 @@
 import { observable, action } from "mobx";
 import SubjectStore from "./SubjectStore";
+import StateStore from "./StateStore";
+import StationStore from "./StationStore";
 
 export default class AppStore {
   fetch;
   subject;
+  acisStates;
+  acisStations;
 
   constructor(fetcher) {
     this.fetch = fetcher;
-    this.subject = new SubjectStore(this.fetch);
+    this.subject = new SubjectStore(this);
+    this.acisStates = new StateStore(this);
+    this.acisStations = new StationStore(this);
   }
+
+  get apples() {
+    return this.subject.subjects;
+  }
+
+  get states() {
+    return this.acisStates.states;
+  }
+
+  get stations() {
+    return this.acisStations.stations;
+  }
+
   @observable
   bpts = {
     xs: "(max-width: 575px)",

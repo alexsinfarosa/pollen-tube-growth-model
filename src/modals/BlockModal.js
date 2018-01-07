@@ -3,17 +3,38 @@ import { inject, observer } from "mobx-react";
 // import { toJS } from "mobx";
 import { Row, Modal, Input, Select } from "antd";
 
-// Components
+const style = { width: "100%", marginBottom: 32 };
 
 const BlockModal = inject("app")(
-  observer(function BlockModal({ app, app: { subject } }) {
-    const { isBlockModal, hideBlockModal } = app;
-    const { subjects } = subject;
-
-    const varietyList = subjects.values().map(variety => {
+  observer(function BlockModal({
+    app: { isBlockModal, hideBlockModal, apples, states, stations }
+  }) {
+    // variety list
+    const varietyList = apples.values().map(variety => {
       return (
         <Select.Option key={variety.id} value={variety.name}>
           {variety.name}
+        </Select.Option>
+      );
+    });
+
+    // state list
+    const stateList = states.values().map(state => {
+      return (
+        <Select.Option key={state.postalCode} value={state.name}>
+          {state.name}
+        </Select.Option>
+      );
+    });
+
+    // station list
+    const stationList = stations.values().map(station => {
+      return (
+        <Select.Option
+          key={`${station.id} ${station.network}`}
+          value={station.name}
+        >
+          {station.name}
         </Select.Option>
       );
     });
@@ -32,14 +53,14 @@ const BlockModal = inject("app")(
       >
         <Row align="middle">
           <Input
-            style={{ width: "100%" }}
+            style={style}
             placeholder="Insert block name"
             // onChange={e => setBlockName(e.target.value)}
             // value={blockName}
           />
 
           <Select
-            style={{ width: "100%" }}
+            style={style}
             placeholder={`Select apple variety`}
             // onChange={name => setSubject(name)}
             // value={subject.name}
@@ -48,18 +69,22 @@ const BlockModal = inject("app")(
           </Select>
 
           <Select
-            style={{ width: "100%" }}
+            style={style}
             placeholder={`Select state`}
             // onChange={name => setState(name)}
             // value={state.name}
-          />
+          >
+            {stateList}
+          </Select>
 
           <Select
-            style={{ width: "100%" }}
-            // placeholder={`Select station (${currentStateStations.length})`}
+            style={style}
+            placeholder={`Select station`}
             // onChange={id => setStation(id)}
             // value={station.name}
-          />
+          >
+            {stationList}
+          </Select>
         </Row>
       </Modal>
     );

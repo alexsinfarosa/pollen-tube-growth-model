@@ -1,12 +1,14 @@
 import { observable, action, when } from "mobx";
 
 export default class SubjectStore {
-  constructor(fetch) {
+  app;
+  constructor(app) {
+    // app is the appStore
+    this.app = app;
     this.fetch = fetch;
     when(() => this.subjects.size === 0, () => this.loadSubjects());
   }
 
-  @observable isLoading = false;
   @observable subjects = new Map();
 
   @action
@@ -15,11 +17,10 @@ export default class SubjectStore {
 
   @action
   loadSubjects() {
-    this.isLoading = true;
-    this.fetch("growthRates.json")
+    this.app
+      .fetch("growthRates.json")
       .then(json => {
         this.updateSubjects(json);
-        this.isLoading = false;
       })
       .catch(err => {
         console.log("Failed to load subjects", err);
