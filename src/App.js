@@ -1,25 +1,38 @@
 import React, { Component } from "react";
 import { inject, observer } from "mobx-react";
-import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+import { MatchMediaProvider } from "mobx-react-matchmedia";
 import DevTools from "mobx-react-devtools";
 
+// styled components
+import { Header, SubHeader, SubHeaderRight, Main } from "styles";
+
 // Components
-import AppHeader from "components/AppHeader";
+import AppToolBar from "components/AppToolBar";
+
+// Modals
+import BlockModal from "modals/BlockModal";
 
 @inject("app")
 @observer
 class App extends Component {
   render() {
+    const { bpts } = this.props.app;
     return (
-      <MuiThemeProvider>
-        <div>
-          <AppHeader />
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque nam
-          numquam sapiente delectus, fugit aspernatur natus minus architecto
-          earum sequi consequatur autem deserunt enim doloremque ratione,
-          perferendis laboriosam ipsum voluptatem.
-        </div>
-      </MuiThemeProvider>
+      <MatchMediaProvider breakpoints={bpts}>
+        <DevTools />
+        <Header>
+          <SubHeader>
+            Pollen Tube Growth Model Developed By Virginia Tech
+          </SubHeader>
+          <SubHeaderRight>NEWA</SubHeaderRight>
+        </Header>
+
+        <BlockModal />
+
+        <AppToolBar breakpoints={bpts} />
+
+        <Main>main...</Main>
+      </MatchMediaProvider>
     );
   }
 }

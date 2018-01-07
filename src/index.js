@@ -5,11 +5,14 @@ import App from "./App";
 import registerServiceWorker from "./registerServiceWorker";
 
 // Mobx
-import stores from "stores";
 import { Provider } from "mobx-react";
+import AppStore from "stores/AppStore";
+
+const fetcher = url => window.fetch(url).then(response => response.json());
+const app = new AppStore(fetcher);
 
 ReactDOM.render(
-  <Provider {...stores}>
+  <Provider app={app}>
     <App />
   </Provider>,
   document.getElementById("root")
@@ -19,7 +22,7 @@ registerServiceWorker();
 if (module.hot) {
   module.hot.accept(() => {
     ReactDOM.render(
-      <Provider {...stores}>
+      <Provider app={app}>
         <App />
       </Provider>,
       document.getElementById("root")
