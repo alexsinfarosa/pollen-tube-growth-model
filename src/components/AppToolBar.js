@@ -5,8 +5,7 @@ import { ToolBarWrapper, Col } from "styles";
 import { Row, Tooltip, Button, Badge } from "antd";
 
 const AppToolBar = inject("app")(
-  observer(function AppToolBar({ app, breakpoints }) {
-    const { isMap, showBlockModal } = app;
+  observer(function AppToolBar({ app: { blockStore, isMap }, breakpoints }) {
     const bpts = breakpoints;
     return (
       <ToolBarWrapper>
@@ -18,7 +17,7 @@ const AppToolBar = inject("app")(
                 ghost
                 icon="plus"
                 style={{ marginRight: 16 }}
-                onClick={showBlockModal}
+                onClick={blockStore.showBlockModal}
               >
                 {bpts.xs ? null : "Block"}
               </Button>

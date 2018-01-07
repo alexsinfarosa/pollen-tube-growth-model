@@ -7,8 +7,11 @@ const style = { width: "100%", marginBottom: 32 };
 
 const BlockModal = inject("app")(
   observer(function BlockModal({
-    app: { isBlockModal, hideBlockModal, apples, states, stations }
+    app: { apples, states, stations, block, blockStore, blocks, newBlock }
   }) {
+    // console.log({ ...block });
+    // console.log(toJS(blocks));
+
     // variety list
     const varietyList = apples.values().map(variety => {
       return (
@@ -21,7 +24,7 @@ const BlockModal = inject("app")(
     // state list
     const stateList = states.values().map(state => {
       return (
-        <Select.Option key={state.postalCode} value={state.name}>
+        <Select.Option key={state.postalCode} value={state.postalCode}>
           {state.name}
         </Select.Option>
       );
@@ -31,8 +34,8 @@ const BlockModal = inject("app")(
     const stationList = stations.values().map(station => {
       return (
         <Select.Option
-          key={`${station.id} ${station.network}`}
-          value={station.name}
+          key={station.id}
+          value={`${station.id} ${station.network}`}
         >
           {station.name}
         </Select.Option>
@@ -45,42 +48,45 @@ const BlockModal = inject("app")(
         style={{ top: 32 }}
         closable={false}
         maskClosable={false}
-        // title={block.isBeingEdited ? `Edit selected block` : `New Block`}
-        visible={isBlockModal}
-        // okText={block.isBeingEdited ? "UPDATE BLOCK" : "ADD BLOCK"}
-        // onOk={block.isBeingEdited ? updateBlock : addBlock}
-        onCancel={hideBlockModal}
+        title={block.isBeingEdited ? `Edit Block` : `New Block`}
+        visible={blockStore.isBlockModal}
+        okText={block.isBeingEdited ? "UPDATE BLOCK" : "ADD BLOCK"}
+        onOk={newBlock}
+        onCancel={blockStore.hideBlockModal}
       >
         <Row align="middle">
           <Input
+            name="name"
             style={style}
             placeholder="Insert block name"
-            // onChange={e => setBlockName(e.target.value)}
+            onChange={e => blockStore.addField(e.target.name, e.target.value)}
             // value={blockName}
           />
 
           <Select
             style={style}
             placeholder={`Select apple variety`}
-            // onChange={name => setSubject(name)}
+            onChange={val => blockStore.addField("variety", val)}
             // value={subject.name}
           >
             {varietyList}
           </Select>
 
           <Select
+            name="state"
             style={style}
             placeholder={`Select state`}
-            // onChange={name => setState(name)}
+            onChange={val => blockStore.addField("state", val)}
             // value={state.name}
           >
             {stateList}
           </Select>
 
           <Select
+            name="station"
             style={style}
             placeholder={`Select station`}
-            // onChange={id => setStation(id)}
+            onChange={val => blockStore.addField("station", val)}
             // value={station.name}
           >
             {stationList}

@@ -2,18 +2,21 @@ import { observable, action } from "mobx";
 import SubjectStore from "./SubjectStore";
 import StateStore from "./StateStore";
 import StationStore from "./StationStore";
+import BlockStore from "./BlockStore";
 
 export default class AppStore {
   fetch;
   subject;
   acisStates;
   acisStations;
+  blockStore;
 
   constructor(fetcher) {
     this.fetch = fetcher;
     this.subject = new SubjectStore(this);
     this.acisStates = new StateStore(this);
     this.acisStations = new StationStore(this);
+    this.blockStore = new BlockStore(this);
   }
 
   get apples() {
@@ -28,6 +31,22 @@ export default class AppStore {
     return this.acisStations.stations;
   }
 
+  get isLoading() {
+    return this.acisStations.isLoading;
+  }
+
+  get blocks() {
+    return this.blockStore.blocks;
+  }
+
+  get block() {
+    return this.blockStore.block;
+  }
+
+  get newBlock() {
+    return this.blockStore.newBlock;
+  }
+
   @observable
   bpts = {
     xs: "(max-width: 575px)",
@@ -38,9 +57,6 @@ export default class AppStore {
     xxl: "(min-width: 1600px)"
   };
   //   Modals ------------------------------------------------------
-  @observable isBlockModal = false;
-  @action showBlockModal = () => (this.isBlockModal = true);
-  @action hideBlockModal = () => (this.isBlockModal = false);
 
   @observable isStyleLengthModal = false;
   @action showStyleLengthModal = () => (this.isStyleLengthModal = true);
