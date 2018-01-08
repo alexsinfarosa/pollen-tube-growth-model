@@ -7,8 +7,9 @@ const style = { width: "100%", marginBottom: 32 };
 
 const BlockModal = inject("app")(
   observer(function BlockModal({
-    app: { apples, states, stations, block, blockStore, blocks, newBlock }
+    app: { apples, states, stations, block, blockStore, blocks }
   }) {
+    const { newBlock, updateBlock } = blockStore;
     // console.log({ ...block });
     // console.log(toJS(blocks));
 
@@ -35,7 +36,7 @@ const BlockModal = inject("app")(
       return (
         <Select.Option
           key={station.id}
-          value={`${station.id} ${station.network}`}
+          value={`${station.name} ${station.id} ${station.network}`}
         >
           {station.name}
         </Select.Option>
@@ -51,8 +52,8 @@ const BlockModal = inject("app")(
         title={block.isBeingEdited ? `Edit Block` : `New Block`}
         visible={blockStore.isBlockModal}
         okText={block.isBeingEdited ? "UPDATE BLOCK" : "ADD BLOCK"}
-        onOk={newBlock}
-        onCancel={blockStore.hideBlockModal}
+        onOk={() => (block.isBeingEdited ? updateBlock(block.id) : newBlock())}
+        onCancel={blockStore.cancelButton}
       >
         <Row align="middle">
           <Input
@@ -60,14 +61,14 @@ const BlockModal = inject("app")(
             style={style}
             placeholder="Insert block name"
             onChange={e => blockStore.addField(e.target.name, e.target.value)}
-            // value={blockName}
+            value={block.name}
           />
 
           <Select
             style={style}
             placeholder={`Select apple variety`}
             onChange={val => blockStore.addField("variety", val)}
-            // value={subject.name}
+            value={block.variety}
           >
             {varietyList}
           </Select>
@@ -77,7 +78,7 @@ const BlockModal = inject("app")(
             style={style}
             placeholder={`Select state`}
             onChange={val => blockStore.addField("state", val)}
-            // value={state.name}
+            value={block.state}
           >
             {stateList}
           </Select>
@@ -87,7 +88,7 @@ const BlockModal = inject("app")(
             style={style}
             placeholder={`Select station`}
             onChange={val => blockStore.addField("station", val)}
-            // value={station.name}
+            value={block.station}
           >
             {stationList}
           </Select>

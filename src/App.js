@@ -8,6 +8,7 @@ import { Header, SubHeader, SubHeaderRight, Main } from "styles";
 
 // Components
 import AppToolBar from "components/AppToolBar";
+import BlockList from "components/block/BlockList";
 
 // Modals
 import BlockModal from "modals/BlockModal";
@@ -31,7 +32,9 @@ class App extends Component {
 
         <AppToolBar breakpoints={bpts} />
 
-        <Main>main...</Main>
+        <Main>
+          <BlockList />
+        </Main>
       </MatchMediaProvider>
     );
   }

@@ -34,10 +34,10 @@ const AppToolBar = inject("app")(
                 {!bpts.xs && (
                   <Badge
                     overflowCount={99}
-                    count={3}
+                    count={blockStore.blocks.size}
                     style={{
-                      marginLeft: 8,
-                      marginBottom: 2,
+                      marginLeft: 6,
+                      marginBottom: 1,
                       background: "#fff",
                       color: "#616161",
                       boxShadow: "0 0 0 1px #d9d9d9 inset"

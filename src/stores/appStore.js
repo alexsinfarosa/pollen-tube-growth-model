@@ -43,10 +43,6 @@ export default class AppStore {
     return this.blockStore.block;
   }
 
-  get newBlock() {
-    return this.blockStore.newBlock;
-  }
-
   @observable
   bpts = {
     xs: "(max-width: 575px)",

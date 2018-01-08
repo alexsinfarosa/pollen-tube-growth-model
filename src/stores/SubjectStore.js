@@ -26,12 +26,4 @@ export default class SubjectStore {
         console.log("Failed to load subjects", err);
       });
   }
-
-  @observable subject = {};
-
-  @action
-  setSubject = name => {
-    this.subject = this.subjects.find(subject => subject.name === name);
-    localStorage.setItem(`pollenTubeVariety`, JSON.stringify(this.subject));
-  };
 }

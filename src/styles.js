@@ -1,4 +1,8 @@
 import styled from "styled-components";
+// import { Icon } from "antd";
+
+// import { pulse } from "react-animations";
+// const bounceAnimation = keyframes`${pulse}`;
 
 // screen sizes
 const sm = "576px";
@@ -130,3 +134,88 @@ export const Main = styled.section`
     max-width: ${lg};
   }
 `;
+
+export const Section = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-bottom: ${margin};
+
+  @media (min-width: ${sm}) {
+    margin-bottom: ${marginSm};
+  }
+
+  @media (min-width: ${md}) {
+    margin-bottom: ${marginSm};
+  }
+
+  @media (min-width: ${lg}) {
+    margin-bottom: ${marginMd};
+  }
+`;
+
+export const SectionMap = Section.extend`
+  width: 100%;
+  height: 25vh;
+
+  @media (min-width: ${sm}) {
+    height: 30vh;
+  }
+
+  @media (min-width: ${md}) {
+    height: 35vh;
+  }
+
+  @media (min-width: ${lg}) {
+    height: 35vh;
+  }
+`;
+
+export const BlockWrapper = Section.extend`
+  border: 1px solid #eee;
+  border-radius: 4px;
+  padding: 8px;
+`;
+
+export const BHeader = styled.div`
+  background: #4ea27d;
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 4px;
+  margin-bottom: ${margin};
+`;
+
+export const BFooter = styled.div`
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 4px;
+  margin-top: ${margin};
+`;
+
+export const RowCentered = styled.div`
+  display: flex;
+  flex-direction: ${props => (props.column ? "column" : "row")};
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+`;
+
+export const BlockBodyWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  @media (min-width: ${sm}) {
+    flex-direction: row;
+  }
+
+  @media (min-width: ${md}) {
+    flex-direction: row;
+  }
+
+  @media (min-width: ${lg}) {
+    flex-direction: row;
+  }
+`;
+
+// export const StepIcon = styled(Icon)`
+//   animation: 2s infinite ${bounceAnimation};
+// `;

@@ -1,4 +1,4 @@
-import { observable, action, computed } from "mobx";
+import { observable, action, computed, when } from "mobx";
 
 class Block {
   id;
@@ -45,20 +45,23 @@ export default class BlockStore {
   app;
   constructor(app) {
     this.app = app;
+    if (typeof window.localStorage !== "undefined") {
+      when(() => this.blocks.size === 0, () => this.readFromLocalStorage());
+    }
   }
 
   @observable isBlockModal = false;
   @action showBlockModal = () => (this.isBlockModal = true);
   @action hideBlockModal = () => (this.isBlockModal = false);
 
-  @observable blocks = new Map();
+  blocks = observable.map();
   @observable
   block = {
     id: null,
     name: "",
-    variety: "",
-    state: "",
-    station: "",
+    variety: undefined,
+    state: undefined,
+    station: undefined,
     styleLengths: [],
     dates: undefined,
     data: new Map(),
@@ -77,5 +80,71 @@ export default class BlockStore {
     entry.id = id;
     this.blocks.set(id, entry);
     this.hideBlockModal();
+    this.writeToLocalStorage();
+    this.clearFields();
+  };
+
+  @action
+  clearFields = () => {
+    const { block } = this;
+    block.id = null;
+    block.name = "";
+    block.variety = undefined;
+    block.state = undefined;
+    block.station = undefined;
+    block.styleLengths = [];
+    block.dates = undefined;
+    block.data = new Map();
+    block.isBeingEdited = false;
+  };
+
+  @action
+  removeBlock = id => {
+    this.blocks.delete(id);
+    this.writeToLocalStorage();
+  };
+
+  @action
+  updateBlock = id => {
+    this.block.isBeingEdited = false;
+    this.blocks.entries().forEach((key, val) => (this.blocks[key] = val));
+    this.hideBlockModal();
+    this.writeToLocalStorage();
+    // this.clearFields();
+  };
+
+  @action
+  editBlock = id => {
+    const blockBeingEdited = this.blocks.get(id);
+    blockBeingEdited.isBeingEdited = true;
+    this.block = blockBeingEdited;
+    this.showBlockModal();
+  };
+
+  @action
+  writeToLocalStorage = () => {
+    window.localStorage.setItem(
+      "pollenTubeModelBlocks",
+      JSON.stringify([...this.blocks.entries()])
+    );
+  };
+
+  @action
+  cancelButton = () => {
+    // this.clearFields();
+    this.hideBlockModal();
+  };
+
+  @action
+  readFromLocalStorage = () => {
+    const data = JSON.parse(
+      window.localStorage.getItem("pollenTubeModelBlocks")
+    );
+    if (data) {
+      this.blocks.clear();
+      data.forEach(json => {
+        this.blocks.set(json[0], json[1]);
+      });
+    }
   };
 }
