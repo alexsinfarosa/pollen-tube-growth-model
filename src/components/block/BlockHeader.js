@@ -15,7 +15,10 @@ const BlockHeader = inject("app")(
   }) {
     const { removeBlock, editBlock } = blockStore;
 
-    const stationName = bl.station.split(" ")[0]; //hack
+    let stationName;
+    if (bl.station) {
+      stationName = bl.station.split(" ")[0]; //hack
+    }
 
     return (
       <BHeader>

@@ -68,6 +68,12 @@ export default class BlockStore {
     isBeingEdited: false
   };
 
+  @computed
+  get areRequiredFieldsSet() {
+    const { name, variety, state, station } = this.block;
+    return name.length >= 3 && variety && state && station;
+  }
+
   @action
   addField = (name, val) => {
     this.block[name] = val;
@@ -75,19 +81,20 @@ export default class BlockStore {
 
   @action
   newBlock = () => {
-    const id = Date.now();
-    const entry = new Block(this.block);
-    entry.id = id;
-    this.blocks.set(id, entry);
-    this.hideBlockModal();
-    this.writeToLocalStorage();
-    this.clearFields();
+    if (this.areRequiredFieldsSet) {
+      const id = Date.now();
+      const entry = new Block(this.block);
+      entry.id = id;
+      this.blocks.set(id, entry);
+      this.hideBlockModal();
+      this.writeToLocalStorage();
+      this.clearFields();
+    }
   };
 
   @action
   clearFields = () => {
     const { block } = this;
-    block.id = null;
     block.name = "";
     block.variety = undefined;
     block.state = undefined;
@@ -106,11 +113,12 @@ export default class BlockStore {
 
   @action
   updateBlock = id => {
-    this.block.isBeingEdited = false;
-    this.blocks.entries().forEach((key, val) => (this.blocks[key] = val));
-    this.hideBlockModal();
-    this.writeToLocalStorage();
-    // this.clearFields();
+    if (this.areRequiredFieldsSet) {
+      this.block.isBeingEdited = false;
+      this.blocks.entries().forEach((key, val) => (this.blocks[key] = val));
+      this.writeToLocalStorage();
+      this.cancelButton(); //refactor
+    }
   };
 
   @action
@@ -131,7 +139,8 @@ export default class BlockStore {
 
   @action
   cancelButton = () => {
-    // this.clearFields();
+    this.readFromLocalStorage();
+    this.clearFields();
     this.hideBlockModal();
   };
 

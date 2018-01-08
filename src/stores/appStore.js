@@ -52,6 +52,7 @@ export default class AppStore {
     xl: "(min-width: 1200px)",
     xxl: "(min-width: 1600px)"
   };
+
   //   Modals ------------------------------------------------------
 
   @observable isStyleLengthModal = false;
