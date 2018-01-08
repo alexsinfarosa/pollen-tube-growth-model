@@ -1,5 +1,10 @@
 import { observable, action, computed, when } from "mobx";
+import moment from "moment";
 
+// utils
+import { roundDate } from "utils/utils";
+
+// antd
 import { message } from "antd";
 
 class Block {
@@ -61,9 +66,24 @@ export default class BlockStore {
     }
   }
 
+  @observable date;
+  @action
+  setDate = d => {
+    this.date = roundDate(d, moment.duration(60, "minutes"), "floor");
+  };
+
   @observable isBlockModal = false;
   @action showBlockModal = () => (this.isBlockModal = true);
   @action hideBlockModal = () => (this.isBlockModal = false);
+
+  @observable isDateModal = false;
+  @action
+  showDateModal = id => {
+    this.isDateModal = true;
+    this.block = this.blocks.find(b => b.id === id);
+    console.log(this.block);
+  };
+  @action hideDateModal = () => (this.isDateModal = false);
 
   @observable blocks = [];
   @observable
@@ -74,7 +94,7 @@ export default class BlockStore {
     state: undefined,
     station: undefined,
     styleLengths: [],
-    dates: undefined,
+    dates: [],
     data: new Map(),
     isBeingSelected: false,
     isBeingEdited: false
@@ -113,7 +133,7 @@ export default class BlockStore {
     block.state = undefined;
     block.station = undefined;
     block.styleLengths = [];
-    block.dates = undefined;
+    block.dates = [];
     block.data = new Map();
     block.isBeingSelected = false;
     block.isBeingEdited = false;
@@ -148,17 +168,14 @@ export default class BlockStore {
   };
 
   @action
-  updateBlock = id => {
-    if (this.areRequiredFieldsSet) {
-      const block = { ...this.block };
-      block.isBeingEdited = false;
-      const idx = this.blocks.findIndex(b => b.id === block.id);
-      this.blocks.splice(idx, 1, block);
-      this.blocks = this.blocks;
-      this.writeToLocalStorage();
-      this.cancelButton(); //refactor
-      message.success(`${block.name} block has been updated!`);
-    }
+  updateBlock = (property = this.block.name, block = this.block) => {
+    block.isBeingEdited = false;
+    const idx = this.blocks.findIndex(b => b.id === block.id);
+    this.blocks.splice(idx, 1, block);
+    this.blocks = this.blocks;
+    this.writeToLocalStorage();
+    this.hideBlockModal();
+    message.success(`${property} has been updated!`);
   };
 
   @action
@@ -170,18 +187,27 @@ export default class BlockStore {
   };
 
   @action
+  cancelButton = () => {
+    this.readFromLocalStorage();
+    this.clearFields();
+    this.hideBlockModal();
+  };
+
+  // Dates ----------------------------------------------------------------------------
+  setStartDate = () => {
+    const block = { ...this.block };
+    block.dates.push(this.date);
+    this.updateBlock("Start Date", block);
+    this.hideDateModal();
+  };
+
+  // Local storage ----------------------------------------------------------------------
+  @action
   writeToLocalStorage = () => {
     window.localStorage.setItem(
       "pollenTubeModelBlocks",
       JSON.stringify(this.blocks)
     );
-  };
-
-  @action
-  cancelButton = () => {
-    this.readFromLocalStorage();
-    this.clearFields();
-    this.hideBlockModal();
   };
 
   @action

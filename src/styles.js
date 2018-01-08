@@ -174,6 +174,7 @@ export const BlockWrapper = Section.extend`
   border: 1px solid #eee;
   border-radius: 4px;
   padding: 8px;
+  margin-bottom: 32px;
 `;
 
 export const BHeader = styled.div`

@@ -1,8 +1,10 @@
 import React from "react";
 import { inject, observer } from "mobx-react";
+import getYear from "date-fns/get_year";
 
 import { ToolBarWrapper, Col } from "styles";
 import { Row, Tooltip, Button, Badge, Select } from "antd";
+const { Option, OptGroup } = Select;
 
 const AppToolBar = inject("app")(
   observer(function AppToolBar({
@@ -11,12 +13,26 @@ const AppToolBar = inject("app")(
   }) {
     const bpts = breakpoints;
 
-    // block list
-    const blockList = blocks.map(block => {
+    // Categorize blocks based on their year
+    const setYears = new Set(blocks.map(block => getYear(block.dates[0])));
+    const arrYears = Array.from(setYears);
+
+    const blockList = arrYears.map((y, i) => {
+      const year = y.toString();
       return (
-        <Select.Option key={block.id} value={block.id}>
-          {block.name}
-        </Select.Option>
+        <OptGroup key={i} label={year === "NaN" ? "Date not set" : year}>
+          {blocks.map((block, j) => {
+            const blockYear = getYear(block.dates[0]).toString();
+            if (year === blockYear) {
+              return (
+                <Option key={block.id} value={block.id}>
+                  {block.name}
+                </Option>
+              );
+            }
+            return null;
+          })}
+        </OptGroup>
       );
     });
 

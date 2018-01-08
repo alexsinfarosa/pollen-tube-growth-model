@@ -4,6 +4,8 @@ import StateStore from "./StateStore";
 import StationStore from "./StationStore";
 import BlockStore from "./BlockStore";
 
+import format from "date-fns/format";
+
 export default class AppStore {
   fetch;
   subject;
@@ -57,15 +59,14 @@ export default class AppStore {
     xxl: "(min-width: 1600px)"
   };
 
+  formatDate = date => {
+    return format(date, "MM/DD/YY HH:00");
+  };
   //   Modals ------------------------------------------------------
 
   @observable isStyleLengthModal = false;
   @action showStyleLengthModal = () => (this.isStyleLengthModal = true);
   @action hideStyleLengthModal = () => (this.isStyleLengthModal = false);
-
-  @observable isStartDateModalOpen = false;
-  @action showStartDateModal = id => (this.isStartDateModalOpen = true);
-  @action hideStartDateModal = () => (this.isStartDateModalOpen = false);
 
   // Radio button values
   @observable radioValue = null;

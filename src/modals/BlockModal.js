@@ -52,7 +52,7 @@ const BlockModal = inject("app")(
         title={block.isBeingEdited ? `Edit Block` : `New Block`}
         visible={blockStore.isBlockModal}
         okText={block.isBeingEdited ? "UPDATE BLOCK" : "ADD BLOCK"}
-        onOk={() => (block.isBeingEdited ? updateBlock(block.id) : newBlock())}
+        onOk={() => (block.isBeingEdited ? updateBlock() : newBlock())}
         onCancel={blockStore.cancelButton}
       >
         <Row align="middle">
