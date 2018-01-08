@@ -51,7 +51,7 @@ const BlockModal = inject("app")(
         maskClosable={false}
         title={block.isBeingEdited ? `Edit Block` : `New Block`}
         visible={blockStore.isBlockModal}
-        okText={block.isBeingEdited ? "UPDATE BLOCK" : "ADD BLOCK"}
+        okText={block.isBeingEdited ? "UpdateBlock" : "Add Block"}
         onOk={() => (block.isBeingEdited ? updateBlock() : newBlock())}
         onCancel={blockStore.cancelButton}
       >

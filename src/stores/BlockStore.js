@@ -1,6 +1,6 @@
 import { observable, action, computed, when } from "mobx";
 import moment from "moment";
-
+// import { toJS } from "mobx";
 // utils
 import { roundDate } from "utils/utils";
 
@@ -31,6 +31,7 @@ class Block {
     isBeingSelected,
     isBeingEdited
   }) {
+    this.id = id;
     this.name = name;
     this.variety = variety;
     this.state = state;
@@ -49,6 +50,13 @@ class Block {
       this.styleLengths.length
     );
   }
+
+  @computed
+  get startDate() {
+    if (this.dates.length !== 0) {
+      return this.dates[0];
+    }
+  }
 }
 
 export default class BlockStore {
@@ -60,7 +68,7 @@ export default class BlockStore {
         () => this.blocks.length === 0,
         () => {
           this.readFromLocalStorage();
-          this.blocks.forEach(block => (block.isBeingSelected = true));
+          this.blocks.forEach(block => block.isBeingSelected);
         }
       );
     }
@@ -114,20 +122,20 @@ export default class BlockStore {
   @action
   newBlock = () => {
     if (this.areRequiredFieldsSet) {
-      const id = Date.now();
-      const block = new Block(this.block);
-      block.id = id;
-      this.blocks.push(block);
-      this.selectOneBlock(block.id);
+      this.block.id = Date.now();
+      this.blocks.forEach(block => (block.isBeingSelected = false));
+      this.block.isBeingSelected = true;
+      this.blocks.push(new Block(this.block));
       this.hideBlockModal();
-      this.writeToLocalStorage();
       this.clearFields();
+      this.writeToLocalStorage();
     }
   };
 
   @action
   clearFields = () => {
     const { block } = this;
+    block.id = null;
     block.name = "";
     block.variety = undefined;
     block.state = undefined;
@@ -150,12 +158,10 @@ export default class BlockStore {
 
   @action
   selectAllBlocks = () => {
-    const areAllBlocksDisplayed = this.blocks.every(
-      block => block.isBeingSelected === true
-    );
+    const areAllBlocksDisplayed = this.blocks.every(bl => bl.isBeingSelected);
     areAllBlocksDisplayed
-      ? this.blocks.forEach(block => (block.isBeingSelected = false))
-      : this.blocks.forEach(block => (block.isBeingSelected = true));
+      ? this.blocks.forEach(bl => (bl.isBeingSelected = false))
+      : this.blocks.forEach(bl => (bl.isBeingSelected = true));
   };
 
   @action
@@ -188,7 +194,7 @@ export default class BlockStore {
 
   @action
   cancelButton = () => {
-    this.readFromLocalStorage();
+    // this.readFromLocalStorage();
     this.clearFields();
     this.hideBlockModal();
   };
@@ -218,7 +224,7 @@ export default class BlockStore {
     if (data) {
       this.blocks.clear();
       data.forEach(json => {
-        this.blocks.push(json);
+        this.blocks.push(new Block(json));
       });
     }
   };

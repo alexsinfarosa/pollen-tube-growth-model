@@ -12,11 +12,12 @@ const DateStyleLengthBar = inject("app")(
     app: { formatDate, blockStore },
     bl
   }) {
+    console.log(bl.startDate);
     return (
       <Row type="flex" justify="space-between" align="center">
         {bl.dates.length !== 0 ? (
           <RowCentered>
-            <Col>Model Start Date: {formatDate(bl.dates[0])}</Col>
+            <Col>Model Start Date: {formatDate(bl.startDate)}</Col>
           </RowCentered>
         ) : (
           <Button

@@ -17,6 +17,9 @@ import StartDateModal from "modals/StartDateModal";
 @inject("app")
 @observer
 class App extends Component {
+  state = {
+    isRickOnScreen: false
+  };
   render() {
     const { bpts } = this.props.app;
     return (

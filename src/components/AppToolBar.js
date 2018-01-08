@@ -14,15 +14,15 @@ const AppToolBar = inject("app")(
     const bpts = breakpoints;
 
     // Categorize blocks based on their year
-    const setYears = new Set(blocks.map(block => getYear(block.dates[0])));
+    const setYears = new Set(blocks.map(block => getYear(block.startDate)));
     const arrYears = Array.from(setYears);
 
     const blockList = arrYears.map((y, i) => {
       const year = y.toString();
       return (
-        <OptGroup key={i} label={year === "NaN" ? "Date not set" : year}>
+        <OptGroup key={i} label={year === "NaN" ? "Start Date Not Set" : year}>
           {blocks.map((block, j) => {
-            const blockYear = getYear(block.dates[0]).toString();
+            const blockYear = getYear(block.startDate).toString();
             if (year === blockYear) {
               return (
                 <Option key={block.id} value={block.id}>
