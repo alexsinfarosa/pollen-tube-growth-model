@@ -1,5 +1,7 @@
 import { observable, action, computed, when } from "mobx";
 
+import { message } from "antd";
+
 class Block {
   id;
   @observable name;
@@ -9,6 +11,7 @@ class Block {
   @observable styleLengths;
   @observable dates;
   @observable data;
+  @observable isBeingSelected;
   @observable isBeingEdited;
 
   constructor({
@@ -20,6 +23,7 @@ class Block {
     styleLengths,
     dates,
     data,
+    isBeingSelected,
     isBeingEdited
   }) {
     this.name = name;
@@ -29,6 +33,7 @@ class Block {
     this.styleLengths = styleLengths;
     this.dates = dates;
     this.data = data;
+    this.isBeingSelected = isBeingSelected;
     this.isBeingEdited = isBeingEdited;
   }
 
@@ -46,7 +51,13 @@ export default class BlockStore {
   constructor(app) {
     this.app = app;
     if (typeof window.localStorage !== "undefined") {
-      when(() => this.blocks.size === 0, () => this.readFromLocalStorage());
+      when(
+        () => this.blocks.length === 0,
+        () => {
+          this.readFromLocalStorage();
+          this.blocks.forEach(block => (block.isBeingSelected = true));
+        }
+      );
     }
   }
 
@@ -54,7 +65,7 @@ export default class BlockStore {
   @action showBlockModal = () => (this.isBlockModal = true);
   @action hideBlockModal = () => (this.isBlockModal = false);
 
-  blocks = observable.map();
+  @observable blocks = [];
   @observable
   block = {
     id: null,
@@ -65,6 +76,7 @@ export default class BlockStore {
     styleLengths: [],
     dates: undefined,
     data: new Map(),
+    isBeingSelected: false,
     isBeingEdited: false
   };
 
@@ -83,9 +95,10 @@ export default class BlockStore {
   newBlock = () => {
     if (this.areRequiredFieldsSet) {
       const id = Date.now();
-      const entry = new Block(this.block);
-      entry.id = id;
-      this.blocks.set(id, entry);
+      const block = new Block(this.block);
+      block.id = id;
+      this.blocks.push(block);
+      this.selectOneBlock(block.id);
       this.hideBlockModal();
       this.writeToLocalStorage();
       this.clearFields();
@@ -102,28 +115,55 @@ export default class BlockStore {
     block.styleLengths = [];
     block.dates = undefined;
     block.data = new Map();
+    block.isBeingSelected = false;
     block.isBeingEdited = false;
   };
 
   @action
+  selectOneBlock = id => {
+    this.blocks.forEach(block => {
+      block.id === id
+        ? (block.isBeingSelected = true)
+        : (block.isBeingSelected = false);
+    });
+  };
+
+  @action
+  selectAllBlocks = () => {
+    const areAllBlocksDisplayed = this.blocks.every(
+      block => block.isBeingSelected === true
+    );
+    areAllBlocksDisplayed
+      ? this.blocks.forEach(block => (block.isBeingSelected = false))
+      : this.blocks.forEach(block => (block.isBeingSelected = true));
+  };
+
+  @action
   removeBlock = id => {
-    this.blocks.delete(id);
+    const idx = this.blocks.findIndex(b => b.id === id);
+    const block = this.blocks[idx];
+    this.blocks.splice(idx, 1);
     this.writeToLocalStorage();
+    message.success(`${block.name} block has been deleted!`);
   };
 
   @action
   updateBlock = id => {
     if (this.areRequiredFieldsSet) {
-      this.block.isBeingEdited = false;
-      this.blocks.entries().forEach((key, val) => (this.blocks[key] = val));
+      const block = { ...this.block };
+      block.isBeingEdited = false;
+      const idx = this.blocks.findIndex(b => b.id === block.id);
+      this.blocks.splice(idx, 1, block);
+      this.blocks = this.blocks;
       this.writeToLocalStorage();
       this.cancelButton(); //refactor
+      message.success(`${block.name} block has been updated!`);
     }
   };
 
   @action
   editBlock = id => {
-    const blockBeingEdited = this.blocks.get(id);
+    const blockBeingEdited = this.blocks.find(b => b.id === id);
     blockBeingEdited.isBeingEdited = true;
     this.block = blockBeingEdited;
     this.showBlockModal();
@@ -133,7 +173,7 @@ export default class BlockStore {
   writeToLocalStorage = () => {
     window.localStorage.setItem(
       "pollenTubeModelBlocks",
-      JSON.stringify([...this.blocks.entries()])
+      JSON.stringify(this.blocks)
     );
   };
 
@@ -152,7 +192,7 @@ export default class BlockStore {
     if (data) {
       this.blocks.clear();
       data.forEach(json => {
-        this.blocks.set(json[0], json[1]);
+        this.blocks.push(json);
       });
     }
   };

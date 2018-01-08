@@ -13,7 +13,7 @@ const BlockHeader = inject("app")(
     breakpoints,
     bl
   }) {
-    const { removeBlock, editBlock } = blockStore;
+    const { removeBlock, editBlock, selectOneBlock } = blockStore;
 
     let stationName;
     if (bl.station) {
@@ -25,7 +25,7 @@ const BlockHeader = inject("app")(
         <Row type="flex" justify="space-between">
           <Col>
             <a
-              //   onClick={() => selectBlock(block.id)}
+              onClick={() => selectOneBlock(bl.id)}
               style={{ color: "white", borderBottom: "1px solid white" }}
             >
               {bl.name}

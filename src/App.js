@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { inject, observer } from "mobx-react";
 import { MatchMediaProvider } from "mobx-react-matchmedia";
-import DevTools from "mobx-react-devtools";
+// import DevTools from "mobx-react-devtools";
 
 // styled components
 import { Header, SubHeader, SubHeaderRight, Main } from "styles";
@@ -20,7 +20,6 @@ class App extends Component {
     const { bpts } = this.props.app;
     return (
       <MatchMediaProvider breakpoints={bpts}>
-        <DevTools />
         <Header>
           <SubHeader>
             Pollen Tube Growth Model Developed By Virginia Tech
