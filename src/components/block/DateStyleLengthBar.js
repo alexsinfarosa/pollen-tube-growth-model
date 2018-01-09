@@ -12,7 +12,6 @@ const DateStyleLengthBar = inject("app")(
     app: { formatDate, blockStore },
     bl
   }) {
-    console.log(bl.startDate);
     return (
       <Row type="flex" justify="space-between" align="center">
         {bl.dates.length !== 0 ? (

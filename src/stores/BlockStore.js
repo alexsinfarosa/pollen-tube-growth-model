@@ -75,6 +75,10 @@ export default class BlockStore {
   }
 
   @observable date;
+  @computed
+  get startDate() {
+    return this.block.startDate;
+  }
   @action
   setDate = d => {
     this.date = roundDate(d, moment.duration(60, "minutes"), "floor");
@@ -89,7 +93,6 @@ export default class BlockStore {
   showDateModal = id => {
     this.isDateModal = true;
     this.block = this.blocks.find(b => b.id === id);
-    console.log(this.block);
   };
   @action hideDateModal = () => (this.isDateModal = false);
 
@@ -205,6 +208,7 @@ export default class BlockStore {
     block.dates.push(this.date);
     this.updateBlock("Start Date", block);
     this.hideDateModal();
+    this.readFromLocalStorage();
   };
 
   // Local storage ----------------------------------------------------------------------
