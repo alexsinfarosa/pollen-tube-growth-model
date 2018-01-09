@@ -68,7 +68,7 @@ export default class BlockStore {
         () => this.blocks.length === 0,
         () => {
           this.readFromLocalStorage();
-          this.blocks.forEach(block => block.isBeingSelected);
+          this.blocks.forEach(b => (b.isBeingSelected = true));
         }
       );
     }
@@ -94,8 +94,16 @@ export default class BlockStore {
   @action hideDateModal = () => (this.isDateModal = false);
 
   @observable isStyleLengthModal = false;
-  @action showStyleLengthModal = () => (this.isStyleLengthModal = true);
-  @action hideStyleLengthModal = () => (this.isStyleLengthModal = false);
+  @action
+  showStyleLengthModal = id => {
+    this.isStyleLengthModal = true;
+    this.block = this.blocks.find(b => b.id === id);
+  };
+  @action
+  hideStyleLengthModal = () => {
+    this.isStyleLengthModal = false;
+    this.radioValue = "";
+  };
 
   @observable radioValue = null;
   @action setRadioValue = d => (this.radioValue = d);
@@ -188,6 +196,7 @@ export default class BlockStore {
     this.blocks = this.blocks;
     this.writeToLocalStorage();
     this.hideBlockModal();
+    this.hideStyleLengthModal();
     message.success(`${property} has been updated!`);
   };
 
@@ -201,7 +210,7 @@ export default class BlockStore {
 
   @action
   cancelButton = () => {
-    // this.readFromLocalStorage();
+    this.readFromLocalStorage();
     this.clearFields();
     this.hideBlockModal();
   };
@@ -215,19 +224,47 @@ export default class BlockStore {
     this.readFromLocalStorage();
   };
 
-  // Style length
-  setStyleLength = () => {
+  // Style length ---------------------------------------------------------------------
+  @observable styleLength;
+  setStyleLength = d => (this.styleLength = d);
+
+  @action
+  addAvgStyleLength = id => {
     const block = { ...this.block };
-    block.dates.push(this.date);
-    this.updateBlock("Start Date", block);
-    this.hideDateModal();
+    let highiestIdx = 0;
+    if (block.styleLengths.length !== 0) {
+      const tempArr = block.styleLengths.map(obj => obj.idx);
+      highiestIdx = Math.max(...tempArr);
+    }
+    const styleLengthObj = {
+      idx: highiestIdx + 1,
+      styleLength: this.styleLength,
+      isEdit: false
+    };
+    block.styleLengths.push(styleLengthObj);
+    this.updateBlock("Style Length", block);
+    this.hideStyleLengthModal();
     this.readFromLocalStorage();
   };
 
-  @computed
-  get styleLength() {
-    return this.block.avgStyleLength;
-  }
+  @action
+  addOneStyleLength = () => {
+    const block = { ...this.block };
+    let highiestIdx = 0;
+    if (block.styleLengths.length !== 0) {
+      const tempArr = block.styleLengths.map(obj => obj.idx);
+      highiestIdx = Math.max(...tempArr);
+    }
+
+    const styleLengthObj = {
+      id: Math.random(),
+      idx: highiestIdx + 1,
+      styleLength: this.styleLength,
+      isEdit: false
+    };
+    block.styleLengths.push(styleLengthObj);
+    block.styleLength = null;
+  };
 
   // Local storage ----------------------------------------------------------------------
   @action

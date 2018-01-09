@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { inject, observer } from "mobx-react";
 import { MatchMediaProvider } from "mobx-react-matchmedia";
-// import DevTools from "mobx-react-devtools";
+import DevTools from "mobx-react-devtools";
 
 // styled components
 import { Header, SubHeader, SubHeaderRight, Main } from "styles";
@@ -18,30 +18,31 @@ import StyleLengthModal from "modals/StyleLengthModal";
 @inject("app")
 @observer
 class App extends Component {
-  state = {
-    isRickOnScreen: false
-  };
   render() {
     const { bpts } = this.props.app;
+    console.log(this.props.app.blocks.slice());
     return (
-      <MatchMediaProvider breakpoints={bpts}>
-        <Header>
-          <SubHeader>
-            Pollen Tube Growth Model Developed By Virginia Tech
-          </SubHeader>
-          <SubHeaderRight>NEWA</SubHeaderRight>
-        </Header>
+      <div>
+        <DevTools />
+        <MatchMediaProvider breakpoints={bpts}>
+          <Header>
+            <SubHeader>
+              Pollen Tube Growth Model Developed By Virginia Tech
+            </SubHeader>
+            <SubHeaderRight>NEWA</SubHeaderRight>
+          </Header>
 
-        <BlockModal />
+          <BlockModal />
 
-        <AppToolBar breakpoints={bpts} />
-        <StartDateModal />
-        <StyleLengthModal />
+          <AppToolBar breakpoints={bpts} />
+          <StartDateModal breakpoints={bpts} />
+          <StyleLengthModal breakpoints={bpts} />
 
-        <Main>
-          <BlockList />
-        </Main>
-      </MatchMediaProvider>
+          <Main>
+            <BlockList />
+          </Main>
+        </MatchMediaProvider>
+      </div>
     );
   }
 }

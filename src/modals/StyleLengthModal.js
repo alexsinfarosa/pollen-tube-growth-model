@@ -1,7 +1,17 @@
 import React from "react";
 import { inject, observer } from "mobx-react";
 
-import { Row, Col, Modal, Table, Divider, Radio, Button, Icon } from "antd";
+import {
+  Row,
+  Col,
+  Modal,
+  Table,
+  Divider,
+  Radio,
+  Button,
+  Icon,
+  InputNumber
+} from "antd";
 const RadioGroup = Radio.Group;
 
 const StyleLengthModal = inject("app")(
@@ -10,67 +20,69 @@ const StyleLengthModal = inject("app")(
       isStyleLengthModal,
       radioValue,
       setRadioValue,
-      hideStyleLengthModal
+      hideStyleLengthModal,
+      addAvgStyleLength,
+      setStyleLength,
+      addOneStyleLength,
+      block,
+      updateBlock
     } = blockStore;
 
-    // const columns = [
-    //   {
-    //     title: "#",
-    //     dataIndex: "idx",
-    //     key: "idx",
-    //     width: "30%",
-    //     sorter: (a, b) => a.idx - b.idx
-    //     // sortOrder: "descend"
-    //   },
-    //   {
-    //     title: "Style Length",
-    //     dataIndex: "styleLength",
-    //     key: "styleLength",
-    //     // width: "50%",
-    //     render: (text, record) => <span>{text.toPrecision(4)} mm</span>
-    //   },
-    //   {
-    //     title: "Actions",
-    //     dataIndex: "actions",
-    //     // width: "20%",
-    //     render: (text, record, index) => (
-    //       <div>
-    //         <Icon type="edit" onClick={() => editStyleLength(record, index)} />
-    //         <Divider type="vertical" />
-    //         <Icon
-    //           type="delete"
-    //           onClick={() => removeStyleLength(record, index)}
-    //         />
-    //       </div>
-    //     )
-    //   }
-    // ];
+    const columns = [
+      {
+        title: "#",
+        dataIndex: "idx",
+        key: "idx",
+        width: "30%",
+        sorter: (a, b) => a.idx - b.idx
+        // sortOrder: "descend"
+      },
+      {
+        title: "Style Length",
+        dataIndex: "styleLength",
+        key: "styleLength",
+        // width: "50%",
+        render: (text, record) => <span>{text.toPrecision(4)} mm</span>
+      }
+      // {
+      //   title: "Actions",
+      //   dataIndex: "actions",
+      //   // width: "20%",
+      //   render: (text, record, index) => (
+      //     <div>
+      //       <Icon type="edit" onClick={() => editStyleLength(record, index)} />
+      //       <Divider type="vertical" />
+      //       <Icon
+      //         type="delete"
+      //         onClick={() => removeStyleLength(record, index)}
+      //       />
+      //     </div>
+      //   )
+      // }
+    ];
 
-    // const Footer = d => {
-    //   return (
-    //     <Row>
-    //       <Col>
-    //         <Button onClick={() => hideStyleLengthModal()}>Cancel</Button>
-    //         <Button
-    //           disabled={
-    //             isStyleLengthEdited ||
-    //             (radioValue === "calculate" && styleLengths.length <= 5)
-    //           }
-    //           onClick={() =>
-    //             radioValue === "avg" ? addAvgStyleLength() : updateBlock()
-    //           }
-    //           type="primary"
-    //         >
-    //           OK
-    //         </Button>
-    //       </Col>
-    //     </Row>
-    //   );
-    // };
+    const Footer = d => {
+      return (
+        <Row>
+          <Col>
+            <Button onClick={() => hideStyleLengthModal()}>Cancel</Button>
+            <Button
+              disabled={block.styleLengths.length < 2}
+              onClick={() =>
+                radioValue === "avg" ? addAvgStyleLength() : updateBlock()
+              }
+              type="primary"
+            >
+              OK
+            </Button>
+          </Col>
+        </Row>
+      );
+    };
 
-    // const average = avgStyleLength
-    //   ? `: ${avgStyleLength.toPrecision(4)} (mm)`
-    //   : "";
+    const average = block.avgStyleLength
+      ? `: ${block.avgStyleLength.toPrecision(4)} (mm)`
+      : "";
 
     return (
       <Modal
@@ -78,12 +90,12 @@ const StyleLengthModal = inject("app")(
         title={
           radioValue
             ? radioValue === "avg"
-              ? `Insert Average Style Length`
-              : `Calculated Average Style Length${16}`
+              ? `Average Style Length`
+              : `Style Lengths (999...)`
             : `Select one of the options:`
         }
         visible={isStyleLengthModal}
-        // footer={radioValue ? <Footer /> : null}
+        footer={radioValue ? <Footer /> : null}
         onCancel={hideStyleLengthModal}
       >
         {!(radioValue === "avg" || radioValue === "calculate") && (
@@ -115,42 +127,57 @@ const StyleLengthModal = inject("app")(
           </RadioGroup>
         )}
 
+        {radioValue === "avg" && (
+          <InputNumber
+            style={{ width: "100%" }}
+            onChange={e => setStyleLength(e)}
+            placeholder="Insert average style length (mm)"
+            min={1}
+            max={20}
+            step={0.01}
+            precision={3}
+            // value={styleLength}
+          />
+        )}
+
         {radioValue === "calculate" && (
           <Row>
-            {/*<Col>
+            <Col>
               <Row type="flex" align="middle">
                 <Col span={20}>
-                  <SelectStyleLength />
+                  <InputNumber
+                    name="name"
+                    style={{ width: "100%", marginBottom: 16 }}
+                    placeholder="Add Style Length"
+                    onChange={e => setStyleLength(e)}
+                    // value={block.name}
+                  />
                 </Col>
                 <Col span={4}>
                   {radioValue === "calculate" && (
                     <Button
                       style={{ width: "100%", marginBottom: 16 }}
-                      disabled={!styleLength}
-                      onClick={
-                        isStyleLengthEdited
-                          ? updateOneStyleLength
-                          : addOneStyleLength
-                      }
+                      // disabled={!styleLength}
+                      onClick={addOneStyleLength}
                     >
-                      {isStyleLengthEdited ? "UPDATE" : "ADD"}
+                      {false ? "UPDATE" : "ADD"}
                     </Button>
                   )}
                 </Col>
               </Row>
-                </Col>*/}
-            {/*<Col>
+            </Col>
+            <Col>
               <Table
                 rowClassName={record => (record.isEdit ? "selected" : null)}
                 rowKey={record => record.idx}
-                loading={isLoading}
-                dataSource={styleLengths.slice()}
+                loading={false}
+                dataSource={block.styleLengths.slice()}
                 columns={columns}
                 size="middle"
                 pagination={false}
                 scroll={{ y: breakpoints.xs ? "30vh" : "50vh", x: "100%" }}
               />
-            </Col>*/}
+            </Col>
           </Row>
         )}
       </Modal>
