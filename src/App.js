@@ -13,6 +13,7 @@ import BlockList from "components/block/BlockList";
 // Modals
 import BlockModal from "modals/BlockModal";
 import StartDateModal from "modals/StartDateModal";
+import StyleLengthModal from "modals/StyleLengthModal";
 
 @inject("app")
 @observer
@@ -35,6 +36,7 @@ class App extends Component {
 
         <AppToolBar breakpoints={bpts} />
         <StartDateModal />
+        <StyleLengthModal />
 
         <Main>
           <BlockList />

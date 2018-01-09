@@ -9,7 +9,7 @@ import { RowCentered } from "styles";
 
 const DateStyleLengthBar = inject("app")(
   observer(function DateStyleLengthBar({
-    app: { formatDate, blockStore },
+    app: { formatDate, blockStore, showStyleLengthModal },
     bl
   }) {
     return (
@@ -38,7 +38,7 @@ const DateStyleLengthBar = inject("app")(
           <Button
             type="default"
             style={{ maxWidth: "40%" }}
-            // onClick={}
+            onClick={() => blockStore.showStyleLengthModal(bl.id)}
           >
             Set Style Length
           </Button>

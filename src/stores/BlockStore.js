@@ -80,6 +80,7 @@ export default class BlockStore {
     this.date = roundDate(d, moment.duration(60, "minutes"), "floor");
   };
 
+  // Modals
   @observable isBlockModal = false;
   @action showBlockModal = () => (this.isBlockModal = true);
   @action hideBlockModal = () => (this.isBlockModal = false);
@@ -91,6 +92,13 @@ export default class BlockStore {
     this.block = this.blocks.find(b => b.id === id);
   };
   @action hideDateModal = () => (this.isDateModal = false);
+
+  @observable isStyleLengthModal = false;
+  @action showStyleLengthModal = () => (this.isStyleLengthModal = true);
+  @action hideStyleLengthModal = () => (this.isStyleLengthModal = false);
+
+  @observable radioValue = null;
+  @action setRadioValue = d => (this.radioValue = d);
 
   @observable blocks = [];
   @observable
@@ -206,6 +214,20 @@ export default class BlockStore {
     this.hideDateModal();
     this.readFromLocalStorage();
   };
+
+  // Style length
+  setStyleLength = () => {
+    const block = { ...this.block };
+    block.dates.push(this.date);
+    this.updateBlock("Start Date", block);
+    this.hideDateModal();
+    this.readFromLocalStorage();
+  };
+
+  @computed
+  get styleLength() {
+    return this.block.avgStyleLength;
+  }
 
   // Local storage ----------------------------------------------------------------------
   @action

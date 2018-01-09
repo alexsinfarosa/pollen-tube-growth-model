@@ -62,13 +62,4 @@ export default class AppStore {
   formatDate = date => {
     return format(date, "MM/DD/YY HH:00");
   };
-  //   Modals ------------------------------------------------------
-
-  @observable isStyleLengthModal = false;
-  @action showStyleLengthModal = () => (this.isStyleLengthModal = true);
-  @action hideStyleLengthModal = () => (this.isStyleLengthModal = false);
-
-  // Radio button values
-  @observable radioValue = null;
-  @action setRadioValue = d => (this.radioValue = d);
 }
