@@ -9,9 +9,7 @@ const BlockModal = inject("app")(
   observer(function BlockModal({
     app: { apples, states, stations, block, blockStore, blocks }
   }) {
-    const { newBlock, updateBlock } = blockStore;
-    // console.log({ ...block });
-    // console.log(toJS(blocks));
+    const { newBlock, updateBlock, radioValue } = blockStore;
 
     // variety list
     const varietyList = apples.values().map(variety => {

@@ -1,16 +1,18 @@
 import React from "react";
 import { inject, observer } from "mobx-react";
 
-import SelectStyleLength from "components/SelectStyleLength";
-
 import { Row, Col, Modal, Table, Divider, Radio, Button, Icon } from "antd";
 const RadioGroup = Radio.Group;
 
 const StyleLengthModal = inject("app")(
-  observer(function StyleLengthModal({
-    app: { radioValue, isStyleLengthModal },
-    breakpoints
-  }) {
+  observer(function StyleLengthModal({ app: { blockStore }, breakpoints }) {
+    const {
+      isStyleLengthModal,
+      radioValue,
+      setRadioValue,
+      hideStyleLengthModal
+    } = blockStore;
+
     // const columns = [
     //   {
     //     title: "#",
@@ -82,7 +84,7 @@ const StyleLengthModal = inject("app")(
         }
         visible={isStyleLengthModal}
         // footer={radioValue ? <Footer /> : null}
-        // onCancel={}
+        onCancel={hideStyleLengthModal}
       >
         {!(radioValue === "avg" || radioValue === "calculate") && (
           <RadioGroup
@@ -91,20 +93,20 @@ const StyleLengthModal = inject("app")(
               justifyContent: "center",
               alignItems: "center"
             }}
-            // onChange={e => setRadioValue(e.target.value)}
+            onChange={e => setRadioValue(e.target.value)}
             defaultValue={null}
           >
             <Row style={{ display: "flex", flexDirection: "column" }}>
-              <Col style={{ borderBottom: "1px solid #eee", padding: 16 }}>
+              <Col style={{ padding: 16 }}>
                 <Radio
                   checked={radioValue === "avg"}
-                  disabled={styleLengths.length > 1}
+                  // disabled={styleLengths.length > 1}
                   value="avg"
                 >
                   Insert average style length
                 </Radio>
               </Col>
-              <Col style={{ borderBottom: "1px solid #eee", padding: 16 }}>
+              <Col style={{ padding: 16 }}>
                 <Radio checked={radioValue === "calculate"} value="calculate">
                   Calculate average style length
                 </Radio>
@@ -112,8 +114,6 @@ const StyleLengthModal = inject("app")(
             </Row>
           </RadioGroup>
         )}
-
-        {radioValue === "avg" && <SelectStyleLength />}
 
         {radioValue === "calculate" && (
           <Row>

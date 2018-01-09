@@ -20,10 +20,11 @@ ReactDOM.render(
 registerServiceWorker();
 
 if (module.hot) {
-  module.hot.accept(() => {
+  module.hot.accept("stores/AppStore", () => {
+    const NewApp = require("stores/AppStore").default;
     ReactDOM.render(
       <Provider app={app}>
-        <App />
+        <NewApp />
       </Provider>,
       document.getElementById("root")
     );
