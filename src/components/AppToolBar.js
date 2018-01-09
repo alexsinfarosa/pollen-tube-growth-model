@@ -8,13 +8,13 @@ const { Option, OptGroup } = Select;
 
 const AppToolBar = inject("app")(
   observer(function AppToolBar({
-    app: { blockStore, isMap, blocks, filteredBlocks, startDate },
+    app: { blockStore, isMap, blocks, filteredBlocks },
     breakpoints
   }) {
     const bpts = breakpoints;
 
     // Categorize blocks based on their year
-    const setYears = new Set(blocks.map(block => getYear(startDate)));
+    const setYears = new Set(blocks.map(block => getYear(block.startDate)));
     const arrYears = Array.from(setYears);
 
     const blockList = arrYears.map((y, i) => {
@@ -22,7 +22,7 @@ const AppToolBar = inject("app")(
       return (
         <OptGroup key={i} label={year === "NaN" ? "Start Date Not Set" : year}>
           {blocks.map((block, j) => {
-            const blockYear = getYear(startDate).toString();
+            const blockYear = getYear(block.startDate).toString();
             if (year === blockYear) {
               return (
                 <Option key={block.id} value={block.id}>

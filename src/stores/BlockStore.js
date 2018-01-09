@@ -75,10 +75,6 @@ export default class BlockStore {
   }
 
   @observable date;
-  @computed
-  get startDate() {
-    return this.block.startDate;
-  }
   @action
   setDate = d => {
     this.date = roundDate(d, moment.duration(60, "minutes"), "floor");
