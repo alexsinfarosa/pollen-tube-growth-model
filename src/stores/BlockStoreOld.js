@@ -50,56 +50,58 @@ class Block {
       return this.dates[0];
     }
   }
-
-  @computed
-  get avgStyleLength() {
-    if (this.styleLengths.length !== 0) {
-      return (
-        this.styleLengths
-          .map(obj => obj.styleLength)
-          .reduce((p, c) => p + c, 0) / this.styleLengths.length
-      );
-    }
-  }
 }
 
 export default class BlockStore {
   app;
   constructor(app) {
     this.app = app;
-    when(() => this.blocks.length === 0, () => this.readFromLocalStorage());
+    if (typeof window.localStorage !== "undefined") {
+      when(
+        () => this.blocks.length === 0,
+        () => {
+          this.readFromLocalStorage();
+          this.blocks.forEach(b => (b.isBeingSelected = true));
+        }
+      );
+    }
   }
 
-  // Dates ----------------------------------------------------------------------------
   @observable date;
   @action
   setDate = d => {
     this.date = roundDate(d, moment.duration(60, "minutes"), "floor");
   };
-  @action
-  setStartDate = () => {
-    this.block.dates.push(this.date);
-    this.updateBlock();
-  };
-
-  // style length
-  @observable styleLength;
-  setStyleLength = d => (this.styleLength = d);
 
   // Modals
   @observable isBlockModal = false;
-  @observable isDateModal = false;
-  @observable isStyleLengthModal = false;
-  @action showModal = name => (this[name] = true);
+  @action showBlockModal = () => (this.isBlockModal = true);
+  @action hideBlockModal = () => (this.isBlockModal = false);
 
-  // radioValue
-  @observable radioValue = "";
+  @observable isDateModal = false;
+  @action
+  showDateModal = id => {
+    this.isDateModal = true;
+    this.block = this.blocks.find(b => b.id === id);
+  };
+  @action hideDateModal = () => (this.isDateModal = false);
+
+  @observable isStyleLengthModal = false;
+  @action
+  showStyleLengthModal = id => {
+    this.isStyleLengthModal = true;
+    this.block = this.blocks.find(b => b.id === id);
+  };
+  @action
+  hideStyleLengthModal = () => {
+    this.isStyleLengthModal = false;
+    this.radioValue = "";
+  };
+
+  @observable radioValue = null;
   @action setRadioValue = d => (this.radioValue = d);
 
-  // blocks
   @observable blocks = [];
-
-  // block
   @observable
   block = {
     id: null,
@@ -114,39 +116,6 @@ export default class BlockStore {
     isBeingEdited: false
   };
 
-  @action
-  clearFields = () => {
-    this.date = undefined;
-    this.styleLength = undefined;
-    this.radioValue = "";
-    this.isBlockModal = false;
-    this.isDateModal = false;
-    this.isStyleLengthModal = false;
-    this.block.id = null;
-    this.block.name = "";
-    this.block.variety = undefined;
-    this.block.state = undefined;
-    this.block.station = undefined;
-    this.block.styleLengths = [];
-    this.block.dates = [];
-    this.block.data = new Map();
-    this.block.isBeingSelected = false;
-    this.block.isBeingEdited = false;
-    this.readFromLocalStorage();
-  };
-
-  @action
-  selectBlock = (name, id) => {
-    this.showModal(name);
-    const block = this.blocks.find(b => b.id === id);
-    this.block = block;
-  };
-
-  @action
-  addField = (name, val) => {
-    this.block[name] = val;
-  };
-
   @computed
   get areRequiredFieldsSet() {
     const { name, variety, state, station } = this.block;
@@ -154,47 +123,36 @@ export default class BlockStore {
   }
 
   @action
-  addBlock = () => {
+  addField = (name, val) => {
+    this.block[name] = val;
+  };
+
+  @action
+  newBlock = () => {
     if (this.areRequiredFieldsSet) {
-      const block = { ...this.block };
-      block.id = Date.now();
-      block.isBeingSelected = true;
-      this.blocks.push(new Block(block));
+      this.block.id = Date.now();
+      this.block.isBeingSelected = true;
+      this.blocks.push(new Block(this.block));
       this.writeToLocalStorage();
+      this.hideBlockModal();
       this.clearFields();
-      message.success(`${block.name} block has been created!`);
     }
   };
 
   @action
-  removeBlock = id => {
-    const idx = this.blocks.findIndex(b => b.id === id);
-    const block = { ...this.blocks[idx] };
-    this.blocks.splice(idx, 1);
-    this.writeToLocalStorage();
-    message.success(`${block.name} block has been deleted!`);
-  };
-
-  @action
-  editBlock = id => {
-    const block = this.blocks.find(b => b.id === id);
-    block.isBeingEdited = true;
-    this.block = block;
-    this.showModal("isBlockModal");
-  };
-
-  @action
-  updateBlock = () => {
-    const block = { ...this.block };
-    const blocks = [...this.blocks];
+  clearFields = () => {
+    this.styleLength = undefined;
+    const { block } = this;
+    block.id = null;
+    block.name = "";
+    block.variety = undefined;
+    block.state = undefined;
+    block.station = undefined;
+    block.styleLengths = [];
+    block.dates = [];
+    block.data = new Map();
+    block.isBeingSelected = false;
     block.isBeingEdited = false;
-    block.styleLengths.forEach(sl => (sl.isEdit = false));
-    const idx = this.blocks.findIndex(b => b.id === block.id);
-    blocks.splice(idx, 1, block);
-    this.blocks = blocks;
-    this.writeToLocalStorage();
-    this.clearFields();
-    message.success(`${block.name} block has been updated!`);
   };
 
   @action
@@ -214,14 +172,66 @@ export default class BlockStore {
       : this.blocks.forEach(bl => (bl.isBeingSelected = true));
   };
 
-  @action cancelButton = () => this.clearFields();
+  @action
+  removeBlock = id => {
+    const idx = this.blocks.findIndex(b => b.id === id);
+    const block = this.blocks[idx];
+    this.blocks.splice(idx, 1);
+    this.writeToLocalStorage();
+    message.success(`${block.name} block has been deleted!`);
+  };
+
+  @action
+  updateBlock = (property = this.block.name, block = this.block) => {
+    block.isBeingEdited = false;
+    block.styleLengths.forEach(sl => (sl.isEdit = false));
+
+    const idx = this.blocks.findIndex(b => b.id === block.id);
+    this.blocks.splice(idx, 1, block);
+    this.blocks = this.blocks;
+    this.writeToLocalStorage();
+    this.hideBlockModal();
+    this.hideStyleLengthModal();
+    message.success(`${property} has been updated!`);
+  };
+
+  @action
+  editBlock = id => {
+    const blockBeingEdited = this.blocks.find(b => b.id === id);
+    blockBeingEdited.isBeingEdited = true;
+    this.block = blockBeingEdited;
+    this.showBlockModal();
+  };
+
+  @action
+  cancelButton = () => {
+    this.readFromLocalStorage();
+    this.clearFields();
+    this.hideBlockModal();
+    this.hideStyleLengthModal();
+    this.hideDateModal();
+    this.block.styleLengths.map(obj => (obj.isEdit = false));
+  };
+
+  // Dates ----------------------------------------------------------------------------
+  setStartDate = () => {
+    const block = { ...this.block };
+    block.dates.push(this.date);
+    this.updateBlock("Start Date", block);
+    this.hideDateModal();
+    this.readFromLocalStorage();
+  };
 
   // Style length ---------------------------------------------------------------------
+  @observable styleLength;
+  setStyleLength = d => (this.styleLength = d);
+
   @action
   addAvgStyleLength = () => {
+    const block = { ...this.block };
     let highiestIdx = 0;
-    if (this.block.styleLengths.length !== 0) {
-      const tempArr = this.block.styleLengths.map(obj => obj.idx);
+    if (block.styleLengths.length !== 0) {
+      const tempArr = block.styleLengths.map(obj => obj.idx);
       highiestIdx = Math.max(...tempArr);
     }
     const styleLengthObj = {
@@ -229,8 +239,8 @@ export default class BlockStore {
       styleLength: this.styleLength,
       isEdit: false
     };
-    this.block.styleLengths.push(styleLengthObj);
-    this.updateBlock();
+    block.styleLengths.push(styleLengthObj);
+    this.updateBlock("Style Length", block);
   };
 
   @action
@@ -264,6 +274,7 @@ export default class BlockStore {
 
   @computed
   get isStyleLengthBeingEdited() {
+    console.log(this.block.styleLengths.some(sl => sl.isEdit));
     return this.block.styleLengths.some(sl => sl.isEdit);
   }
 
@@ -284,17 +295,17 @@ export default class BlockStore {
     this.styleLength = undefined;
   };
 
-  // @computed
-  // get avgStyleLength() {
-  //   console.log(this.block);
-  //   if (this.block.styleLengths.length !== 0) {
-  //     return (
-  //       this.block.styleLengths
-  //         .map(obj => obj.styleLength)
-  //         .reduce((p, c) => p + c, 0) / this.block.styleLengths.length
-  //     );
-  //   }
-  // }
+  @computed
+  get avgStyleLength() {
+    console.log(this.block);
+    if (this.block.styleLengths.length !== 0) {
+      return (
+        this.block.styleLengths
+          .map(obj => obj.styleLength)
+          .reduce((p, c) => p + c, 0) / this.block.styleLengths.length
+      );
+    }
+  }
 
   // Local storage ----------------------------------------------------------------------
   @action

@@ -22,7 +22,7 @@ const DateStyleLengthBar = inject("app")(
           <Button
             type="default"
             style={{ maxWidth: "40%" }}
-            onClick={() => blockStore.showDateModal(bl.id)}
+            onClick={() => blockStore.selectBlock("isDateModal", bl.id)}
           >
             Set Start Date
           </Button>
@@ -38,7 +38,7 @@ const DateStyleLengthBar = inject("app")(
           <Button
             type="default"
             style={{ maxWidth: "40%" }}
-            onClick={() => blockStore.showStyleLengthModal(bl.id)}
+            onClick={() => blockStore.selectBlock("isStyleLengthModal", bl.id)}
           >
             Set Style Length
           </Button>

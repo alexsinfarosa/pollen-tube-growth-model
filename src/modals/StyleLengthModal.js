@@ -17,16 +17,22 @@ const RadioGroup = Radio.Group;
 const StyleLengthModal = inject("app")(
   observer(function StyleLengthModal({ app: { blockStore }, breakpoints }) {
     const {
-      isStyleLengthModal,
+      block,
+      updateBlock,
       radioValue,
       setRadioValue,
-      hideStyleLengthModal,
-      addAvgStyleLength,
+      isStyleLengthModal,
+      styleLength,
       setStyleLength,
       addOneStyleLength,
-      block,
-      updateBlock
+      addAvgStyleLength,
+      removeStyleLength,
+      editStyleLength,
+      isStyleLengthBeingEdited,
+      updateOneStyleLength,
+      cancelButton
     } = blockStore;
+    console.log(radioValue);
 
     const columns = [
       {
@@ -41,33 +47,36 @@ const StyleLengthModal = inject("app")(
         title: "Style Length",
         dataIndex: "styleLength",
         key: "styleLength",
-        // width: "50%",
+        width: "50%",
         render: (text, record) => <span>{text.toPrecision(4)} mm</span>
+      },
+      {
+        title: "Actions",
+        dataIndex: "actions",
+        width: "20%",
+        render: (text, record, idx) => (
+          <div>
+            <Icon type="edit" onClick={() => editStyleLength(record, idx)} />
+            <Divider type="vertical" />
+            <Icon
+              type="delete"
+              onClick={() => removeStyleLength(record, idx)}
+            />
+          </div>
+        )
       }
-      // {
-      //   title: "Actions",
-      //   dataIndex: "actions",
-      //   // width: "20%",
-      //   render: (text, record, index) => (
-      //     <div>
-      //       <Icon type="edit" onClick={() => editStyleLength(record, index)} />
-      //       <Divider type="vertical" />
-      //       <Icon
-      //         type="delete"
-      //         onClick={() => removeStyleLength(record, index)}
-      //       />
-      //     </div>
-      //   )
-      // }
     ];
 
     const Footer = d => {
       return (
         <Row>
           <Col>
-            <Button onClick={() => hideStyleLengthModal()}>Cancel</Button>
+            <Button onClick={cancelButton}>Cancel</Button>
             <Button
-              disabled={block.styleLengths.length < 2}
+              disabled={
+                (radioValue === "calculate" && block.styleLengths.length < 2) ||
+                isStyleLengthBeingEdited
+              }
               onClick={() =>
                 radioValue === "avg" ? addAvgStyleLength() : updateBlock()
               }
@@ -91,14 +100,14 @@ const StyleLengthModal = inject("app")(
           radioValue
             ? radioValue === "avg"
               ? `Average Style Length`
-              : `Style Lengths (999...)`
+              : `Style Lengths ${average}`
             : `Select one of the options:`
         }
         visible={isStyleLengthModal}
         footer={radioValue ? <Footer /> : null}
-        onCancel={hideStyleLengthModal}
+        onCancel={cancelButton}
       >
-        {!(radioValue === "avg" || radioValue === "calculate") && (
+        {!radioValue && (
           <RadioGroup
             style={{
               display: "flex",
@@ -110,11 +119,7 @@ const StyleLengthModal = inject("app")(
           >
             <Row style={{ display: "flex", flexDirection: "column" }}>
               <Col style={{ padding: 16 }}>
-                <Radio
-                  checked={radioValue === "avg"}
-                  // disabled={styleLengths.length > 1}
-                  value="avg"
-                >
+                <Radio checked={radioValue === "avg"} value="avg">
                   Insert average style length
                 </Radio>
               </Col>
@@ -136,7 +141,7 @@ const StyleLengthModal = inject("app")(
             max={20}
             step={0.01}
             precision={3}
-            // value={styleLength}
+            value={styleLength}
           />
         )}
 
@@ -146,21 +151,29 @@ const StyleLengthModal = inject("app")(
               <Row type="flex" align="middle">
                 <Col span={20}>
                   <InputNumber
-                    name="name"
                     style={{ width: "100%", marginBottom: 16 }}
-                    placeholder="Add Style Length"
                     onChange={e => setStyleLength(e)}
-                    // value={block.name}
+                    placeholder="Add Style Length"
+                    min={1}
+                    max={20}
+                    step={0.01}
+                    precision={3}
+                    value={styleLength}
                   />
                 </Col>
                 <Col span={4}>
                   {radioValue === "calculate" && (
                     <Button
                       style={{ width: "100%", marginBottom: 16 }}
-                      // disabled={!styleLength}
-                      onClick={addOneStyleLength}
+                      disabled={!styleLength}
+                      type={isStyleLengthBeingEdited ? "primary" : "secondary"}
+                      onClick={
+                        isStyleLengthBeingEdited
+                          ? updateOneStyleLength
+                          : addOneStyleLength
+                      }
                     >
-                      {false ? "UPDATE" : "ADD"}
+                      {isStyleLengthBeingEdited ? "UPDATE" : "ADD"}
                     </Button>
                   )}
                 </Col>

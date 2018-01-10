@@ -37,3 +37,7 @@ circle {
     transform: scale(2);
   }
 }
+
+.selected {
+  background: #dfe8e3;
+}

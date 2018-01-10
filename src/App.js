@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { inject, observer } from "mobx-react";
+// import { toJS } from "mobx";
 import { MatchMediaProvider } from "mobx-react-matchmedia";
 import DevTools from "mobx-react-devtools";
 
@@ -20,7 +21,6 @@ import StyleLengthModal from "modals/StyleLengthModal";
 class App extends Component {
   render() {
     const { bpts } = this.props.app;
-    console.log(this.props.app.blocks.slice());
     return (
       <div>
         <DevTools />

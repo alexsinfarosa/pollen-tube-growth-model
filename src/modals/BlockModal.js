@@ -9,7 +9,7 @@ const BlockModal = inject("app")(
   observer(function BlockModal({
     app: { apples, states, stations, block, blockStore, blocks }
   }) {
-    const { newBlock, updateBlock, radioValue } = blockStore;
+    const { addBlock, updateBlock } = blockStore;
 
     // variety list
     const varietyList = apples.values().map(variety => {
@@ -50,14 +50,14 @@ const BlockModal = inject("app")(
         title={block.isBeingEdited ? `Edit Block` : `New Block`}
         visible={blockStore.isBlockModal}
         okText={block.isBeingEdited ? "UpdateBlock" : "Add Block"}
-        onOk={() => (block.isBeingEdited ? updateBlock() : newBlock())}
+        onOk={() => (block.isBeingEdited ? updateBlock() : addBlock())}
         onCancel={blockStore.cancelButton}
       >
         <Row align="middle">
           <Input
             name="name"
             style={style}
-            placeholder="Insert block name"
+            placeholder="Insert block name (min. 3 letters)"
             onChange={e => blockStore.addField(e.target.name, e.target.value)}
             value={block.name}
           />
