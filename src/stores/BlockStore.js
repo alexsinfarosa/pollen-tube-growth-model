@@ -284,18 +284,6 @@ export default class BlockStore {
     this.styleLength = undefined;
   };
 
-  // @computed
-  // get avgStyleLength() {
-  //   console.log(this.block);
-  //   if (this.block.styleLengths.length !== 0) {
-  //     return (
-  //       this.block.styleLengths
-  //         .map(obj => obj.styleLength)
-  //         .reduce((p, c) => p + c, 0) / this.block.styleLengths.length
-  //     );
-  //   }
-  // }
-
   // Local storage ----------------------------------------------------------------------
   @action
   writeToLocalStorage = () => {

@@ -32,7 +32,6 @@ const StyleLengthModal = inject("app")(
       updateOneStyleLength,
       cancelButton
     } = blockStore;
-    console.log(radioValue);
 
     const columns = [
       {
