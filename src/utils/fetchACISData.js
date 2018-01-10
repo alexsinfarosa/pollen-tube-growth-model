@@ -4,7 +4,6 @@ import {
   networkTemperatureAdjustment
 } from "utils/utils";
 
-// import getYear from "date-fns/get_year";
 import format from "date-fns/format";
 import addDays from "date-fns/add_days";
 
