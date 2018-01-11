@@ -23,7 +23,8 @@ import { Spin } from "antd";
 @observer
 class App extends Component {
   render() {
-    const { bpts, isLoading } = this.props.app;
+    const { bpts, isLoading, acisData } = this.props.app;
+    console.log(acisData);
     return (
       <div>
         <DevTools />

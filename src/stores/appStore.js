@@ -1,4 +1,4 @@
-import { observable, computed, when, toJS } from "mobx";
+import { observable, action, computed, when, toJS } from "mobx";
 import SubjectStore from "./SubjectStore";
 import StateStore from "./StateStore";
 import StationStore from "./StationStore";
@@ -8,7 +8,7 @@ import format from "date-fns/format";
 
 import { loadACISData } from "utils/cleanFetchedData";
 
-// import { stationTest } from "utils/testData";
+import { stationTest } from "utils/testData";
 const seasonStartDate = "2017-03-01";
 const selectedDate = "2017-05-15";
 
@@ -18,7 +18,7 @@ export default class AppStore {
   acisStates;
   acisStations;
   blockStore;
-  @observable acisData = new Map();
+  @observable acisData = [];
 
   constructor(fetcher) {
     this.fetch = fetcher;
@@ -27,17 +27,24 @@ export default class AppStore {
     this.acisStations = new StationStore(this);
     this.blockStore = new BlockStore(this);
     when(
-      () => !this.isLoading && this.blocks.length !== 0,
-      () =>
-        this.listOfStationsToFetch.forEach(station => {
-          console.log(station);
-          this.acisData.set(
-            station.id,
-            loadACISData(toJS(station), seasonStartDate, selectedDate)
-          );
-        })
+      () => !this.isLoading && this.listOfStationsToFetch,
+      () => this.loadData()
     );
-    console.log(this.acisData.size);
+  }
+
+  @action
+  loadData = () => {
+    this.listOfStationsToFetch.forEach(station => {
+      loadACISData(station, seasonStartDate, selectedDate).then(res => {
+        console.log(res);
+        this.acisData.push({ [station.id]: res });
+      });
+    });
+  };
+
+  get acis() {
+    console.log(toJS(this.acisData));
+    return toJS(this.acisData);
   }
 
   get apples() {

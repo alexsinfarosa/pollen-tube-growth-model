@@ -3,8 +3,8 @@ import { replaceNonConsecutiveMissingValues } from "utils/utils";
 import isThisYear from "date-fns/is_this_year";
 
 // Replace missing values
-export const loadACISData = (stationTest, seasonStartDate, selectedDate) => {
-  fetchACISData(stationTest, seasonStartDate, selectedDate).then(res => {
+export const loadACISData = (station, seasonStartDate, selectedDate) => {
+  return fetchACISData(station, seasonStartDate, selectedDate).then(res => {
     const cStation = res.get("cStation");
     const sStation = res.get("sStation");
     const forecast = res.get("forecast");
@@ -32,6 +32,7 @@ export const loadACISData = (stationTest, seasonStartDate, selectedDate) => {
 
     res.set("cStationClean", cStationClean);
 
+    // console.log(res);
     return res;
   });
 };
