@@ -9,6 +9,7 @@ import { roundDate } from "utils/utils";
 import { message } from "antd";
 
 class Block {
+  subject;
   id;
   @observable name;
   @observable variety;
@@ -20,18 +21,22 @@ class Block {
   @observable isBeingSelected;
   @observable isBeingEdited;
 
-  constructor({
-    id,
-    name,
-    variety,
-    state,
-    station,
-    styleLengths,
-    dates,
-    data,
-    isBeingSelected,
-    isBeingEdited
-  }) {
+  constructor(
+    subject,
+    {
+      id,
+      name,
+      variety,
+      state,
+      station,
+      styleLengths,
+      dates,
+      data,
+      isBeingSelected,
+      isBeingEdited
+    }
+  ) {
+    this.subject = subject;
     this.id = id;
     this.name = name;
     this.variety = variety;
@@ -70,17 +75,26 @@ class Block {
 
   @computed
   get modelData() {
+    console.log(this.subject);
     let results = [];
     let cumulativeHrGrowth = 0;
     let percentage = 0;
-    this.data.forEach((date, i) => {
+
+    this.data.forEach((arr, i) => {
+      const { date, temp } = arr;
       let hourlyGrowth = 0;
-      if (date.temp < 35 || date.temp > 106 || date.temp === "M")
-        hourlyGrowth = 0;
+      if (temp < 35 || temp > 106 || temp === "M") hourlyGrowth = 0;
+
+      cumulativeHrGrowth += hourlyGrowth;
+
+      let percentage;
+      this.avgStyleLength
+        ? (percentage = cumulativeHrGrowth / this.avgStyleLength * 100)
+        : (percentage = 0);
 
       results.push({
-        date: date.date,
-        temp: date.temp,
+        date,
+        temp,
         hourlyGrowth,
         percentage,
         cumulativeHrGrowth
@@ -200,9 +214,10 @@ export default class BlockStore {
   addBlock = () => {
     if (this.areRequiredFieldsSet) {
       const block = { ...this.block };
+      const subject = this.app.apples.get(block.variety);
       block.id = Date.now();
       block.isBeingSelected = true;
-      this.blocks.push(new Block(block));
+      this.blocks.push(new Block(subject, block));
       this.writeToLocalStorage();
       this.clearFields();
       message.success(`${block.name} block has been created!`);
