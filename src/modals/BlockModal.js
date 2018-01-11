@@ -7,7 +7,7 @@ const style = { width: "100%", marginBottom: 32 };
 
 const BlockModal = inject("app")(
   observer(function BlockModal({
-    app: { apples, states, stations, block, blockStore, blocks }
+    app: { apples, states, currentStateStations, block, blockStore, blocks }
   }) {
     const { addBlock, updateBlock } = blockStore;
 
@@ -21,7 +21,7 @@ const BlockModal = inject("app")(
     });
 
     // state list
-    const stateList = states.values().map(state => {
+    const stateList = states.map(state => {
       return (
         <Select.Option key={state.postalCode} value={state.postalCode}>
           {state.name}
@@ -30,12 +30,9 @@ const BlockModal = inject("app")(
     });
 
     // station list
-    const stationList = stations.values().map(station => {
+    const stationList = currentStateStations.map(station => {
       return (
-        <Select.Option
-          key={station.id}
-          value={`${station.name} ${station.id} ${station.network}`}
-        >
+        <Select.Option key={station.id} value={station.id}>
           {station.name}
         </Select.Option>
       );
@@ -84,7 +81,7 @@ const BlockModal = inject("app")(
           <Select
             name="station"
             style={style}
-            placeholder={`Select station`}
+            placeholder={`Select station - ${currentStateStations.length}`}
             onChange={val => blockStore.addField("station", val)}
             value={block.station}
           >

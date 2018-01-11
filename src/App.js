@@ -16,11 +16,14 @@ import BlockModal from "modals/BlockModal";
 import StartDateModal from "modals/StartDateModal";
 import StyleLengthModal from "modals/StyleLengthModal";
 
+// antd
+import { Spin } from "antd";
+
 @inject("app")
 @observer
 class App extends Component {
   render() {
-    const { bpts } = this.props.app;
+    const { bpts, isLoading } = this.props.app;
     return (
       <div>
         <DevTools />
@@ -38,12 +41,17 @@ class App extends Component {
           <StartDateModal breakpoints={bpts} />
           <StyleLengthModal breakpoints={bpts} />
 
-          <Main>
-            <BlockList />
-          </Main>
+          {isLoading ? (
+            <Spin />
+          ) : (
+            <Main>
+              <BlockList />
+            </Main>
+          )}
         </MatchMediaProvider>
       </div>
     );
+    // return <div>ciccio</div>;
   }
 }
 

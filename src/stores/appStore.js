@@ -1,4 +1,4 @@
-import { observable, when } from "mobx";
+import { observable, computed, when, toJS } from "mobx";
 import SubjectStore from "./SubjectStore";
 import StateStore from "./StateStore";
 import StationStore from "./StationStore";
@@ -8,7 +8,7 @@ import format from "date-fns/format";
 
 import { loadACISData } from "utils/cleanFetchedData";
 
-import { stationTest } from "utils/testData";
+// import { stationTest } from "utils/testData";
 const seasonStartDate = "2017-03-01";
 const selectedDate = "2017-05-15";
 
@@ -27,16 +27,17 @@ export default class AppStore {
     this.acisStations = new StationStore(this);
     this.blockStore = new BlockStore(this);
     when(
-      () => this.blockStationList.length !== 0,
+      () => !this.isLoading && this.blocks.length !== 0,
       () =>
-        this.blockStationList.forEach(station => {
+        this.listOfStationsToFetch.forEach(station => {
+          console.log(station);
           this.acisData.set(
-            "station",
-            loadACISData(station[0], seasonStartDate, selectedDate)
+            station.id,
+            loadACISData(toJS(station), seasonStartDate, selectedDate)
           );
         })
     );
-    console.log(this.acisData);
+    console.log(this.acisData.size);
   }
 
   get apples() {
@@ -47,17 +48,34 @@ export default class AppStore {
     return this.acisStates.states;
   }
 
+  get state() {
+    return this.block.state;
+  }
+
+  get station() {
+    return this.blocks.station;
+  }
+
   get stations() {
     return this.acisStations.stations;
   }
 
-  get blockStationList() {
-    const stationList = Array.from(new Set(this.blocks.map(bl => bl.station)))
-      .map(st => st.split(" "))
-      .map(arr => arr.slice(1))
-      .map(arr => arr.join(" "));
-    console.log(stationList);
-    return stationList;
+  get currentStateStations() {
+    if (this.state === "All States") {
+      return this.stations;
+    }
+
+    return this.stations.filter(station => station.state === this.state);
+  }
+
+  @computed
+  get listOfStationsToFetch() {
+    const stationList = this.blocks.map(bl => bl.station);
+    const stationListObj = stationList.map(station =>
+      this.stations.find(s => s.id === station)
+    );
+    // console.log(stationListObj);
+    return stationListObj;
   }
 
   get isLoading() {

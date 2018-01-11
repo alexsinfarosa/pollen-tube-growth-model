@@ -1,21 +1,17 @@
-import { observable, action, when, computed } from "mobx";
+import { observable, action, when } from "mobx";
 import axios from "axios";
 
 export default class StationStore {
   app;
   constructor(app) {
     this.app = app;
-    when(() => this.stations.size === 0, () => this.loadStations());
+    when(() => this.stations, () => this.loadStations());
   }
 
   @observable isLoading = false;
-  @observable stations = new Map();
+  @observable stations = [];
 
-  @action
-  updateStations = json =>
-    json.forEach(blockJson =>
-      this.stations.set(`${blockJson.id} ${blockJson.network}`, blockJson)
-    );
+  @action updateStations = d => (this.stations = d);
 
   @action
   loadStations() {
@@ -35,19 +31,6 @@ export default class StationStore {
         console.log("Failed to load stations", err);
       });
   }
-
-  @computed
-  get currentStateStations() {
-    if (this.state.name === "All States") {
-      return this.stations;
-    }
-
-    return this.stations.filter(
-      station => station.state === this.state.postalCode
-    );
-  }
-
-  @observable station = JSON.parse(localStorage.getItem("station")) || {};
 
   @action
   setStation = id => {

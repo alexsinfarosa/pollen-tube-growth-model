@@ -4,14 +4,11 @@ export default class StateStore {
   app;
   constructor(app) {
     this.app = app;
-    when(() => this.states.size === 0, () => this.loadStates());
+    when(() => this.states, () => this.loadStates());
   }
 
-  @observable states = new Map();
-
-  @action
-  updateStates = json =>
-    json.forEach(blockJson => this.states.set(blockJson.postalCode, blockJson));
+  @observable states = [];
+  @action updateStates = d => (d = this.states = d);
 
   @action
   loadStates() {
@@ -24,19 +21,4 @@ export default class StateStore {
         console.log("Failed to load states", err);
       });
   }
-
-  @observable
-  state = JSON.parse(localStorage.getItem("state")) || this.states.get("ALL");
-
-  @action
-  setState = name => {
-    this.state = this.states.find(state => state.name === name);
-    localStorage.setItem("state", JSON.stringify(this.state));
-  };
-
-  @action
-  setStateFromMap = state => {
-    this.state = state;
-    localStorage.setItem("state", JSON.stringify(this.state));
-  };
 }
