@@ -6,14 +6,22 @@ import { BlockWrapper } from "styles";
 
 // components
 import BlockHeader from "./BlockHeader";
-import DateStyleLengthBar from "components/block/DateStyleLengthBar";
+import BlockBody from "components/block/BlockBody";
+
+import { Row, Spin } from "antd";
 
 const Block = inject("app")(
   observer(function Block({ app: { bpts }, bl }) {
     return (
       <BlockWrapper>
         <BlockHeader bl={bl} breakpoints={bpts} />
-        <DateStyleLengthBar bl={bl} />
+        {!bl.isDataLoaded ? (
+          <Row type="flex" justify="center" align="middle">
+            <Spin />
+          </Row>
+        ) : (
+          <BlockBody bl={bl} breakpoints={bpts} />
+        )}
       </BlockWrapper>
     );
   })

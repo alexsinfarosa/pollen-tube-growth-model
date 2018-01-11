@@ -9,7 +9,7 @@ import { Row, Col, Tooltip, Icon, Popconfirm, Divider } from "antd";
 
 const BlockHeader = inject("app")(
   observer(function BlockHeader({
-    app: { blockStore, stations },
+    app: { blockStore, stations, isLoading },
     breakpoints,
     bl
   }) {

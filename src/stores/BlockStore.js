@@ -61,6 +61,49 @@ class Block {
       );
     }
   }
+
+  @computed
+  get isDataLoaded() {
+    // console.log(this.data.length > 0);
+    return this.data.length > 0;
+  }
+
+  @computed
+  get modelData() {
+    let results = [];
+    let cumulativeHrGrowth = 0;
+    let percentage = 0;
+    this.data.forEach((date, i) => {
+      let hourlyGrowth = 0;
+      if (date.temp < 35 || date.temp > 106 || date.temp === "M")
+        hourlyGrowth = 0;
+
+      results.push({
+        date: date.date,
+        temp: date.temp,
+        hourlyGrowth,
+        percentage,
+        cumulativeHrGrowth
+      });
+    });
+    return results;
+  }
+
+  @computed
+  get json() {
+    return {
+      id: this.id,
+      name: this.name,
+      variety: this.variety,
+      state: this.state,
+      station: this.station,
+      styleLengths: this.styleLengths,
+      dates: this.dates,
+      data: this.data,
+      isBeingSelected: this.isBeingSelected,
+      isBeingEdited: this.isBeingEdited
+    };
+  }
 }
 
 export default class BlockStore {
@@ -109,7 +152,7 @@ export default class BlockStore {
     station: undefined,
     styleLengths: [],
     dates: [],
-    data: new Map(),
+    data: [],
     isBeingSelected: false,
     isBeingEdited: false
   };
@@ -129,7 +172,7 @@ export default class BlockStore {
     this.block.station = undefined;
     this.block.styleLengths = [];
     this.block.dates = [];
-    this.block.data = new Map();
+    this.block.data = [];
     this.block.isBeingSelected = false;
     this.block.isBeingEdited = false;
     this.readFromLocalStorage();
@@ -283,6 +326,8 @@ export default class BlockStore {
     this.block.styleLengths.splice(idx, 1, obj);
     this.styleLength = undefined;
   };
+
+  // data -------------------------------------------------------------------------------
 
   // Local storage ----------------------------------------------------------------------
   @action
