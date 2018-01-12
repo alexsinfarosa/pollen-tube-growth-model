@@ -77,7 +77,6 @@ class Block {
   get modelData() {
     if (this.dates.length !== 0 && this.avgStyleLength) {
       const hour = getHours(this.dates[this.dates.length - 1]);
-      console.log(hour);
       const startIdx = hour - 1;
       const data = this.data.slice(startIdx);
       let cumulativeHrGrowth = 0;
@@ -260,6 +259,7 @@ export default class BlockStore {
     const block = { ...this.block };
     const blocks = [...this.blocks];
     block.isBeingEdited = false;
+    block.subject = this.app.apples.get(block.variety);
     block.styleLengths.forEach(sl => (sl.isEdit = false));
     const idx = this.blocks.findIndex(b => b.id === block.id);
     blocks.splice(idx, 1, block);
@@ -355,8 +355,6 @@ export default class BlockStore {
     this.block.styleLengths.splice(idx, 1, obj);
     this.styleLength = undefined;
   };
-
-  // data -------------------------------------------------------------------------------
 
   // Local storage ----------------------------------------------------------------------
   @action

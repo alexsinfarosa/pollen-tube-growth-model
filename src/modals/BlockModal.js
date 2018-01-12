@@ -7,7 +7,15 @@ const style = { width: "100%", marginBottom: 32 };
 
 const BlockModal = inject("app")(
   observer(function BlockModal({
-    app: { apples, states, currentStateStations, block, blockStore, blocks }
+    app: {
+      apples,
+      states,
+      currentStateStations,
+      block,
+      blockStore,
+      blocks,
+      stations
+    }
   }) {
     const { addBlock, updateBlock } = blockStore;
 
@@ -37,6 +45,15 @@ const BlockModal = inject("app")(
         </Select.Option>
       );
     });
+
+    let stationCount = "Select Station";
+    if (block.state) {
+      if (block.state === "ALL") {
+        stationCount = `Select Station (${stations.length})`;
+      } else {
+        stationCount = `Select Station (${currentStateStations.length})`;
+      }
+    }
 
     return (
       <Modal
@@ -81,7 +98,7 @@ const BlockModal = inject("app")(
           <Select
             name="station"
             style={style}
-            placeholder={`Select station - ${currentStateStations.length}`}
+            placeholder={stationCount}
             onChange={val => blockStore.addField("station", val)}
             value={block.station}
           >
