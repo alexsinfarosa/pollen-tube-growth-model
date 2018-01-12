@@ -5,7 +5,6 @@ export default class SubjectStore {
   constructor(app) {
     // app is the appStore
     this.app = app;
-    this.fetch = fetch;
     when(() => this.subjects.size === 0, () => this.loadSubjects());
   }
 

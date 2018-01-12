@@ -1,4 +1,5 @@
 import moment from "moment";
+import format from "date-fns/format";
 
 // PRE FETCHING ---------------------------------------------------------
 export const matchIconsToStations = (protocol, station, state) => {
@@ -158,4 +159,8 @@ export const dailyToHourlyDates = arr => {
     });
   });
   return results;
+};
+
+export const formatDate = date => {
+  return format(date, "MM/DD/YY HH:00");
 };

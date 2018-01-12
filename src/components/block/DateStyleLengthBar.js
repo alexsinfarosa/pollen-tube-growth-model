@@ -1,15 +1,19 @@
 import React from "react";
 import { inject, observer } from "mobx-react";
 // import { toJS } from "mobx";
+
 // antd
 import { Row, Col, Button } from "antd";
 
 // styled components
 import { RowCentered } from "styles";
 
+// utils
+import { formatDate } from "utils/utils";
+
 const DateStyleLengthBar = inject("app")(
   observer(function DateStyleLengthBar({
-    app: { formatDate, blockStore, showStyleLengthModal },
+    app: { blockStore, showStyleLengthModal },
     bl
   }) {
     return (

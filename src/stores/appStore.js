@@ -4,7 +4,7 @@ import StateStore from "./StateStore";
 import StationStore from "./StationStore";
 import BlockStore from "./BlockStore";
 
-import format from "date-fns/format";
+// import format from "date-fns/format";
 
 export default class AppStore {
   fetch;
@@ -19,29 +19,7 @@ export default class AppStore {
     this.acisStates = new StateStore(this);
     this.acisStations = new StationStore(this);
     this.blockStore = new BlockStore(this);
-    // if (isAfter(Date.now(), this.seasonStartDate)) {
-    // when(
-    //   () => !this.isLoading && this.blocks.length !== 0,
-    //   () => this.loadData()
-    // );
-    // // }
   }
-
-  // @action
-  // loadData = () => {
-  //   console.log("loadData");
-  //   this.listOfStationsToFetch.forEach(station => {
-  //     loadACISData(station, "2017-03-01", "2017-05-01").then(res => {
-  //       this.blocks.forEach(block => {
-  //         if (block.station === station.id) {
-  //           block.data = dailyToHourlyDates(
-  //             Array.from(res.get("cStationClean"))
-  //           );
-  //         }
-  //       });
-  //     });
-  //   });
-  // };
 
   get apples() {
     return this.subject.subjects;
@@ -71,16 +49,6 @@ export default class AppStore {
     return this.stations.filter(station => station.state === this.state);
   }
 
-  // @computed
-  // get listOfStationsToFetch() {
-  //   const stationList = Array.from(new Set(this.blocks.map(bl => bl.station)));
-  //   const stationListObj = stationList.map(station =>
-  //     this.stations.find(s => s.id === station)
-  //   );
-  //   // console.log(stationListObj);
-  //   return stationListObj;
-  // }
-
   get isLoading() {
     return this.acisStations.isLoading;
   }
@@ -105,9 +73,5 @@ export default class AppStore {
     lg: "(min-width: 992px)",
     xl: "(min-width: 1200px)",
     xxl: "(min-width: 1600px)"
-  };
-
-  formatDate = date => {
-    return format(date, "MM/DD/YY HH:00");
   };
 }

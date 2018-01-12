@@ -1,4 +1,4 @@
-import { observable, action, computed, when, reaction } from "mobx";
+import { observable, action, computed, when } from "mobx";
 import moment from "moment";
 import { toJS } from "mobx";
 
@@ -53,21 +53,12 @@ class Block {
     this.data = data;
     this.isBeingSelected = isBeingSelected;
     this.isBeingEdited = isBeingEdited;
-
-    reaction(
-      () => this.json,
-      json => {
-        if (json.dates && json.avgStyleLength) {
-          console.log("make the call");
-        }
-      }
-    );
   }
 
   @computed
   get startDate() {
     if (this.dates.length !== 0) {
-      return format(this.dates[0], "YYYY-MM-DD");
+      return this.dates[0];
     }
   }
 
@@ -112,14 +103,6 @@ class Block {
         };
       });
     }
-  }
-
-  @computed
-  get json() {
-    return {
-      avgStyleLength: this.avgStyleLength,
-      dates: this.dates
-    };
   }
 }
 
