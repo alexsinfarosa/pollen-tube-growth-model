@@ -1,6 +1,5 @@
 [
   {
-    "id": 1,
     "name": "Fuji",
     "temps": [
       35,
@@ -150,7 +149,6 @@
     ]
   },
   {
-    "id": 2,
     "name": "Gala",
     "temps": [
       35,
@@ -300,7 +298,6 @@
     ]
   },
   {
-    "id": 3,
     "name": "Golden Delicous",
     "temps": [
       35,
@@ -450,7 +447,6 @@
     ]
   },
   {
-    "id": 4,
     "name": "Cripps Pink (Pink Lady)",
     "temps": [
       35,
@@ -600,7 +596,6 @@
     ]
   },
   {
-    "id": 5,
     "name": "Granny Smith",
     "temps": [
       35,
@@ -750,7 +745,6 @@
     ]
   },
   {
-    "id": 6,
     "name": "Honeycrisp",
     "temps": [
       35,
@@ -900,7 +894,6 @@
     ]
   },
   {
-    "id": 7,
     "name": "Red Delicious",
     "temps": [
       35,

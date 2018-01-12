@@ -14,7 +14,7 @@ const BlockModal = inject("app")(
     // variety list
     const varietyList = apples.values().map(variety => {
       return (
-        <Select.Option key={variety.id} value={variety.name}>
+        <Select.Option key={variety.name} value={variety.name}>
           {variety.name}
         </Select.Option>
       );

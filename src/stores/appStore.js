@@ -1,14 +1,10 @@
-import { observable, action, computed, when } from "mobx";
+import { observable } from "mobx";
 import SubjectStore from "./SubjectStore";
 import StateStore from "./StateStore";
 import StationStore from "./StationStore";
 import BlockStore from "./BlockStore";
 
 import format from "date-fns/format";
-import getHours from "date-fns/get_hours";
-
-import { loadACISData } from "utils/cleanFetchedData";
-import { dailyToHourlyDates } from "utils/utils";
 
 export default class AppStore {
   fetch;
@@ -16,8 +12,6 @@ export default class AppStore {
   acisStates;
   acisStations;
   blockStore;
-  @observable seasonStartDate = "2017-03-01";
-  @observable selectedDate = "2017-05-15";
 
   constructor(fetcher) {
     this.fetch = fetcher;
@@ -25,26 +19,29 @@ export default class AppStore {
     this.acisStates = new StateStore(this);
     this.acisStations = new StationStore(this);
     this.blockStore = new BlockStore(this);
-    when(() => !this.isLoading, () => this.loadData());
+    // if (isAfter(Date.now(), this.seasonStartDate)) {
+    // when(
+    //   () => !this.isLoading && this.blocks.length !== 0,
+    //   () => this.loadData()
+    // );
+    // // }
   }
 
-  @action
-  loadData = () => {
-    console.log("loadData");
-    this.listOfStationsToFetch.forEach(station => {
-      loadACISData(station, this.seasonStartDate, this.selectedDate).then(
-        res => {
-          this.blocks.forEach(block => {
-            if (block.station === station.id) {
-              block.data = dailyToHourlyDates(
-                Array.from(res.get("cStationClean"))
-              );
-            }
-          });
-        }
-      );
-    });
-  };
+  // @action
+  // loadData = () => {
+  //   console.log("loadData");
+  //   this.listOfStationsToFetch.forEach(station => {
+  //     loadACISData(station, "2017-03-01", "2017-05-01").then(res => {
+  //       this.blocks.forEach(block => {
+  //         if (block.station === station.id) {
+  //           block.data = dailyToHourlyDates(
+  //             Array.from(res.get("cStationClean"))
+  //           );
+  //         }
+  //       });
+  //     });
+  //   });
+  // };
 
   get apples() {
     return this.subject.subjects;
@@ -74,15 +71,15 @@ export default class AppStore {
     return this.stations.filter(station => station.state === this.state);
   }
 
-  @computed
-  get listOfStationsToFetch() {
-    const stationList = Array.from(new Set(this.blocks.map(bl => bl.station)));
-    const stationListObj = stationList.map(station =>
-      this.stations.find(s => s.id === station)
-    );
-    // console.log(stationListObj);
-    return stationListObj;
-  }
+  // @computed
+  // get listOfStationsToFetch() {
+  //   const stationList = Array.from(new Set(this.blocks.map(bl => bl.station)));
+  //   const stationListObj = stationList.map(station =>
+  //     this.stations.find(s => s.id === station)
+  //   );
+  //   // console.log(stationListObj);
+  //   return stationListObj;
+  // }
 
   get isLoading() {
     return this.acisStations.isLoading;

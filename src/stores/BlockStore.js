@@ -1,12 +1,18 @@
-import { observable, action, computed, when } from "mobx";
+import { observable, action, computed, when, reaction } from "mobx";
 import moment from "moment";
-// import { toJS } from "mobx";
+import { toJS } from "mobx";
 
 // utils
-import { roundDate } from "utils/utils";
+import { roundDate, dailyToHourlyDates } from "utils/utils";
+import { loadACISData } from "utils/cleanFetchedData";
 
 // antd
 import { message } from "antd";
+import getHours from "date-fns/get_hours";
+
+import format from "date-fns/format";
+import getYear from "date-fns/get_year";
+import isThisYear from "date-fns/is_this_year";
 
 class Block {
   subject;
@@ -47,12 +53,21 @@ class Block {
     this.data = data;
     this.isBeingSelected = isBeingSelected;
     this.isBeingEdited = isBeingEdited;
+
+    reaction(
+      () => this.json,
+      json => {
+        if (json.dates && json.avgStyleLength) {
+          console.log("make the call");
+        }
+      }
+    );
   }
 
   @computed
   get startDate() {
     if (this.dates.length !== 0) {
-      return this.dates[0];
+      return format(this.dates[0], "YYYY-MM-DD");
     }
   }
 
@@ -68,54 +83,42 @@ class Block {
   }
 
   @computed
-  get isDataLoaded() {
-    // console.log(this.data.length > 0);
-    return this.data.length > 0;
-  }
-
-  @computed
   get modelData() {
-    console.log(this.subject);
-    let results = [];
-    let cumulativeHrGrowth = 0;
-    let percentage = 0;
+    if (this.dates.length !== 0 && this.avgStyleLength) {
+      const hour = getHours(this.dates[this.dates.length - 1]);
+      console.log(hour);
+      const startIdx = hour - 1;
+      const data = this.data.slice(startIdx);
+      let cumulativeHrGrowth = 0;
+      let percentage = 0;
 
-    this.data.forEach((arr, i) => {
-      const { date, temp } = arr;
-      let hourlyGrowth = 0;
-      if (temp < 35 || temp > 106 || temp === "M") hourlyGrowth = 0;
+      return data.map((arr, i) => {
+        const { date, temp } = arr;
+        const { hrGrowth, temps } = this.subject;
 
-      cumulativeHrGrowth += hourlyGrowth;
+        const idx = temps.findIndex(t => t.toString() === temp);
+        let hourlyGrowth = hrGrowth[idx];
+        if (temp < 35 || temp > 106 || temp === "M") hourlyGrowth = 0;
 
-      let percentage;
-      this.avgStyleLength
-        ? (percentage = cumulativeHrGrowth / this.avgStyleLength * 100)
-        : (percentage = 0);
+        cumulativeHrGrowth += hourlyGrowth;
+        percentage = cumulativeHrGrowth / this.avgStyleLength * 100;
 
-      results.push({
-        date,
-        temp,
-        hourlyGrowth,
-        percentage,
-        cumulativeHrGrowth
+        return {
+          date,
+          temp,
+          hourlyGrowth,
+          percentage: Number(percentage.toFixed(3)),
+          cumulativeHrGrowth: Number(cumulativeHrGrowth.toFixed(3))
+        };
       });
-    });
-    return results;
+    }
   }
 
   @computed
   get json() {
     return {
-      id: this.id,
-      name: this.name,
-      variety: this.variety,
-      state: this.state,
-      station: this.station,
-      styleLengths: this.styleLengths,
-      dates: this.dates,
-      data: this.data,
-      isBeingSelected: this.isBeingSelected,
-      isBeingEdited: this.isBeingEdited
+      avgStyleLength: this.avgStyleLength,
+      dates: this.dates
     };
   }
 }
@@ -127,6 +130,7 @@ export default class BlockStore {
     when(() => this.blocks.length === 0, () => this.readFromLocalStorage());
   }
 
+  @observable isLoading = false;
   // Dates ----------------------------------------------------------------------------
   @observable date;
   @action
@@ -136,7 +140,7 @@ export default class BlockStore {
   @action
   setStartDate = () => {
     this.block.dates.push(this.date);
-    this.updateBlock();
+    this.fetchAndUploadData();
   };
 
   // style length
@@ -192,6 +196,11 @@ export default class BlockStore {
     this.readFromLocalStorage();
   };
 
+  @computed
+  get isDataLoaded() {
+    console.log(this.blocks.map(bl => bl.data.length !== 0));
+    return this.blocks.map(bl => bl.data.length !== 0);
+  }
   @action
   selectBlock = (name, id) => {
     this.showModal(name);
@@ -214,10 +223,10 @@ export default class BlockStore {
   addBlock = () => {
     if (this.areRequiredFieldsSet) {
       const block = { ...this.block };
-      const subject = this.app.apples.get(block.variety);
-      block.id = Date.now();
       block.isBeingSelected = true;
-      this.blocks.push(new Block(subject, block));
+      block.id = Date.now();
+      const subject = this.app.apples.get(block.variety);
+      this.blocks.push(new Block(toJS(subject), block));
       this.writeToLocalStorage();
       this.clearFields();
       message.success(`${block.name} block has been created!`);
@@ -239,6 +248,28 @@ export default class BlockStore {
     block.isBeingEdited = true;
     this.block = block;
     this.showModal("isBlockModal");
+  };
+
+  fetchAndUploadData = () => {
+    this.isLoading = true;
+    const block = { ...this.block };
+    const blocks = [...this.blocks];
+    let startDate = format(block.dates[0], "YYYY-MM-DD");
+    let now = format(Date.now(), "YYYY-MM-DD");
+    const year = getYear(startDate);
+    const station = this.app.stations.find(s => s.id === block.station);
+    if (!isThisYear(year)) now = `${year}-07-01`;
+
+    loadACISData(station, startDate, now).then(res => {
+      block.data = dailyToHourlyDates(Array.from(res.get("cStationClean")));
+      const idx = this.blocks.findIndex(b => b.id === block.id);
+      blocks.splice(idx, 1, block);
+      this.blocks = blocks;
+      this.writeToLocalStorage();
+      this.clearFields();
+      message.success(`${block.name} block has been updated!`);
+      this.isLoading = false;
+    });
   };
 
   @action
@@ -361,7 +392,7 @@ export default class BlockStore {
     if (data) {
       this.blocks.clear();
       data.forEach(json => {
-        this.blocks.push(new Block(json));
+        this.blocks.push(new Block(json.subject, json));
       });
     }
   };
