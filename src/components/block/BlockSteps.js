@@ -17,7 +17,7 @@ const BlockSteps = inject("app")(
         <svg className="button" expanded="true" height="24px" width="24px">
           <circle cx="50%" cy="50%" r="7px" fill="#4EA27D" />
           <circle
-            className={props.name === "Today" && "pulse"}
+            className={props.name === "Today" ? "pulse" : null}
             cx="50%"
             cy="50%"
             r="8px"

@@ -39,19 +39,26 @@ const BlockTop = inject("app")(
               flex: "1 1 auto"
             }}
           >
-            <RowCentered column>
-              <Col style={{ marginBottom: 8 }}>
-                <small>Emergence</small>
-              </Col>
-              <Col>
-                <Progress
-                  type="circle"
-                  percent={Math.round(currentPercentage, 1)}
-                  // percent={100}
-                  format={d => formatEmergence(d)}
-                  width={80}
-                />
-              </Col>
+            <RowCentered>
+              {breakpoints.xs ? (
+                <Col
+                  span={24}
+                  style={{
+                    height: 110,
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center"
+                  }}
+                >
+                  <small>
+                    Avg. Style Length: {bl.avgStyleLength.toPrecision(4)} (mm)
+                  </small>
+                </Col>
+              ) : (
+                <Col span={24}>
+                  Avg. Style Length: {bl.avgStyleLength.toPrecision(4)} (mm)
+                </Col>
+              )}
             </RowCentered>
           </Col>
 
@@ -78,26 +85,19 @@ const BlockTop = inject("app")(
               flex: "1 1 auto"
             }}
           >
-            <RowCentered>
-              {breakpoints.xs ? (
-                <Col
-                  span={24}
-                  style={{
-                    height: 110,
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center"
-                  }}
-                >
-                  <small>
-                    Avg. Style Length: {bl.avgStyleLength.toPrecision(4)} (mm)
-                  </small>
-                </Col>
-              ) : (
-                <Col span={24}>
-                  Avg. Style Length: {bl.avgStyleLength.toPrecision(4)} (mm)
-                </Col>
-              )}
+            <RowCentered column>
+              <Col style={{ marginBottom: 8 }}>
+                <small>Emergence</small>
+              </Col>
+              <Col>
+                <Progress
+                  type="circle"
+                  percent={Math.round(currentPercentage, 1)}
+                  // percent={100}
+                  format={d => formatEmergence(d)}
+                  width={80}
+                />
+              </Col>
             </RowCentered>
           </Col>
         </BlockBodyWrapper>

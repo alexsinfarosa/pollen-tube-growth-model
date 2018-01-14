@@ -12,7 +12,9 @@ import getHours from "date-fns/get_hours";
 
 import format from "date-fns/format";
 import getYear from "date-fns/get_year";
-import isThisYear from "date-fns/is_this_year";
+// import isThisYear from "date-fns/is_this_year";
+import isAfter from "date-fns/is_after";
+import isBefore from "date-fns/is_before";
 
 class Block {
   id;
@@ -51,6 +53,54 @@ class Block {
   }
 
   @computed
+  get startDate() {
+    if (this.dates.length !== 0) {
+      return this.dates[0];
+    }
+  }
+
+  @computed
+  get currentYear() {
+    if (this.startDate) {
+      return format(this.startDate, "YYYY");
+    }
+    return getYear(new Date());
+  }
+
+  @computed
+  get seasonStartDate() {
+    if (this.startDate) {
+      return `${this.currentYear}-03-01`;
+    }
+  }
+
+  @computed
+  get seasonEndDate() {
+    if (this.startDate) {
+      return `${this.currentYear}-07-01`;
+    }
+  }
+
+  @computed
+  get isSeason() {
+    if (this.startDate) {
+      return (
+        isAfter(this.startDate, this.seasonStartDate) &&
+        isBefore(this.startDate, this.seasonEndDate)
+      );
+    }
+  }
+
+  @computed
+  get now() {
+    const now = Date.now();
+    if (isAfter(now, this.seasonEndDate)) {
+      return this.seasonEndDate;
+    }
+    return format(now, "MM/DD/YY HH:00");
+  }
+
+  @computed
   get stepDate() {
     let results = [];
     this.dates.forEach((date, i) => {
@@ -68,22 +118,12 @@ class Block {
       });
     });
 
-    let now = format(Date.now(), "YYYY-MM-DD");
-    const year = getYear(this.startDate);
-    if (!isThisYear(year)) now = `${year}-05-01`;
     const today = {
       name: "Today",
-      date: now,
+      date: this.now,
       status: "finish"
     };
     return [...results, today];
-  }
-
-  @computed
-  get startDate() {
-    if (this.dates.length !== 0) {
-      return this.dates[0];
-    }
   }
 
   @computed
@@ -274,12 +314,7 @@ export default class BlockStore {
     this.isLoading = true;
     const block = { ...this.block };
     const blocks = [...this.blocks];
-    let startDate = format(block.dates[0], "YYYY-MM-DD");
-    let now = format(Date.now(), "YYYY-MM-DD");
-    const year = getYear(startDate);
-    if (!isThisYear(year)) now = `${year}-05-01`;
-
-    loadACISData(block.station, startDate, now).then(res => {
+    loadACISData(block.station, block.startDate, block.now).then(res => {
       block.data = dailyToHourlyDates(Array.from(res.get("cStationClean")));
       const idx = this.blocks.findIndex(b => b.id === block.id);
       blocks.splice(idx, 1, block);
