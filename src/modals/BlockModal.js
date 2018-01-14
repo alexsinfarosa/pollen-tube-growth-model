@@ -17,7 +17,13 @@ const BlockModal = inject("app")(
       stations
     }
   }) {
-    const { addBlock, updateBlock } = blockStore;
+    const {
+      addBlock,
+      updateBlock,
+      isBlockModal,
+      cancelButton,
+      addField
+    } = blockStore;
 
     // variety list
     const varietyList = apples.values().map(variety => {
@@ -62,25 +68,25 @@ const BlockModal = inject("app")(
         closable={false}
         maskClosable={false}
         title={block.isBeingEdited ? `Edit Block` : `New Block`}
-        visible={blockStore.isBlockModal}
+        visible={isBlockModal}
         okText={block.isBeingEdited ? "UpdateBlock" : "Add Block"}
         onOk={() => (block.isBeingEdited ? updateBlock() : addBlock())}
-        onCancel={blockStore.cancelButton}
+        onCancel={cancelButton}
       >
         <Row align="middle">
           <Input
             name="name"
             style={style}
             placeholder="Insert block name (min. 3 letters)"
-            onChange={e => blockStore.addField(e.target.name, e.target.value)}
+            onChange={e => addField(e.target.name, e.target.value)}
             value={block.name}
           />
 
           <Select
             style={style}
             placeholder={`Select apple variety`}
-            onChange={val => blockStore.addField("variety", val)}
-            value={block.variety}
+            onChange={val => addField("variety", val)}
+            value={block.variety ? block.variety.name : undefined}
           >
             {varietyList}
           </Select>
@@ -89,8 +95,8 @@ const BlockModal = inject("app")(
             name="state"
             style={style}
             placeholder={`Select state`}
-            onChange={val => blockStore.addField("state", val)}
-            value={block.state}
+            onChange={val => addField("state", val)}
+            value={block.state ? block.state.postalCode : undefined}
           >
             {stateList}
           </Select>
@@ -99,8 +105,8 @@ const BlockModal = inject("app")(
             name="station"
             style={style}
             placeholder={stationCount}
-            onChange={val => blockStore.addField("station", val)}
-            value={block.station}
+            onChange={val => addField("station", val)}
+            value={block.station ? block.station.name : undefined}
           >
             {stationList}
           </Select>

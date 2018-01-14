@@ -7,11 +7,12 @@ import { BlockWrapper } from "styles";
 // components
 import BlockHeader from "./BlockHeader";
 import BlockBody from "components/block/BlockBody";
+import USMap from "components/USMap";
 
 import { Row, Spin } from "antd";
 
 const Block = inject("app")(
-  observer(function Block({ app: { bpts, isDataLoaded }, bl }) {
+  observer(function Block({ app: { bpts, bStore, isDataLoaded }, bl }) {
     return (
       <BlockWrapper>
         <BlockHeader bl={bl} breakpoints={bpts} />
@@ -20,7 +21,10 @@ const Block = inject("app")(
             <Spin />
           </Row>
         ) : (
-          <BlockBody bl={bl} breakpoints={bpts} />
+          <div>
+            <BlockBody bl={bl} breakpoints={bpts} />
+            {bStore.isMap && <USMap bl={bl} />}
+          </div>
         )}
       </BlockWrapper>
     );

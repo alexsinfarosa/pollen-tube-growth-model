@@ -15,7 +15,7 @@ import {
 const RadioGroup = Radio.Group;
 
 const StyleLengthModal = inject("app")(
-  observer(function StyleLengthModal({ app: { blockStore }, breakpoints }) {
+  observer(function StyleLengthModal({ app: { bStore }, breakpoints }) {
     const {
       block,
       updateBlock,
@@ -31,7 +31,7 @@ const StyleLengthModal = inject("app")(
       isStyleLengthBeingEdited,
       updateOneStyleLength,
       cancelButton
-    } = blockStore;
+    } = bStore;
 
     const columns = [
       {

@@ -1,8 +1,14 @@
 import moment from "moment";
 import format from "date-fns/format";
 
+// import newa from "assets/newa.svg";
+// import newaGray from "assets/newaGray.svg";
+// import airport from "assets/airport.svg";
+// import airportGray from "assets/airportGray.svg";
+
 // PRE FETCHING ---------------------------------------------------------
-export const matchIconsToStations = (protocol, station, state) => {
+export const matchIconsToStations = (station, state) => {
+  const protocol = window.location.protocol;
   const { network } = station;
   const { postalCode } = state;
 

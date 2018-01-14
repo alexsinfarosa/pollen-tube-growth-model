@@ -8,7 +8,7 @@ const { Option, OptGroup } = Select;
 
 const AppToolBar = inject("app")(
   observer(function AppToolBar({
-    app: { blockStore, isMap, blocks, filteredBlocks },
+    app: { blockStore, blocks, filteredBlocks },
     breakpoints
   }) {
     const bpts = breakpoints;
@@ -91,14 +91,14 @@ const AppToolBar = inject("app")(
           </Select>
         </Col>
 
-        {!bpts.xs && (
+        {filteredBlocks.length === 1 && (
           <Col right>
             <Tooltip title="Toggle Map">
               <Button
                 type="primary"
-                ghost={isMap ? false : true}
+                ghost={blockStore.isMap ? false : true}
                 icon="environment-o"
-                // onClick={toggleMap}
+                onClick={blockStore.toggleMap}
               >
                 Map
               </Button>

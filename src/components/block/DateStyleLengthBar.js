@@ -12,28 +12,25 @@ import { RowCentered } from "styles";
 import { formatDate } from "utils/utils";
 
 const DateStyleLengthBar = inject("app")(
-  observer(function DateStyleLengthBar({
-    app: { blockStore, showStyleLengthModal },
-    bl
-  }) {
+  observer(function DateStyleLengthBar({ app: { bStore }, bl }) {
     return (
       <Row type="flex" justify="space-between" align="center">
         {bl.dates.length !== 0 ? (
-          <RowCentered>
+          <RowCentered style={{ height: 32 }}>
             <Col>Model Start Date: {formatDate(bl.startDate)}</Col>
           </RowCentered>
         ) : (
           <Button
             type="default"
             style={{ maxWidth: "40%" }}
-            onClick={() => blockStore.selectBlock("isDateModal", bl.id)}
+            onClick={() => bStore.selectBlock("isDateModal", bl.id)}
           >
             Set Start Date
           </Button>
         )}
 
         {bl.avgStyleLength ? (
-          <RowCentered>
+          <RowCentered style={{ height: 32 }}>
             <Col>
               Average Style Length: {bl.avgStyleLength.toPrecision(4)} (mm)
             </Col>
@@ -42,7 +39,7 @@ const DateStyleLengthBar = inject("app")(
           <Button
             type="default"
             style={{ maxWidth: "40%" }}
-            onClick={() => blockStore.selectBlock("isStyleLengthModal", bl.id)}
+            onClick={() => bStore.selectBlock("isStyleLengthModal", bl.id)}
           >
             Set Style Length
           </Button>

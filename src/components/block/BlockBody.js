@@ -7,7 +7,7 @@ import DateStyleLengthBar from "components/block/DateStyleLengthBar";
 import { Row, Col } from "antd";
 
 const BlockBody = inject("app")(
-  observer(function BlockBody({ app: { bpts, isLoading }, bl }) {
+  observer(function BlockBody({ app, bl }) {
     return (
       <Row>
         <Col>

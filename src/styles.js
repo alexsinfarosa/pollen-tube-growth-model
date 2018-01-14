@@ -155,18 +155,18 @@ export const Section = styled.div`
 
 export const SectionMap = Section.extend`
   width: 100%;
-  height: 25vh;
+  height: 35vh;
 
   @media (min-width: ${sm}) {
-    height: 30vh;
+    height: 35vh;
   }
 
   @media (min-width: ${md}) {
-    height: 35vh;
+    height: 40vh;
   }
 
   @media (min-width: ${lg}) {
-    height: 35vh;
+    height: 45vh;
   }
 `;
 

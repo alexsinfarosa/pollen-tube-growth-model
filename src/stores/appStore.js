@@ -29,28 +29,12 @@ export default class AppStore {
     return this.acisStates.states;
   }
 
-  get state() {
-    return this.block.state;
-  }
-
-  get station() {
-    return this.blocks.station;
-  }
-
   get stations() {
     return this.acisStations.stations;
   }
 
-  get currentStateStations() {
-    if (this.state === "All States") {
-      return this.stations;
-    }
-
-    return this.stations.filter(station => station.state === this.state);
-  }
-
-  get isLoading() {
-    return this.acisStations.isLoading;
+  get bStore() {
+    return this.blockStore;
   }
 
   get blocks() {
@@ -63,6 +47,27 @@ export default class AppStore {
 
   get block() {
     return this.blockStore.block;
+  }
+
+  get state() {
+    return this.block.state;
+  }
+
+  get currentStateStations() {
+    if (this.state) {
+      if (this.state.postalCode === "ALL") {
+        return this.stations;
+      }
+
+      return this.stations.filter(
+        station => station.state === this.state.postalCode
+      );
+    }
+    return [];
+  }
+
+  get isLoading() {
+    return this.acisStations.isLoading;
   }
 
   @observable

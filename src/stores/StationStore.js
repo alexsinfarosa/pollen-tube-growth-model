@@ -5,7 +5,7 @@ export default class StationStore {
   app;
   constructor(app) {
     this.app = app;
-    when(() => this.stations, () => this.loadStations());
+    when(() => this.stations.length === 0, () => this.loadStations());
   }
 
   @observable isLoading = false;

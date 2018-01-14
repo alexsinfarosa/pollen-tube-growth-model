@@ -1,6 +1,6 @@
 import { observable, action, computed, when } from "mobx";
 import moment from "moment";
-import { toJS } from "mobx";
+// import { toJS } from "mobx";
 
 // utils
 import { roundDate, dailyToHourlyDates } from "utils/utils";
@@ -15,7 +15,6 @@ import getYear from "date-fns/get_year";
 import isThisYear from "date-fns/is_this_year";
 
 class Block {
-  subject;
   id;
   @observable name;
   @observable variety;
@@ -27,22 +26,18 @@ class Block {
   @observable isBeingSelected;
   @observable isBeingEdited;
 
-  constructor(
-    subject,
-    {
-      id,
-      name,
-      variety,
-      state,
-      station,
-      styleLengths,
-      dates,
-      data,
-      isBeingSelected,
-      isBeingEdited
-    }
-  ) {
-    this.subject = subject;
+  constructor({
+    id,
+    name,
+    variety,
+    state,
+    station,
+    styleLengths,
+    dates,
+    data,
+    isBeingSelected,
+    isBeingEdited
+  }) {
     this.id = id;
     this.name = name;
     this.variety = variety;
@@ -84,7 +79,7 @@ class Block {
 
       return data.map((arr, i) => {
         const { date, temp } = arr;
-        const { hrGrowth, temps } = this.subject;
+        const { hrGrowth, temps } = this.variety;
 
         const idx = temps.findIndex(t => t.toString() === temp);
         let hourlyGrowth = hrGrowth[idx];
@@ -133,6 +128,8 @@ export default class BlockStore {
   @observable isBlockModal = false;
   @observable isDateModal = false;
   @observable isStyleLengthModal = false;
+  @observable isMap = false;
+  @action toggleMap = () => (this.isMap = !this.isMap);
   @action showModal = name => (this[name] = true);
 
   // radioValue
@@ -183,6 +180,7 @@ export default class BlockStore {
     console.log(this.blocks.map(bl => bl.data.length !== 0));
     return this.blocks.map(bl => bl.data.length !== 0);
   }
+
   @action
   selectBlock = (name, id) => {
     this.showModal(name);
@@ -192,10 +190,21 @@ export default class BlockStore {
 
   @action
   addField = (name, val) => {
-    this.block[name] = val;
+    if (name === "variety") {
+      this.block[name] = this.app.apples.get(val);
+    }
+    if (name === "state") {
+      this.block[name] = this.app.states.find(s => s.postalCode === val);
+    }
+    if (name === "station") {
+      this.block[name] = this.app.stations.find(s => s.id === val);
+    }
+    if (name === "name") {
+      this.block[name] = val;
+    }
   };
 
-  @computed
+  @computed //FIX
   get areRequiredFieldsSet() {
     const { name, variety, state, station } = this.block;
     return name.length >= 3 && variety && state && station;
@@ -207,8 +216,7 @@ export default class BlockStore {
       const block = { ...this.block };
       block.isBeingSelected = true;
       block.id = Date.now();
-      const subject = this.app.apples.get(block.variety);
-      this.blocks.push(new Block(toJS(subject), block));
+      this.blocks.push(new Block(block));
       this.writeToLocalStorage();
       this.clearFields();
       message.success(`${block.name} block has been created!`);
@@ -239,18 +247,17 @@ export default class BlockStore {
     let startDate = format(block.dates[0], "YYYY-MM-DD");
     let now = format(Date.now(), "YYYY-MM-DD");
     const year = getYear(startDate);
-    const station = this.app.stations.find(s => s.id === block.station);
     if (!isThisYear(year)) now = `${year}-07-01`;
 
-    loadACISData(station, startDate, now).then(res => {
+    loadACISData(block.station, startDate, now).then(res => {
       block.data = dailyToHourlyDates(Array.from(res.get("cStationClean")));
       const idx = this.blocks.findIndex(b => b.id === block.id);
       blocks.splice(idx, 1, block);
       this.blocks = blocks;
       this.writeToLocalStorage();
       this.clearFields();
-      message.success(`${block.name} block has been updated!`);
       this.isLoading = false;
+      message.success(`${block.name} block has been updated!`);
     });
   };
 
@@ -259,7 +266,6 @@ export default class BlockStore {
     const block = { ...this.block };
     const blocks = [...this.blocks];
     block.isBeingEdited = false;
-    block.subject = this.app.apples.get(block.variety);
     block.styleLengths.forEach(sl => (sl.isEdit = false));
     const idx = this.blocks.findIndex(b => b.id === block.id);
     blocks.splice(idx, 1, block);
@@ -280,6 +286,7 @@ export default class BlockStore {
 
   @action
   selectAllBlocks = () => {
+    this.isMap = false;
     const areAllBlocksDisplayed = this.blocks.every(bl => bl.isBeingSelected);
     areAllBlocksDisplayed
       ? this.blocks.forEach(bl => (bl.isBeingSelected = false))
@@ -373,7 +380,7 @@ export default class BlockStore {
     if (data) {
       this.blocks.clear();
       data.forEach(json => {
-        this.blocks.push(new Block(json.subject, json));
+        this.blocks.push(new Block(json));
       });
     }
   };

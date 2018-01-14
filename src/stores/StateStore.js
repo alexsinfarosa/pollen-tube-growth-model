@@ -4,7 +4,7 @@ export default class StateStore {
   app;
   constructor(app) {
     this.app = app;
-    when(() => this.states, () => this.loadStates());
+    when(() => this.states.length === 0, () => this.loadStates());
   }
 
   @observable states = [];

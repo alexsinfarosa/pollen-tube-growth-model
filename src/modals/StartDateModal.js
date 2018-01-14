@@ -11,7 +11,7 @@ const disabledStartDate = current => {
 };
 
 const StartDateModal = inject("app")(
-  observer(function StartDateModal({ app: { formatDate, blockStore }, bl }) {
+  observer(function StartDateModal({ app: { formatDate, bStore }, bl }) {
     const width = window.screen.width;
     // hack! Fix it.
     const margin = (width - 280 - 24) / 2;
@@ -21,8 +21,8 @@ const StartDateModal = inject("app")(
         width={280}
         closable={false}
         footer={null}
-        visible={blockStore.isDateModal}
-        onCancel={blockStore.hideDateModal}
+        visible={bStore.isDateModal}
+        onCancel={bStore.hideDateModal}
         bodyStyle={{
           marginLeft: width <= 768 ? `${margin}px` : 0,
           padding: 0
@@ -33,7 +33,7 @@ const StartDateModal = inject("app")(
         }}
       >
         <DatePicker
-          open={blockStore.isDateModal}
+          open={bStore.isDateModal}
           showTime={{ format: "HH:00" }}
           //  value={moment(bl.dates[0])}
           allowClear={false}
@@ -41,8 +41,8 @@ const StartDateModal = inject("app")(
           placeholder={`Select Date and Time`}
           disabledDate={disabledStartDate}
           showToday={true}
-          onChange={date => blockStore.setDate(date)}
-          onOk={blockStore.setStartDate}
+          onChange={date => bStore.setDate(date)}
+          onOk={bStore.setStartDate}
         />
       </Modal>
     );

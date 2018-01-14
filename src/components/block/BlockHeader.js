@@ -9,16 +9,11 @@ import { Row, Col, Tooltip, Icon, Popconfirm, Divider } from "antd";
 
 const BlockHeader = inject("app")(
   observer(function BlockHeader({
-    app: { blockStore, stations, isLoading },
+    app: { bStore, stations, isLoading },
     breakpoints,
     bl
   }) {
-    const { removeBlock, editBlock, selectOneBlock } = blockStore;
-
-    let stationName;
-    if (bl.station) {
-      stationName = bl.station.split(" ")[0]; //hack
-    }
+    const { removeBlock, editBlock, selectOneBlock } = bStore;
 
     return (
       <BHeader>
@@ -31,10 +26,10 @@ const BlockHeader = inject("app")(
               {bl.name}
             </a>
           </Col>
-          <Col>{bl.variety}</Col>
+          <Col>{bl.variety.name}</Col>
           {!breakpoints.xs && (
             <Col>
-              {stationName}, {bl.state}
+              {bl.station.name}, {bl.state.postalCode}
             </Col>
           )}
           <Col>
