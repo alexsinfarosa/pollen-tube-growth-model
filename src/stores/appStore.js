@@ -67,7 +67,7 @@ export default class AppStore {
   }
 
   get isLoading() {
-    return this.acisStations.isLoading;
+    return this.blockStore.isLoading;
   }
 
   @observable

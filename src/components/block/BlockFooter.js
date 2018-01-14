@@ -2,8 +2,7 @@ import React from "react";
 import { inject, observer } from "mobx-react";
 
 import { BFooter } from "styles";
-// import GrowthTable from "components/GrowthTable";
-import USMap from "components/USMap";
+import GrowthTable from "components/GrowthTable";
 
 // antd
 import { Tabs, Icon } from "antd";
@@ -27,7 +26,7 @@ const BlockFooter = inject("app")(
             }
             key="1"
           >
-            Table
+            <GrowthTable bl={bl} />
           </TabPane>
           <TabPane
             tab={

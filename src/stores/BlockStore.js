@@ -51,6 +51,35 @@ class Block {
   }
 
   @computed
+  get stepDate() {
+    let results = [];
+    this.dates.forEach((date, i) => {
+      let status = "process";
+      if (i === this.dates.length - 1) status = "finish";
+      let name = "";
+      if (i === 0) name = "Start Date";
+      if (i === 1) name = "First Spray";
+      if (i === 2) name = "Second Spray";
+      if (i === 3) name = "Third Spray";
+      results.push({
+        name,
+        date,
+        status
+      });
+    });
+
+    let now = format(Date.now(), "YYYY-MM-DD");
+    const year = getYear(this.startDate);
+    if (!isThisYear(year)) now = `${year}-05-01`;
+    const today = {
+      name: "Today",
+      date: now,
+      status: "finish"
+    };
+    return [...results, today];
+  }
+
+  @computed
   get startDate() {
     if (this.dates.length !== 0) {
       return this.dates[0];
@@ -109,6 +138,7 @@ export default class BlockStore {
 
   @observable isLoading = false;
   // Dates ----------------------------------------------------------------------------
+  @observable now;
   @observable date;
   @action
   setDate = d => {
@@ -247,7 +277,7 @@ export default class BlockStore {
     let startDate = format(block.dates[0], "YYYY-MM-DD");
     let now = format(Date.now(), "YYYY-MM-DD");
     const year = getYear(startDate);
-    if (!isThisYear(year)) now = `${year}-07-01`;
+    if (!isThisYear(year)) now = `${year}-05-01`;
 
     loadACISData(block.station, startDate, now).then(res => {
       block.data = dailyToHourlyDates(Array.from(res.get("cStationClean")));
