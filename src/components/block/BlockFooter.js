@@ -3,6 +3,7 @@ import { inject, observer } from "mobx-react";
 
 import { BFooter } from "styles";
 import GrowthTable from "components/GrowthTable";
+import GrowthGraph from "components/GrowthGraph";
 
 // antd
 import { Tabs, Icon } from "antd";
@@ -36,7 +37,7 @@ const BlockFooter = inject("app")(
             }
             key="2"
           >
-            Growth Graph
+            <GrowthGraph bl={bl} />
           </TabPane>
         </Tabs>
       </BFooter>

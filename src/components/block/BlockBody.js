@@ -7,17 +7,37 @@ import DateStyleLengthBar from "components/block/DateStyleLengthBar";
 import BlockSteps from "components/block/BlockSteps";
 
 import BlockFooter from "components/block/BlockFooter";
-import { Row, Col } from "antd";
+import { Row, Col, Button } from "antd";
 
 const BlockBody = inject("app")(
-  observer(function BlockBody({ app: { bpts }, bl }) {
+  observer(function BlockBody({ app: { bpts, bStore }, bl }) {
+    let sprayButtonLabel;
+    let count = 2;
+    if (bl.stepDate) count = bl.stepDate.length;
+    if (count === 2) sprayButtonLabel = "Set 1st Spray";
+    if (count === 3) sprayButtonLabel = "Set 2nd Spray";
+    if (count === 4) sprayButtonLabel = "Set 3rd Spray";
+
     return (
       <Row>
         {bl.modelData ? (
           <Col>
             <BlockTop breakpoints={bpts} bl={bl} />
             <BlockSteps breakpoints={bpts} bl={bl} />
-            ciccio
+            {count < 4 && (
+              <div
+                style={{
+                  textAlign: "center"
+                }}
+              >
+                <Button
+                  style={{ marginTop: 16 }}
+                  onClick={() => bStore.addSprayDate(bl.id)}
+                >
+                  {sprayButtonLabel}
+                </Button>
+              </div>
+            )}
             <BlockFooter breakpoints={bpts} bl={bl} />
           </Col>
         ) : (

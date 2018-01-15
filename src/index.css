@@ -41,3 +41,8 @@ circle {
 .selected {
   background: #dfe8e3;
 }
+
+.ciccio {
+  background: white !important;
+  color: red !important;
+}

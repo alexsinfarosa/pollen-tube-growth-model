@@ -133,7 +133,7 @@ const StyleLengthModal = inject("app")(
 
         {radioValue === "avg" && (
           <InputNumber
-            style={{ width: "100%" }}
+            style={{ width: "99%", marginLeft: 1 }}
             onChange={e => setStyleLength(e)}
             placeholder="Insert average style length (mm)"
             min={1}

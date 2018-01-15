@@ -1,9 +1,16 @@
 import React from "react";
 import { inject, observer } from "mobx-react";
+import moment from "moment";
 // import { toJS } from "mobx";
-import { Row, Modal, Input, Select } from "antd";
+import { Row, Modal, Input, Select, DatePicker } from "antd";
 
 const style = { width: "100%", marginBottom: 32 };
+
+const disabledStartDate = current => {
+  // const { date } = this.props;
+  // Try Date.now(date)
+  return current && current.valueOf() > Date.now();
+};
 
 const BlockModal = inject("app")(
   observer(function BlockModal({
@@ -12,7 +19,7 @@ const BlockModal = inject("app")(
       states,
       currentStateStations,
       block,
-      blockStore,
+      bStore,
       blocks,
       stations
     }
@@ -23,7 +30,7 @@ const BlockModal = inject("app")(
       isBlockModal,
       cancelButton,
       addField
-    } = blockStore;
+    } = bStore;
 
     // variety list
     const varietyList = apples.values().map(variety => {
@@ -110,6 +117,21 @@ const BlockModal = inject("app")(
           >
             {stationList}
           </Select>
+
+          {block.isBeingEdited && (
+            <DatePicker
+              showTime={{ format: "HH:00" }}
+              style={style}
+              value={block.dates[0] ? moment(block.date) : undefined}
+              allowClear={false}
+              format="MMM Do YYYY, HH:00"
+              placeholder={`Select date and time`}
+              disabledDate={disabledStartDate}
+              showToday={true}
+              onChange={date => bStore.setDate(date)}
+              onOk={bStore.setStartDate}
+            />
+          )}
         </Row>
       </Modal>
     );

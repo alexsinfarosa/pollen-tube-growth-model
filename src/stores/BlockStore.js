@@ -8,13 +8,14 @@ import { loadACISData } from "utils/cleanFetchedData";
 
 // antd
 import { message } from "antd";
-import getHours from "date-fns/get_hours";
+// import getHours from "date-fns/get_hours";
 
 import format from "date-fns/format";
 import getYear from "date-fns/get_year";
 // import isThisYear from "date-fns/is_this_year";
 import isAfter from "date-fns/is_after";
 import isBefore from "date-fns/is_before";
+import differenceInHours from "date-fns/difference_in_hours";
 
 class Block {
   id;
@@ -77,7 +78,7 @@ class Block {
   @computed
   get seasonEndDate() {
     if (this.startDate) {
-      return `${this.currentYear}-07-01`;
+      return `${this.currentYear}-05-01`;
     }
   }
 
@@ -104,7 +105,7 @@ class Block {
   get stepDate() {
     let results = [];
     this.dates.forEach((date, i) => {
-      let status = "process";
+      let status = "wait";
       if (i === this.dates.length - 1) status = "finish";
       let name = "";
       if (i === 0) name = "Start Date";
@@ -140,9 +141,11 @@ class Block {
   @computed
   get modelData() {
     if (this.dates.length !== 0 && this.avgStyleLength) {
-      const hour = getHours(this.dates[this.dates.length - 1]);
-      const startIdx = hour - 1;
-      const data = this.data.slice(startIdx);
+      const lastDay = this.stepDate[this.stepDate.length - 1].date;
+      const prevToLastDay = this.stepDate[this.stepDate.length - 2].date;
+      const diffInHrs = differenceInHours(lastDay, prevToLastDay);
+
+      const data = this.data.slice(-(diffInHrs + 25));
       let cumulativeHrGrowth = 0;
       let percentage = 0;
 
@@ -159,7 +162,7 @@ class Block {
 
         return {
           date,
-          temp,
+          temp: Number(temp),
           hourlyGrowth,
           percentage: Number(percentage.toFixed(3)),
           cumulativeHrGrowth: Number(cumulativeHrGrowth.toFixed(3))
@@ -178,7 +181,6 @@ export default class BlockStore {
 
   @observable isLoading = false;
   // Dates ----------------------------------------------------------------------------
-  @observable now;
   @observable date;
   @action
   setDate = d => {
@@ -188,6 +190,66 @@ export default class BlockStore {
   setStartDate = () => {
     this.block.dates.push(this.date);
     this.fetchAndUploadData();
+  };
+
+  @computed
+  get startDate() {
+    return this.block.dates[0];
+  }
+
+  @computed
+  get currentYear() {
+    if (this.startDate) {
+      return format(this.startDate, "YYYY");
+    }
+    return getYear(new Date());
+  }
+
+  @computed
+  get seasonStartDate() {
+    if (this.startDate) {
+      return `${this.currentYear}-03-01`;
+    }
+  }
+
+  @computed
+  get seasonEndDate() {
+    if (this.startDate) {
+      return `${this.currentYear}-05-01`;
+    }
+  }
+
+  @computed
+  get now() {
+    if (isAfter(Date.now(), this.seasonEndDate)) {
+      return this.seasonEndDate;
+    }
+    return format(Date.now(), "MM/DD/YY HH:00");
+  }
+
+  @action
+  addSprayDate = id => {
+    const block = this.blocks.find(b => b.id === id);
+    this.block = block;
+    const now = roundDate(
+      moment("2017-04-30 23:34"),
+      moment.duration(60, "minutes"),
+      "floor"
+    );
+    this.block.dates.push(now);
+    this.updateBlock();
+  };
+
+  @action
+  replaceDate = () => {
+    console.log(this.date);
+    const dateToReplace = this.block.dates.find(date => date === this.date);
+    console.log(dateToReplace);
+
+    const idx = this.block.dates.findIndex(dateToReplace);
+    console.log(idx);
+    this.block.dates.splice(idx, 1, this.date);
+    this.updateBlock();
   };
 
   // style length
@@ -314,7 +376,8 @@ export default class BlockStore {
     this.isLoading = true;
     const block = { ...this.block };
     const blocks = [...this.blocks];
-    loadACISData(block.station, block.startDate, block.now).then(res => {
+
+    loadACISData(block.station, this.startDate, this.now).then(res => {
       block.data = dailyToHourlyDates(Array.from(res.get("cStationClean")));
       const idx = this.blocks.findIndex(b => b.id === block.id);
       blocks.splice(idx, 1, block);
