@@ -165,7 +165,8 @@ class Block {
           temp: Number(temp),
           hourlyGrowth,
           percentage: Number(percentage.toFixed(3)),
-          cumulativeHrGrowth: Number(cumulativeHrGrowth.toFixed(3))
+          cumulativeHrGrowth: Number(cumulativeHrGrowth.toFixed(3)),
+          avgSL: Number(this.avgStyleLength)
         };
       });
     }

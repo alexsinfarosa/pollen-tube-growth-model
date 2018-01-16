@@ -31,6 +31,8 @@ const GrowthGraph = inject("app")(
               axisLine={false}
             />
             <YAxis unit="˚F" type="number" domain={["dataMin", "dataMax"]} />
+            <YAxis dataKey="percentage" orientation="right" />
+
             <CartesianGrid strokeDasharray="3 3" vertical={false} />
 
             {bl.modelData.length >= 20 && (
@@ -43,6 +45,7 @@ const GrowthGraph = inject("app")(
 
             <Tooltip />
             <Line dataKey="temp" stroke="#ff7f00" dot={false} />
+            <Line dataKey="avgSL" stroke="#1f78b4" dot={false} />
           </LineChart>
         </ResponsiveContainer>
       </div>
