@@ -46,3 +46,11 @@ circle {
   background: white !important;
   color: red !important;
 }
+
+.ant-progress-status-success .ant-progress-circle-path {
+  stroke: #4ea27d !important;
+}
+
+.ant-progress-circle.ant-progress-status-success .ant-progress-text {
+  color: #4ea27d !important;
+}

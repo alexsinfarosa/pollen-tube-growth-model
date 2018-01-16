@@ -198,7 +198,7 @@ class Block {
           Temperature: Number(temp),
           hourlyGrowth,
           Percentage: Number(percentage.toFixed(3)),
-          cumulativeHrGrowth: Number(cumulativeHrGrowth.toFixed(3)),
+          cumulativeHrGrowth: Number(cumulativeHrGrowth.toFixed(1)),
           "Average Style Length": Number(this.avgStyleLength)
         };
       });
