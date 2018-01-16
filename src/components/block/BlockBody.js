@@ -5,6 +5,7 @@ import { inject, observer } from "mobx-react";
 import BlockTop from "components/block/BlockTop";
 import DateStyleLengthBar from "components/block/DateStyleLengthBar";
 import BlockSteps from "components/block/BlockSteps";
+import USMap from "components/USMap";
 
 import BlockFooter from "components/block/BlockFooter";
 import { Row, Col, Button } from "antd";
@@ -39,7 +40,11 @@ const BlockBody = inject("app")(
               </div>
             )}
             <div style={{ color: "white" }}>x</div>
-            <BlockFooter breakpoints={bpts} bl={bl} />
+            {bStore.isMap ? (
+              <USMap bl={bl} />
+            ) : (
+              <BlockFooter breakpoints={bpts} bl={bl} />
+            )}
           </Col>
         ) : (
           <Col>

@@ -7,7 +7,7 @@ import { BlockWrapper } from "styles";
 // components
 import BlockHeader from "./BlockHeader";
 import BlockBody from "components/block/BlockBody";
-import USMap from "components/USMap";
+// import USMap from "components/USMap";
 
 import { Row, Spin } from "antd";
 
@@ -23,7 +23,6 @@ const Block = inject("app")(
         ) : (
           <div>
             <BlockBody bl={bl} breakpoints={bpts} />
-            {bStore.isMap && <USMap bl={bl} />}
           </div>
         )}
       </BlockWrapper>
