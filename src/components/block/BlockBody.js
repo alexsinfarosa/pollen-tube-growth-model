@@ -11,7 +11,7 @@ import BlockFooter from "components/block/BlockFooter";
 import { Row, Col, Button } from "antd";
 
 const BlockBody = inject("app")(
-  observer(function BlockBody({ app: { bpts, bStore }, bl }) {
+  observer(function BlockBody({ app: { bpts, bStore }, bl, breakpoints }) {
     let sprayButtonLabel;
     let count = 2;
     if (bl.stepDate) count = bl.stepDate.length;
@@ -43,7 +43,7 @@ const BlockBody = inject("app")(
             {bStore.isMap ? (
               <USMap bl={bl} />
             ) : (
-              <BlockFooter breakpoints={bpts} bl={bl} />
+              !breakpoints.xs && <BlockFooter breakpoints={bpts} bl={bl} />
             )}
           </Col>
         ) : (
