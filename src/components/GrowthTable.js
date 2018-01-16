@@ -18,8 +18,8 @@ const columns = [
   },
   {
     title: "Air Temp (˚F)",
-    dataIndex: "temp",
-    key: "temp",
+    dataIndex: "Temperature",
+    key: "Temperature",
     width: "20%"
   },
   {
@@ -35,8 +35,8 @@ const columns = [
       },
       {
         title: "Accumulated",
-        dataIndex: "cumulativeHrGrowthSpray",
-        key: "cumulativeHrGrowthSpray",
+        dataIndex: "Cumulative Hourly Growth",
+        key: "Cumulative Hourly Growth",
         width: "20%",
         render: d => Number(d).toFixed(3)
       }

@@ -140,39 +140,6 @@ class Block {
     }
   }
 
-  // @computed
-  // get modelData() {
-  //   if (this.dates.length !== 0 && this.avgStyleLength) {
-  //     const lastDay = this.stepDate[this.stepDate.length - 1].date;
-  //     const prevToLastDay = this.stepDate[this.stepDate.length - 2].date;
-  //     const diffInHrs = differenceInHours(lastDay, prevToLastDay);
-
-  //     const data = this.data.slice(-diffInHrs);
-  //     let cumulativeHrGrowth = 0;
-  //     let percentage = 0;
-
-  //     return data.map((arr, i) => {
-  //       const { date, temp } = arr;
-  //       const { hrGrowth, temps } = this.variety;
-
-  //       const idx = temps.findIndex(t => t.toString() === temp);
-  //       let hourlyGrowth = hrGrowth[idx];
-  //       if (temp < 35 || temp > 106 || temp === "M") hourlyGrowth = 0;
-
-  //       cumulativeHrGrowth += hourlyGrowth;
-  //       percentage = cumulativeHrGrowth / this.avgStyleLength * 100;
-
-  //       return {
-  //         date,
-  //         temp: Number(temp),
-  //         hourlyGrowth,
-  //         percentage: Number(percentage.toFixed(3)),
-  //         cumulativeHrGrowth: Number(cumulativeHrGrowth.toFixed(3))
-  //       };
-  //     });
-  //   }
-  // }
-
   @computed
   get modelData() {
     if (this.dates.length !== 0 && this.avgStyleLength) {
@@ -214,12 +181,16 @@ class Block {
 
         return {
           date: dateNow,
-          temp: Number(temp),
+          Date: format(date, "MM-DD HH:00"),
+          Temperature: Number(temp),
           hourlyGrowth,
           cumulativeHrGrowth: Number(cumulativeHrGrowth.toFixed(3)),
           percentage: Number(percentage.toFixed(3)),
-          cumulativeHrGrowthSpray: Number(cumulativeHrGrowthSpray.toFixed(3)),
-          percentageSpray: Number(percentageSpray.toFixed(3))
+          "Cumulative Hourly Growth": Number(
+            cumulativeHrGrowthSpray.toFixed(3)
+          ),
+          percentageSpray: Number(percentageSpray.toFixed(3)),
+          "Average Style Length": Number(this.avgStyleLength)
         };
       });
     }
