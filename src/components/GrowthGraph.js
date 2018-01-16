@@ -37,7 +37,7 @@ const GrowthGraph = inject("app")(
                 interval="preserveStartEnd"
                 axisLine={false}
               />
-              <YAxis type="number" domain={["dataMin", "dataMax"]} />
+              <YAxis />
               <CartesianGrid strokeDasharray="3 3" vertical={false} />
               <Tooltip />
               <Line dataKey="Temperature" stroke="#8F2D56" dot={false} />
@@ -61,7 +61,7 @@ const GrowthGraph = inject("app")(
                 interval="preserveStartEnd"
                 axisLine={false}
               />
-              <YAxis type="number" domain={["dataMin", "dataMax"]} />
+              <YAxis />
               <CartesianGrid strokeDasharray="3 3" vertical={false} />
               <Tooltip />
               <Line

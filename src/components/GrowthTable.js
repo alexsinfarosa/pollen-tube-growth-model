@@ -29,8 +29,8 @@ const columns = [
       },
       {
         title: "Accumulated",
-        dataIndex: "cumulativeHrGrowth",
-        key: "cumulativeHrGrowth",
+        dataIndex: "cumulativeHrGrowthAll",
+        key: "cumulativeHrGrowthAll",
         width: "20%",
         render: d => Number(d).toFixed(3)
       }
