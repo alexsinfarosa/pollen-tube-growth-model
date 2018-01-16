@@ -8,7 +8,7 @@ import { loadACISData } from "utils/cleanFetchedData";
 
 // antd
 import { message } from "antd";
-// import getHours from "date-fns/get_hours";
+import getHours from "date-fns/get_hours";
 
 import format from "date-fns/format";
 import getYear from "date-fns/get_year";
@@ -16,6 +16,7 @@ import getYear from "date-fns/get_year";
 import isAfter from "date-fns/is_after";
 import isBefore from "date-fns/is_before";
 import differenceInHours from "date-fns/difference_in_hours";
+import addDays from "date-fns/add_days";
 
 class Block {
   id;
@@ -165,8 +166,40 @@ class Block {
           temp: Number(temp),
           hourlyGrowth,
           percentage: Number(percentage.toFixed(3)),
+          cumulativeHrGrowth: Number(cumulativeHrGrowth.toFixed(3))
+        };
+      });
+    }
+  }
+
+  @computed
+  get graphData() {
+    if (this.dates.length !== 0 && this.avgStyleLength) {
+      const hour = getHours(this.dates[this.dates.length - 1]);
+      const startIdx = hour - 1;
+      const data = this.data.slice(startIdx);
+      let cumulativeHrGrowth = 0;
+      let percentage = 0;
+
+      return data.map((arr, i) => {
+        const { date, temp } = arr;
+        const { hrGrowth, temps } = this.variety;
+
+        const idx = temps.findIndex(t => t.toString() === temp);
+        let hourlyGrowth = hrGrowth[idx];
+        if (temp < 35 || temp > 106 || temp === "M") hourlyGrowth = 0;
+
+        cumulativeHrGrowth += hourlyGrowth;
+        percentage = cumulativeHrGrowth / this.avgStyleLength * 100;
+
+        return {
+          Date: format(date, "MM-DD HH:00"),
+          DateYear: date,
+          Temperature: Number(temp),
+          hourlyGrowth,
+          Percentage: Number(percentage.toFixed(3)),
           cumulativeHrGrowth: Number(cumulativeHrGrowth.toFixed(3)),
-          avgSL: Number(this.avgStyleLength)
+          "Average Style Length": Number(this.avgStyleLength)
         };
       });
     }
@@ -232,23 +265,22 @@ export default class BlockStore {
   addSprayDate = id => {
     const block = this.blocks.find(b => b.id === id);
     this.block = block;
-    const now = roundDate(
-      moment("2017-04-30 23:34"),
+    const now = this.block.dates[this.block.dates.length - 1];
+
+    const temp = roundDate(
+      moment(addDays(now, 5)),
       moment.duration(60, "minutes"),
       "floor"
     );
-    this.block.dates.push(now);
+    this.block.dates.push(temp);
     this.updateBlock();
   };
 
   @action
   replaceDate = () => {
-    console.log(this.date);
     const dateToReplace = this.block.dates.find(date => date === this.date);
-    console.log(dateToReplace);
 
     const idx = this.block.dates.findIndex(dateToReplace);
-    console.log(idx);
     this.block.dates.splice(idx, 1, this.date);
     this.updateBlock();
   };

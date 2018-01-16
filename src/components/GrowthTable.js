@@ -6,14 +6,14 @@ import { Table } from "antd";
 const columns = [
   {
     title: "Date",
-    dataIndex: "date",
-    key: "date",
+    dataIndex: "DateYear",
+    key: "DateYear",
     width: "20%"
   },
   {
     title: "Air Temp (˚F)",
-    dataIndex: "temp",
-    key: "temp",
+    dataIndex: "Temperature",
+    key: "Temperature",
     width: "20%"
   },
   {
@@ -38,8 +38,8 @@ const columns = [
   },
   {
     title: "% of Target",
-    dataIndex: "percentage",
-    key: "percentage",
+    dataIndex: "Percentage",
+    key: "Percentage",
     width: "20%",
     render: perc => Number(perc).toFixed(3)
   }
@@ -50,10 +50,10 @@ const GrowthTable = inject("app")(
     return (
       <Table
         size="middle"
-        dataSource={bl.modelData}
+        dataSource={bl.graphData}
         columns={columns}
         pagination={false}
-        rowKey={bl => bl.date}
+        rowKey={bl => bl.Date}
         loading={bStore.isLoading}
         scroll={{ y: "35vh" }}
         bordered={true}

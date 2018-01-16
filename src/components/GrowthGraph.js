@@ -18,12 +18,12 @@ const GrowthGraph = inject("app")(
       <div style={{ width: "100%", height: "35vh" }}>
         <ResponsiveContainer width="100%" height="100%">
           <LineChart
-            data={bl.modelData}
+            data={bl.graphData}
             margin={{ top: 15, right: 0, left: -23, bottom: 15 }}
             style={{ background: "#fafafa", borderRadius: "5px" }}
           >
             <XAxis
-              dataKey="date"
+              dataKey="Date"
               // domain={["dataMin", "dataMax"]}
               minTickGap={30}
               tickSize={10}
@@ -31,21 +31,20 @@ const GrowthGraph = inject("app")(
               axisLine={false}
             />
             <YAxis unit="˚F" type="number" domain={["dataMin", "dataMax"]} />
-            <YAxis dataKey="percentage" orientation="right" />
+            <YAxis dataKey="Percentage" orientation="right" />
 
             <CartesianGrid strokeDasharray="3 3" vertical={false} />
 
-            {bl.modelData.length >= 20 && (
+            {bl.graphData.length >= 20 && (
               <Brush
-                tickFormatter={x => bl.modelData[x].date}
+                tickFormatter={x => bl.graphData[x].Date}
                 height={30}
                 startIndex={0}
               />
             )}
 
             <Tooltip />
-            <Line dataKey="temp" stroke="#ff7f00" dot={false} />
-            <Line dataKey="avgSL" stroke="#1f78b4" dot={false} />
+            <Line dataKey="Temperature" stroke="#ff7f00" dot={false} />
           </LineChart>
         </ResponsiveContainer>
       </div>

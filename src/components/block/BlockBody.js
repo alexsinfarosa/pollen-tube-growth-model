@@ -24,7 +24,7 @@ const BlockBody = inject("app")(
           <Col>
             <BlockTop breakpoints={bpts} bl={bl} />
             <BlockSteps breakpoints={bpts} bl={bl} />
-            {count < 4 && (
+            {count < 5 && (
               <div
                 style={{
                   textAlign: "center"
@@ -38,6 +38,7 @@ const BlockBody = inject("app")(
                 </Button>
               </div>
             )}
+            <div style={{ color: "white" }}>x</div>
             <BlockFooter breakpoints={bpts} bl={bl} />
           </Col>
         ) : (

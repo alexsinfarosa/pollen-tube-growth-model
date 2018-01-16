@@ -91,20 +91,21 @@ const AppToolBar = inject("app")(
           </Select>
         </Col>
 
-        {filteredBlocks.length === 1 && (
-          <Col right>
-            <Tooltip title="Toggle Map">
-              <Button
-                type="primary"
-                ghost={blockStore.isMap ? false : true}
-                icon="environment-o"
-                onClick={blockStore.toggleMap}
-              >
-                Map
-              </Button>
-            </Tooltip>
-          </Col>
-        )}
+        {filteredBlocks.length === 1 &&
+          !bpts.xs && (
+            <Col right>
+              <Tooltip title="Toggle Map">
+                <Button
+                  type="primary"
+                  ghost={blockStore.isMap ? false : true}
+                  icon="environment-o"
+                  onClick={blockStore.toggleMap}
+                >
+                  Map
+                </Button>
+              </Tooltip>
+            </Col>
+          )}
       </ToolBarWrapper>
     );
   })
