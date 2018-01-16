@@ -9,7 +9,9 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  Brush
+  Brush,
+  ComposedChart,
+  Area
 } from "recharts";
 
 const GrowthGraph = inject("app")(
@@ -38,12 +40,12 @@ const GrowthGraph = inject("app")(
               <YAxis type="number" domain={["dataMin", "dataMax"]} />
               <CartesianGrid strokeDasharray="3 3" vertical={false} />
               <Tooltip />
-              <Line dataKey="Temperature" stroke="#ff7f00" dot={false} />
+              <Line dataKey="Temperature" stroke="#8F2D56" dot={false} />
             </LineChart>
 
             <br />
             <h4>Cumulative Hourly Pollen Tube Growth (mm)</h4>
-            <LineChart
+            <ComposedChart
               width={970}
               height={250}
               syncId="ciccio"
@@ -62,8 +64,17 @@ const GrowthGraph = inject("app")(
               <YAxis type="number" domain={["dataMin", "dataMax"]} />
               <CartesianGrid strokeDasharray="3 3" vertical={false} />
               <Tooltip />
-              <Line dataKey="cumulativeHrGrowth" stroke="#9897D8" dot={false} />
-              <Line dataKey="Average Style Length" stroke="red" dot={false} />
+              <Line
+                dataKey="Average Style Length"
+                stroke="#D81159"
+                dot={false}
+              />
+              <Area
+                type="monotone"
+                dataKey="Cumulative Hourly Growth"
+                stroke="#FFBC42"
+                fill="#FFBC42"
+              />
 
               {bl.graphData.length >= 20 && (
                 <Brush
@@ -72,7 +83,7 @@ const GrowthGraph = inject("app")(
                   startIndex={0}
                 />
               )}
-            </LineChart>
+            </ComposedChart>
           </div>
         </ResponsiveContainer>
       </div>

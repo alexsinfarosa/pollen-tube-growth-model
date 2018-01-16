@@ -17,6 +17,7 @@ import isAfter from "date-fns/is_after";
 import isBefore from "date-fns/is_before";
 import differenceInHours from "date-fns/difference_in_hours";
 import addDays from "date-fns/add_days";
+import isEqual from "date-fns/is_equal";
 
 class Block {
   id;
@@ -181,6 +182,8 @@ class Block {
       let cumulativeHrGrowth = 0;
       let percentage = 0;
 
+      let cumulativeHrGrowthSpray = 0;
+
       return data.map((arr, i) => {
         const { date, temp } = arr;
         const { hrGrowth, temps } = this.variety;
@@ -188,7 +191,12 @@ class Block {
         const idx = temps.findIndex(t => t.toString() === temp);
         let hourlyGrowth = hrGrowth[idx];
         if (temp < 35 || temp > 106 || temp === "M") hourlyGrowth = 0;
-
+        const formattedDates = this.dates.map(d =>
+          format(d, "YYYY-MM-DD HH:00")
+        );
+        const isOneOfTheDates = formattedDates.some(d => isEqual(date, d));
+        if (isOneOfTheDates) cumulativeHrGrowthSpray = 0;
+        cumulativeHrGrowthSpray += hourlyGrowth;
         cumulativeHrGrowth += hourlyGrowth;
         percentage = cumulativeHrGrowth / this.avgStyleLength * 100;
 
@@ -198,7 +206,10 @@ class Block {
           Temperature: Number(temp),
           hourlyGrowth,
           Percentage: Number(percentage.toFixed(3)),
-          cumulativeHrGrowth: Number(cumulativeHrGrowth.toFixed(1)),
+          cumulativeHrGrowthAll: Number(cumulativeHrGrowth.toFixed(1)),
+          "Cumulative Hourly Growth": Number(
+            cumulativeHrGrowthSpray.toFixed(1)
+          ),
           "Average Style Length": Number(this.avgStyleLength)
         };
       });
@@ -382,6 +393,7 @@ export default class BlockStore {
       block.isBeingSelected = true;
       block.id = Date.now();
       this.blocks.push(new Block(block));
+      this.selectOneBlock(block.id);
       this.writeToLocalStorage();
       this.clearFields();
       message.success(`${block.name} block has been created!`);
@@ -431,6 +443,7 @@ export default class BlockStore {
     const idx = this.blocks.findIndex(b => b.id === block.id);
     blocks.splice(idx, 1, block);
     this.blocks = blocks;
+    this.selectOneBlock(block.id);
     this.writeToLocalStorage();
     this.clearFields();
     message.success(`${block.name} block has been updated!`);
