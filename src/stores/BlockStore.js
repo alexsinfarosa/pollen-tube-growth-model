@@ -15,9 +15,10 @@ import getYear from "date-fns/get_year";
 // import isThisYear from "date-fns/is_this_year";
 import isAfter from "date-fns/is_after";
 import isBefore from "date-fns/is_before";
-import differenceInHours from "date-fns/difference_in_hours";
+// import differenceInHours from "date-fns/difference_in_hours";
 import addDays from "date-fns/add_days";
 import isEqual from "date-fns/is_equal";
+import getTime from "date-fns/get_time";
 
 class Block {
   id;
@@ -73,14 +74,14 @@ class Block {
   @computed
   get seasonStartDate() {
     if (this.startDate) {
-      return `${this.currentYear}-03-01`;
+      return `${this.currentYear}-03-01 00:00`;
     }
   }
 
   @computed
   get seasonEndDate() {
     if (this.startDate) {
-      return `${this.currentYear}-05-01`;
+      return `${this.currentYear}-05-01 23:00`;
     }
   }
 
@@ -96,11 +97,10 @@ class Block {
 
   @computed
   get now() {
-    const now = Date.now();
-    if (isAfter(now, this.seasonEndDate)) {
+    if (isAfter(Date.now(), this.seasonEndDate)) {
       return this.seasonEndDate;
     }
-    return format(now, "MM/DD/YY HH:00");
+    return format(Date.now(), "MM/DD/YY HH:00");
   }
 
   @computed
@@ -140,34 +140,86 @@ class Block {
     }
   }
 
+  // @computed
+  // get modelData() {
+  //   if (this.dates.length !== 0 && this.avgStyleLength) {
+  //     const lastDay = this.stepDate[this.stepDate.length - 1].date;
+  //     const prevToLastDay = this.stepDate[this.stepDate.length - 2].date;
+  //     const diffInHrs = differenceInHours(lastDay, prevToLastDay);
+
+  //     const data = this.data.slice(-diffInHrs);
+  //     let cumulativeHrGrowth = 0;
+  //     let percentage = 0;
+
+  //     return data.map((arr, i) => {
+  //       const { date, temp } = arr;
+  //       const { hrGrowth, temps } = this.variety;
+
+  //       const idx = temps.findIndex(t => t.toString() === temp);
+  //       let hourlyGrowth = hrGrowth[idx];
+  //       if (temp < 35 || temp > 106 || temp === "M") hourlyGrowth = 0;
+
+  //       cumulativeHrGrowth += hourlyGrowth;
+  //       percentage = cumulativeHrGrowth / this.avgStyleLength * 100;
+
+  //       return {
+  //         date,
+  //         temp: Number(temp),
+  //         hourlyGrowth,
+  //         percentage: Number(percentage.toFixed(3)),
+  //         cumulativeHrGrowth: Number(cumulativeHrGrowth.toFixed(3))
+  //       };
+  //     });
+  //   }
+  // }
+
   @computed
   get modelData() {
     if (this.dates.length !== 0 && this.avgStyleLength) {
-      const lastDay = this.stepDate[this.stepDate.length - 1].date;
-      const prevToLastDay = this.stepDate[this.stepDate.length - 2].date;
-      const diffInHrs = differenceInHours(lastDay, prevToLastDay);
+      const startHour = getHours(this.dates[this.dates.length - 1]);
+      const endHour = getHours(this.now);
+      // const lastIdx = 24 - endHour;
 
-      const data = this.data.slice(-(diffInHrs + 25));
+      const data = this.data.slice(startHour);
+
       let cumulativeHrGrowth = 0;
       let percentage = 0;
+
+      let cumulativeHrGrowthSpray = 0;
+      let percentageSpray = 0;
 
       return data.map((arr, i) => {
         const { date, temp } = arr;
         const { hrGrowth, temps } = this.variety;
+        const dateNow = getTime(date);
 
         const idx = temps.findIndex(t => t.toString() === temp);
         let hourlyGrowth = hrGrowth[idx];
         if (temp < 35 || temp > 106 || temp === "M") hourlyGrowth = 0;
 
+        const formattedDates = this.dates.map(d =>
+          format(d, "YYYY-MM-DD HH:00")
+        );
+        const isOneOfTheDates = formattedDates.some(d => isEqual(dateNow, d));
+        if (isOneOfTheDates) {
+          cumulativeHrGrowthSpray = 0;
+          percentageSpray = 0;
+        }
+
+        cumulativeHrGrowthSpray += hourlyGrowth;
+        percentageSpray = cumulativeHrGrowthSpray / this.avgStyleLength * 100;
+
         cumulativeHrGrowth += hourlyGrowth;
         percentage = cumulativeHrGrowth / this.avgStyleLength * 100;
 
         return {
-          date,
+          date: dateNow,
           temp: Number(temp),
           hourlyGrowth,
+          cumulativeHrGrowth: Number(cumulativeHrGrowth.toFixed(3)),
           percentage: Number(percentage.toFixed(3)),
-          cumulativeHrGrowth: Number(cumulativeHrGrowth.toFixed(3))
+          cumulativeHrGrowthSpray: Number(cumulativeHrGrowthSpray.toFixed(3)),
+          percentageSpray: Number(percentageSpray.toFixed(3))
         };
       });
     }
@@ -176,37 +228,47 @@ class Block {
   @computed
   get graphData() {
     if (this.dates.length !== 0 && this.avgStyleLength) {
-      const hour = getHours(this.dates[this.dates.length - 1]);
-      const startIdx = hour - 1;
-      const data = this.data.slice(startIdx);
+      const startHour = getHours(this.dates[this.dates.length - 1]);
+      const endHour = getHours(this.now);
+      // const lastIdx = 24 - endHour;
+
+      const data = this.data.slice(startHour);
+
       let cumulativeHrGrowth = 0;
       let percentage = 0;
 
       let cumulativeHrGrowthSpray = 0;
+      let percentageSpray = 0;
 
       return data.map((arr, i) => {
         const { date, temp } = arr;
         const { hrGrowth, temps } = this.variety;
+        const dateNow = getTime(date);
 
         const idx = temps.findIndex(t => t.toString() === temp);
         let hourlyGrowth = hrGrowth[idx];
         if (temp < 35 || temp > 106 || temp === "M") hourlyGrowth = 0;
+
         const formattedDates = this.dates.map(d =>
           format(d, "YYYY-MM-DD HH:00")
         );
-        const isOneOfTheDates = formattedDates.some(d => isEqual(date, d));
-        if (isOneOfTheDates) cumulativeHrGrowthSpray = 0;
+        const isOneOfTheDates = formattedDates.some(d => isEqual(dateNow, d));
+        if (isOneOfTheDates) {
+          cumulativeHrGrowthSpray = 0;
+          percentageSpray = 0;
+        }
+
         cumulativeHrGrowthSpray += hourlyGrowth;
+        percentageSpray = cumulativeHrGrowthSpray / this.avgStyleLength * 100;
+
         cumulativeHrGrowth += hourlyGrowth;
         percentage = cumulativeHrGrowth / this.avgStyleLength * 100;
 
         return {
           Date: format(date, "MM-DD HH:00"),
-          DateYear: date,
           Temperature: Number(temp),
           hourlyGrowth,
-          Percentage: Number(percentage.toFixed(3)),
-          cumulativeHrGrowthAll: Number(cumulativeHrGrowth.toFixed(1)),
+          percentageSpray: Number(percentageSpray.toFixed(3)),
           "Cumulative Hourly Growth": Number(
             cumulativeHrGrowthSpray.toFixed(1)
           ),
@@ -253,14 +315,14 @@ export default class BlockStore {
   @computed
   get seasonStartDate() {
     if (this.startDate) {
-      return `${this.currentYear}-03-01`;
+      return `${this.currentYear}-03-01 00:00`;
     }
   }
 
   @computed
   get seasonEndDate() {
     if (this.startDate) {
-      return `${this.currentYear}-05-01`;
+      return `${this.currentYear}-05-01 23:00`;
     }
   }
 

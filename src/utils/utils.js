@@ -152,11 +152,26 @@ export const roundDate = (date, duration, method) => {
   return moment(Math[method](+date / +duration) * +duration);
 };
 
+// export const dailyToHourlyDates = arr => {
+//   let results = [];
+//   arr.forEach((date, d) => {
+//     date[1].forEach((temp, h) => {
+//       let hour = h + 1;
+//       if (h >= 0 && h <= 8) hour = `0${h + 1}`;
+//       results.push({
+//         date: `${date[0]} ${hour}:00`,
+//         temp
+//       });
+//     });
+//   });
+//   return results;
+// };
+
 export const dailyToHourlyDates = arr => {
   let results = [];
   arr.forEach((date, d) => {
     date[1].forEach((temp, h) => {
-      let hour = h + 1;
+      let hour = h;
       if (h >= 0 && h <= 8) hour = `0${h + 1}`;
       results.push({
         date: `${date[0]} ${hour}:00`,

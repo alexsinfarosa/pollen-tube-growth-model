@@ -54,3 +54,7 @@ circle {
 .ant-progress-circle.ant-progress-status-success .ant-progress-text {
   color: #4ea27d !important;
 }
+
+.hilight {
+  color: red;
+}

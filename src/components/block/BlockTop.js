@@ -15,7 +15,7 @@ const BlockTop = inject("app")(
   observer(function BlockTop({ app, breakpoints, bl }) {
     let currentPercentage = 0;
     if (bl.modelData.length !== 0) {
-      currentPercentage = bl.modelData[bl.modelData.length - 1].percentage;
+      currentPercentage = bl.modelData[bl.modelData.length - 1].percentageSpray;
     }
     return (
       <Col
