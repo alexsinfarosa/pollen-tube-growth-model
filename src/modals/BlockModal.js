@@ -1,16 +1,16 @@
 import React from "react";
 import { inject, observer } from "mobx-react";
-import moment from "moment";
+// import moment from "moment";
 // import { toJS } from "mobx";
-import { Row, Modal, Input, Select, DatePicker, Button } from "antd";
+import { Row, Modal, Input, Select, Button } from "antd";
 
 const style = { width: "100%", marginBottom: 32 };
 
-const disabledStartDate = current => {
-  // const { date } = this.props;
-  // Try Date.now(date)
-  return current && current.valueOf() > Date.now();
-};
+// const disabledStartDate = current => {
+//   // const { date } = this.props;
+//   // Try Date.now(date)
+//   return current && current.valueOf() > Date.now();
+// };
 
 const BlockModal = inject("app")(
   observer(function BlockModal({

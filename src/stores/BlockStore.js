@@ -214,6 +214,7 @@ export default class BlockStore {
   @action
   setStartDate = () => {
     this.block.dates.push(this.date);
+    this.isDateModal = false;
     this.fetchAndUploadData();
   };
 
@@ -333,7 +334,6 @@ export default class BlockStore {
 
   @computed
   get isDataLoaded() {
-    console.log(this.blocks.map(bl => bl.data.length !== 0));
     return this.blocks.map(bl => bl.data.length !== 0);
   }
 
