@@ -1,8 +1,7 @@
 import React from "react";
 import { inject, observer } from "mobx-react";
+import format from "date-fns/format";
 
-// utils
-import { formatDate } from "utils/utils";
 // antd
 import { Col, Steps } from "antd";
 const Step = Steps.Step;
@@ -12,13 +11,12 @@ const BlockSteps = inject("app")(
     const StepTitle = props => <small>{props.children}</small>;
 
     const StepDate = bl.stepDate.map(obj => {
-      // console.log(obj);
       return (
         <Step
           key={obj.date}
           status={obj.status}
           title={<StepTitle date={obj}>{obj.name}</StepTitle>}
-          description={<small>{formatDate(obj.date)}</small>}
+          description={<small>{format(obj.date, "YY/MM/DD HH:00")}</small>}
         />
       );
     });
