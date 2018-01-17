@@ -144,7 +144,7 @@ class Block {
   get modelData() {
     if (this.dates.length !== 0 && this.avgStyleLength) {
       const startHour = getHours(this.dates[this.dates.length - 1]);
-      const endHour = getHours(this.now);
+      // const endHour = getHours(this.now);
       // const lastIdx = 24 - endHour;
 
       const data = this.data.slice(startHour);
@@ -190,59 +190,6 @@ class Block {
             cumulativeHrGrowthSpray.toFixed(3)
           ),
           percentageSpray: Number(percentageSpray.toFixed(3)),
-          "Average Style Length": Number(this.avgStyleLength)
-        };
-      });
-    }
-  }
-
-  @computed
-  get graphData() {
-    if (this.dates.length !== 0 && this.avgStyleLength) {
-      const startHour = getHours(this.dates[this.dates.length - 1]);
-      const endHour = getHours(this.now);
-      // const lastIdx = 24 - endHour;
-
-      const data = this.data.slice(startHour);
-
-      let cumulativeHrGrowth = 0;
-      let percentage = 0;
-
-      let cumulativeHrGrowthSpray = 0;
-      let percentageSpray = 0;
-
-      return data.map((arr, i) => {
-        const { date, temp } = arr;
-        const { hrGrowth, temps } = this.variety;
-        const dateNow = getTime(date);
-
-        const idx = temps.findIndex(t => t.toString() === temp);
-        let hourlyGrowth = hrGrowth[idx];
-        if (temp < 35 || temp > 106 || temp === "M") hourlyGrowth = 0;
-
-        const formattedDates = this.dates.map(d =>
-          format(d, "YYYY-MM-DD HH:00")
-        );
-        const isOneOfTheDates = formattedDates.some(d => isEqual(dateNow, d));
-        if (isOneOfTheDates) {
-          cumulativeHrGrowthSpray = 0;
-          percentageSpray = 0;
-        }
-
-        cumulativeHrGrowthSpray += hourlyGrowth;
-        percentageSpray = cumulativeHrGrowthSpray / this.avgStyleLength * 100;
-
-        cumulativeHrGrowth += hourlyGrowth;
-        percentage = cumulativeHrGrowth / this.avgStyleLength * 100;
-
-        return {
-          Date: format(date, "MM-DD HH:00"),
-          Temperature: Number(temp),
-          hourlyGrowth,
-          percentageSpray: Number(percentageSpray.toFixed(3)),
-          "Cumulative Hourly Growth": Number(
-            cumulativeHrGrowthSpray.toFixed(1)
-          ),
           "Average Style Length": Number(this.avgStyleLength)
         };
       });

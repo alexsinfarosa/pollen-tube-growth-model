@@ -25,7 +25,7 @@ const GrowthGraph = inject("app")(
               width={970}
               height={250}
               syncId="ciccio"
-              data={bl.graphData}
+              data={bl.modelData}
               margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
               style={{ background: "#fafafa", borderRadius: "5px" }}
             >
@@ -49,7 +49,7 @@ const GrowthGraph = inject("app")(
               width={970}
               height={250}
               syncId="ciccio"
-              data={bl.graphData}
+              data={bl.modelData}
               margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
               style={{ background: "#fafafa", borderRadius: "5px" }}
             >
