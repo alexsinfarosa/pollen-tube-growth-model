@@ -46,13 +46,13 @@ const StyleLengthModal = inject("app")(
         title: "Style Length",
         dataIndex: "styleLength",
         key: "styleLength",
-        width: "50%",
+        width: "45%",
         render: (text, record) => <span>{text.toPrecision(4)} mm</span>
       },
       {
         title: "Actions",
         dataIndex: "actions",
-        width: "20%",
+        width: "25%",
         render: (text, record, idx) => (
           <div>
             <Icon type="edit" onClick={() => editStyleLength(record, idx)} />

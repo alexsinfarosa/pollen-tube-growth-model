@@ -26,18 +26,21 @@ const BlockBody = inject("app")(
             <BlockTop breakpoints={bpts} bl={bl} />
             <BlockSteps breakpoints={bpts} bl={bl} />
             {count < 5 && (
-              <div
-                style={{
-                  textAlign: "center"
-                }}
+              <Col
+                xs={8}
+                sm={24}
+                md={24}
+                lg={24}
+                style={{ textAlign: "center" }}
               >
                 <Button
+                  size={breakpoints.xs ? "small" : "default"}
                   style={{ marginTop: 16 }}
                   onClick={() => bStore.addSprayDate(bl.id)}
                 >
                   {sprayButtonLabel}
                 </Button>
-              </div>
+              </Col>
             )}
             <div style={{ color: "white" }}>x</div>
             {bStore.isMap ? (

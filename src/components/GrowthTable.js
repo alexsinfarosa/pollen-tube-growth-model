@@ -18,8 +18,8 @@ const columns = [
   },
   {
     title: "Air Temp (˚F)",
-    dataIndex: "Temperature",
-    key: "Temperature",
+    dataIndex: "temp",
+    key: "temp",
     width: "20%"
   },
   {

@@ -182,7 +182,8 @@ class Block {
         return {
           date: dateNow,
           Date: format(date, "MM-DD HH:00"),
-          Temperature: Number(temp),
+          temp,
+          Temperature: isNaN(Number(temp)) ? "No Data" : Number(temp),
           hourlyGrowth,
           cumulativeHrGrowth: Number(cumulativeHrGrowth.toFixed(3)),
           percentage: Number(percentage.toFixed(3)),
