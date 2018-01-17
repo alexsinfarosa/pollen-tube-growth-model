@@ -2,7 +2,7 @@ import React from "react";
 import { inject, observer } from "mobx-react";
 import { Table } from "antd";
 // import isBefore from "date-fns/is_before";
-import format from "date-fns/format";
+// import format from "date-fns/format";
 import { getTime } from "date-fns";
 
 //columns for the growth table
@@ -13,8 +13,8 @@ const columns = [
     key: "date",
     width: "20%",
     defaultSortOrder: "descend",
-    sorter: (a, b) => new Date(a.date) - new Date(b.date),
-    render: d => format(d, "YYYY-MM-DD HH:00")
+    sorter: (a, b) => new Date(a.date) - new Date(b.date)
+    // render: d => format(d, "YYYY-MM-DD HH:00")
   },
   {
     title: "Air Temp (˚F)",

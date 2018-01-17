@@ -18,7 +18,7 @@ import isBefore from "date-fns/is_before";
 // import differenceInHours from "date-fns/difference_in_hours";
 import addDays from "date-fns/add_days";
 import isEqual from "date-fns/is_equal";
-import getTime from "date-fns/get_time";
+// import getTime from "date-fns/get_time";
 
 class Block {
   id;
@@ -158,7 +158,7 @@ class Block {
       return data.map((arr, i) => {
         const { date, temp } = arr;
         const { hrGrowth, temps } = this.variety;
-        const dateNow = getTime(date);
+        // const dateNow = getTime(date);
 
         const idx = temps.findIndex(t => t.toString() === temp);
         let hourlyGrowth = hrGrowth[idx];
@@ -167,7 +167,7 @@ class Block {
         const formattedDates = this.dates.map(d =>
           format(d, "YYYY-MM-DD HH:00")
         );
-        const isOneOfTheDates = formattedDates.some(d => isEqual(dateNow, d));
+        const isOneOfTheDates = formattedDates.some(d => isEqual(date, d));
         if (isOneOfTheDates) {
           cumulativeHrGrowthSpray = 0;
           percentageSpray = 0;
@@ -180,7 +180,7 @@ class Block {
         percentage = cumulativeHrGrowth / this.avgStyleLength * 100;
 
         return {
-          date: dateNow,
+          date,
           Date: format(date, "MM-DD HH:00"),
           temp,
           Temperature: isNaN(Number(temp)) ? "No Data" : Number(temp),

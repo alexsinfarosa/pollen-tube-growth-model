@@ -58,3 +58,15 @@ circle {
 .hilight {
   color: red;
 }
+
+.green {
+  background: #a1e5ab;
+}
+
+.yellow {
+  background: #e9d985;
+}
+
+.red {
+  background: #d33f49;
+}
