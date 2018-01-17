@@ -73,7 +73,7 @@ const StyleLengthModal = inject("app")(
             <Button onClick={cancelButton}>Cancel</Button>
             <Button
               disabled={
-                (radioValue === "calculate" && block.styleLengths.length < 2) ||
+                (radioValue === "calculate" && block.styleLengths.length < 4) ||
                 isStyleLengthBeingEdited
               }
               onClick={() =>

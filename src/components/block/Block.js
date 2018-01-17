@@ -12,16 +12,14 @@ import BlockBody from "components/block/BlockBody";
 import { Row, Spin } from "antd";
 
 const Block = inject("app")(
-  observer(function Block({ app: { bpts, bStore, isDataLoaded }, bl }) {
+  observer(function Block({ app: { bpts, bStore }, bl }) {
     return (
       <BlockWrapper>
-        <BlockHeader bl={bl} breakpoints={bpts} />
-        {isDataLoaded ? (
-          <Row type="flex" justify="center" align="middle">
-            <Spin />
-          </Row>
+        {bStore.isLoading ? (
+          <Spin />
         ) : (
           <div>
+            <BlockHeader bl={bl} breakpoints={bpts} />
             <BlockBody bl={bl} breakpoints={bpts} />
           </div>
         )}

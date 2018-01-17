@@ -76,9 +76,9 @@ const GrowthGraph = inject("app")(
                 fill="#FFBC42"
               />
 
-              {bl.graphData.length >= 20 && (
+              {bl.modelData.length >= 20 && (
                 <Brush
-                  tickFormatter={x => bl.graphData[x].Date}
+                  tickFormatter={x => bl.modelData[x].Date}
                   height={30}
                   startIndex={0}
                 />

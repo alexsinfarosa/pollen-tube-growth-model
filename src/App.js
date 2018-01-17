@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { inject, observer } from "mobx-react";
 // import { toJS } from "mobx";
 import { MatchMediaProvider } from "mobx-react-matchmedia";
-import DevTools from "mobx-react-devtools";
+// import DevTools from "mobx-react-devtools";
 
 // styled components
 import { Header, SubHeader, SubHeaderRight, Main } from "styles";
@@ -23,7 +23,6 @@ class App extends Component {
     const { bpts } = this.props.app;
     return (
       <div>
-        <DevTools />
         <MatchMediaProvider breakpoints={bpts}>
           <Header>
             <SubHeader>

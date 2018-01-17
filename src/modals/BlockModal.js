@@ -2,7 +2,7 @@ import React from "react";
 import { inject, observer } from "mobx-react";
 import moment from "moment";
 // import { toJS } from "mobx";
-import { Row, Modal, Input, Select, DatePicker } from "antd";
+import { Row, Modal, Input, Select, DatePicker, Button } from "antd";
 
 const style = { width: "100%", marginBottom: 32 };
 
@@ -29,7 +29,8 @@ const BlockModal = inject("app")(
       updateBlock,
       isBlockModal,
       cancelButton,
-      addField
+      addField,
+      areRequiredFieldsSet
     } = bStore;
 
     // variety list
@@ -68,6 +69,21 @@ const BlockModal = inject("app")(
       }
     }
 
+    const Footer = () => {
+      return (
+        <div>
+          <Button onClick={cancelButton}>Cancel</Button>
+          <Button
+            disabled={!areRequiredFieldsSet}
+            type="primary"
+            onClick={() => (block.isBeingEdited ? updateBlock() : addBlock())}
+          >
+            {block.isBeingEdited ? "UpdateBlock" : "Add Block"}
+          </Button>
+        </div>
+      );
+    };
+
     return (
       <Modal
         width={400}
@@ -76,9 +92,10 @@ const BlockModal = inject("app")(
         maskClosable={false}
         title={block.isBeingEdited ? `Edit Block` : `New Block`}
         visible={isBlockModal}
-        okText={block.isBeingEdited ? "UpdateBlock" : "Add Block"}
-        onOk={() => (block.isBeingEdited ? updateBlock() : addBlock())}
-        onCancel={cancelButton}
+        // okText={block.isBeingEdited ? "UpdateBlock" : "Add Block"}
+        // onOk={() => (block.isBeingEdited ? updateBlock() : addBlock())}
+        // onCancel={cancelButton}
+        footer={<Footer />}
       >
         <Row align="middle">
           <Input
@@ -117,21 +134,6 @@ const BlockModal = inject("app")(
           >
             {stationList}
           </Select>
-
-          {block.isBeingEdited && (
-            <DatePicker
-              showTime={{ format: "HH:00" }}
-              style={style}
-              value={block.dates[0] ? moment(block.date) : undefined}
-              allowClear={false}
-              format="MMM Do YYYY, HH:00"
-              placeholder={`Select date and time`}
-              disabledDate={disabledStartDate}
-              showToday={true}
-              onChange={date => bStore.setDate(date)}
-              onOk={bStore.setStartDate}
-            />
-          )}
         </Row>
       </Modal>
     );

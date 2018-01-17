@@ -31,14 +31,14 @@ const columns = [
         dataIndex: "hourlyGrowth",
         key: "hourlyGrowth",
         width: "20%",
-        render: d => Number(d).toFixed(3)
+        render: d => Number(d).toFixed(2)
       },
       {
         title: "Accumulated",
         dataIndex: "Cumulative Hourly Growth",
         key: "Cumulative Hourly Growth",
         width: "20%",
-        render: d => Number(d).toFixed(3)
+        render: d => Number(d).toFixed(2)
       }
     ]
   },
@@ -47,7 +47,7 @@ const columns = [
     dataIndex: "percentageSpray",
     key: "percentageSpray",
     width: "20%",
-    render: perc => Number(perc).toFixed(3)
+    render: perc => Number(perc).toFixed(0)
   }
 ];
 

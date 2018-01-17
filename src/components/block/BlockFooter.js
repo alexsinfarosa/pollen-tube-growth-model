@@ -16,7 +16,7 @@ const BlockFooter = inject("app")(
         <Tabs
           defaultActiveKey="0"
           tabBarStyle={{ textAlign: "center" }}
-          type="card"
+          type="line"
           //   onChange={() => setGridData(block.id)}
         >
           <TabPane
