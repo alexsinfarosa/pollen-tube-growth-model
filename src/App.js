@@ -10,6 +10,7 @@ import { Header, SubHeader, SubHeaderRight, Main } from "styles";
 // Components
 import AppToolBar from "components/AppToolBar";
 import BlockList from "components/block/BlockList";
+import Instructions from "components/Instructions";
 
 // Modals
 import BlockModal from "modals/BlockModal";
@@ -20,7 +21,7 @@ import StyleLengthModal from "modals/StyleLengthModal";
 @observer
 class App extends Component {
   render() {
-    const { bpts } = this.props.app;
+    const { bpts, bStore } = this.props.app;
     return (
       <div>
         <MatchMediaProvider breakpoints={bpts}>
@@ -38,7 +39,7 @@ class App extends Component {
           <StyleLengthModal breakpoints={bpts} />
 
           <Main>
-            <BlockList />
+            {bStore.blocks.length !== 0 ? <BlockList /> : <Instructions />}
           </Main>
         </MatchMediaProvider>
       </div>
