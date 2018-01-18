@@ -1,7 +1,8 @@
 import axios from "axios";
 import {
   michiganIdAdjustment,
-  networkTemperatureAdjustment
+  networkTemperatureAdjustment,
+  IncrementTemp
 } from "utils/utils";
 
 import format from "date-fns/format";
@@ -31,7 +32,9 @@ const fetchHourlyCurrentStationData = (
   return axios
     .post(`${protocol}//data.nrcc.rcc-acis.org/StnData`, params)
     .then(res => {
-      return new Map(res.data.data);
+      const data = IncrementTemp(res.data.data);
+      // console.log(data);
+      return new Map(data);
     })
     .catch(err => {
       console.log("Failed to load ACIS data", err);
@@ -57,8 +60,9 @@ const fetchHourlySisterStationData = (sid, seasonStartDate, selectedDate) => {
   return axios
     .post(`${protocol}//data.nrcc.rcc-acis.org/StnData`, params)
     .then(res => {
-      // console.log(res.data.data);
-      return new Map(res.data.data);
+      const data = IncrementTemp(res.data.data);
+      // console.log(data);
+      return new Map(data);
     })
     .catch(err => {
       console.log("Failed to load ACIS data", err);
@@ -92,8 +96,9 @@ const fetchHourlyForcestData = (station, seasonStartDate, selectedDate) => {
       }/temp/${formatDate(seasonStartDate)}/${formatDate(plusFiveDays)}`
     )
     .then(res => {
-      // console.log(res.data.data);
-      return new Map(res.data.data);
+      const data = IncrementTemp(res.data.data);
+      // console.log(data);
+      return new Map(data);
     })
     .catch(err => {
       console.log("Failed to load hourly forecast data", err);

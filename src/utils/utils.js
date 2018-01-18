@@ -186,3 +186,12 @@ export const dailyToHourlyDates = arr => {
 export const formatDate = date => {
   return format(date, "MM/DD/YY HH:00");
 };
+
+export const IncrementTemp = data => {
+  return data.map(arr => {
+    return [
+      arr[0],
+      arr[1].map(t => (t === "M" ? t : (Number(t) + 30).toString()))
+    ];
+  });
+};

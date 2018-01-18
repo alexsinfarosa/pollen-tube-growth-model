@@ -4,12 +4,6 @@ import { inject, observer } from "mobx-react";
 // antd
 import { Modal, DatePicker } from "antd";
 
-const disabledStartDate = current => {
-  // const { date } = this.props;
-  // Try Date.now(date)
-  return current && current.valueOf() > Date.now();
-};
-
 const StartDateModal = inject("app")(
   observer(function StartDateModal({ app: { formatDate, bStore }, bl }) {
     const width = window.screen.width;
@@ -39,7 +33,7 @@ const StartDateModal = inject("app")(
           allowClear={false}
           format="MMM Do YYYY, HH:00"
           placeholder={`Select Date and Time`}
-          disabledDate={disabledStartDate}
+          disabledDate={current => current && current.valueOf() > Date.now()}
           showToday={true}
           onChange={date => bStore.setDate(date)}
           onOk={bStore.setStartDate}

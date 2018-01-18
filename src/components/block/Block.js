@@ -6,7 +6,8 @@ import { BlockWrapper } from "styles";
 
 // components
 import BlockHeader from "./BlockHeader";
-import BlockBody from "components/block/BlockBody";
+import ProgressionGraph from "components/ProgressionGraph";
+import SprayButton from "components/block/SprayButton";
 // import USMap from "components/USMap";
 
 import { Spin } from "antd";
@@ -20,7 +21,8 @@ const Block = inject("app")(
         ) : (
           <div>
             <BlockHeader bl={bl} breakpoints={bpts} />
-            <BlockBody bl={bl} breakpoints={bpts} />
+            <ProgressionGraph bl={bl} />
+            <SprayButton bl={bl} breakpoints={bpts} />
           </div>
         )}
       </BlockWrapper>

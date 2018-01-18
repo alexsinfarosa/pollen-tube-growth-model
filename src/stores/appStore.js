@@ -45,14 +45,6 @@ export default class AppStore {
     return this.blocks.filter(block => block.isBeingSelected);
   }
 
-  get block() {
-    return this.blockStore.block;
-  }
-
-  get state() {
-    return this.block.state;
-  }
-
   get currentStateStations() {
     if (this.state) {
       if (this.state.postalCode === "ALL") {

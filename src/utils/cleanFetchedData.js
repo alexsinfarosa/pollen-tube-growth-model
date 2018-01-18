@@ -28,6 +28,14 @@ export const loadACISData = (station, seasonStartDate, selectedDate) => {
       }
 
       cStationClean.set(date, cStationTempsReplaced);
+
+      // If current year, add 5 days forecast data to current station
+      if (isThisYear(selectedDate)) {
+        const dates = [...forecast.keys()];
+        dates.slice(1).forEach(date => {
+          cStationClean.set(date, forecast.get(date));
+        });
+      }
     }
 
     res.set("cStationClean", cStationClean);

@@ -29,7 +29,10 @@ const BlockModal = inject("app")(
       updateBlock,
       isBlockModal,
       cancelButton,
-      addField,
+      setName,
+      setVariety,
+      setState,
+      setStation,
       areRequiredFieldsSet
     } = bStore;
 
@@ -52,7 +55,7 @@ const BlockModal = inject("app")(
     });
 
     // station list
-    const stationList = currentStateStations.map(station => {
+    const stationList = stations.map(station => {
       return (
         <Select.Option key={station.id} value={station.id}>
           {station.name}
@@ -60,14 +63,14 @@ const BlockModal = inject("app")(
       );
     });
 
-    let stationCount = "Select Station";
-    if (block.state) {
-      if (block.state === "ALL") {
-        stationCount = `Select Station (${stations.length})`;
-      } else {
-        stationCount = `Select Station (${currentStateStations.length})`;
-      }
-    }
+    // let stationCount = "Select Station";
+    // if (block.state) {
+    //   if (block.state === "ALL") {
+    //     stationCount = `Select Station (${stations.length})`;
+    //   } else {
+    //     stationCount = `Select Station (${currentStateStations.length})`;
+    //   }
+    // }
 
     const Footer = () => {
       return (
@@ -102,14 +105,14 @@ const BlockModal = inject("app")(
             name="name"
             style={style}
             placeholder="Insert block name (min. 3 letters)"
-            onChange={e => addField(e.target.name, e.target.value)}
+            onChange={e => setName(e.target.value)}
             value={block.name}
           />
 
           <Select
             style={style}
             placeholder={`Select apple variety`}
-            onChange={val => addField("variety", val)}
+            onChange={val => setVariety(val)}
             value={block.variety ? block.variety.name : undefined}
           >
             {varietyList}
@@ -119,7 +122,7 @@ const BlockModal = inject("app")(
             name="state"
             style={style}
             placeholder={`Select state`}
-            onChange={val => addField("state", val)}
+            onChange={val => setState(val)}
             value={block.state ? block.state.postalCode : undefined}
           >
             {stateList}
@@ -128,8 +131,8 @@ const BlockModal = inject("app")(
           <Select
             name="station"
             style={style}
-            placeholder={stationCount}
-            onChange={val => addField("station", val)}
+            placeholder={"Select station"}
+            onChange={val => setStation(val)}
             value={block.station ? block.station.name : undefined}
           >
             {stationList}
