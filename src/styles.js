@@ -157,6 +157,7 @@ export const SectionMap = Section.extend`
   width: calc(100% - 32px);
   margin: 0 auto;
   height: 30vh;
+  margin-top: 32px;
 
   @media (min-width: ${sm}) {
     height: 30vh;
@@ -189,7 +190,7 @@ export const BFooter = styled.div`
   color: #fff;
   padding: 8px 16px;
   border-radius: 4px;
-  margin-top: ${margin};
+  // margin-top: ${margin};
 `;
 
 export const RowCentered = styled.div`
