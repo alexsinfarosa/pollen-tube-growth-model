@@ -299,6 +299,7 @@ export default class BlockStore {
   @observable isMap = false;
   @action toggleMap = () => (this.isMap = !this.isMap);
   @action showModal = name => (this[name] = true);
+  @action hideModal = name => (this[name] = false);
 
   // radioValue
   @observable radioValue = "";

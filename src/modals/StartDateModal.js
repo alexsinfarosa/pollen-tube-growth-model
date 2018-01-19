@@ -16,7 +16,7 @@ const StartDateModal = inject("app")(
         closable={false}
         footer={null}
         visible={bStore.isDateModal}
-        onCancel={bStore.hideDateModal}
+        onCancel={() => bStore.hideModal("isDateModal")}
         bodyStyle={{
           marginLeft: width <= 768 ? `${margin}px` : 0,
           padding: 0
@@ -35,8 +35,8 @@ const StartDateModal = inject("app")(
           placeholder={`Select Date and Time`}
           disabledDate={current => current && current.valueOf() > Date.now()}
           showToday={true}
-          onChange={date => bStore.setDate(date)}
-          onOk={bStore.setStartDate}
+          onChange={date => bStore.addField("startDate", date)}
+          onOk={bStore.fetchAndUploadData}
         />
       </Modal>
     );

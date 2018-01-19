@@ -22,8 +22,13 @@ const Block = inject("app")(
         ) : (
           <div>
             <BlockHeader bl={bl} breakpoints={bpts} />
-            <DateStyleLengthBar bl={bl} breakpoints={bpts} />
-            <SprayButton bl={bl} breakpoints={bpts} />
+            {bl.startDate && bl.avgStyleLength ? (
+              <div>
+                <SprayButton bl={bl} breakpoints={bpts} />
+              </div>
+            ) : (
+              <DateStyleLengthBar bl={bl} breakpoints={bpts} />
+            )}
           </div>
         )}
       </BlockWrapper>

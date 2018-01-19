@@ -32,6 +32,7 @@ export default class BlockStore {
   @observable isMap = false;
   @action toggleMap = () => (this.isMap = !this.isMap);
   @action showModal = name => (this[name] = true);
+  @action hideModal = name => (this[name] = false);
 
   // radioValue
   @observable radioValue = "";
@@ -39,33 +40,21 @@ export default class BlockStore {
 
   // dates
   @computed
-  get currentYear() {
-    if (this.block.startDate) {
-      return format(this.block.startDate, "YYYY");
-    }
-    return getYear(new Date());
-  }
-
-  @computed
   get seasonStartDate() {
-    if (this.startDate) {
-      return `${this.currentYear}-03-01 00:00`;
-    }
+    return new Date(`${getYear(this.block.startDate)}-03-01 00:00`);
   }
 
   @computed
   get seasonEndDate() {
-    if (this.startDate) {
-      return `${this.currentYear}-07-01 23:00`;
-    }
+    return new Date(`${getYear(this.block.startDate)}-07-01 23:00`);
   }
 
   @computed
   get now() {
-    if (isAfter(Date.now(), this.seasonEndDate)) {
+    if (isAfter(new Date(), this.seasonEndDate)) {
       return this.seasonEndDate;
     }
-    return format(Date.now(), "MM/DD/YY HH:00");
+    return new Date();
   }
 
   // style length
@@ -126,6 +115,8 @@ export default class BlockStore {
 
   @action
   addField = (name, val) => {
+    this.block[name] = val;
+
     if (name === "variety") {
       this.block[name] = this.app.apples.get(val);
     }
@@ -134,9 +125,6 @@ export default class BlockStore {
     }
     if (name === "station") {
       this.block[name] = this.app.stations.find(s => s.id === val);
-    }
-    if (name === "name") {
-      this.block[name] = val;
     }
   };
 
@@ -178,6 +166,7 @@ export default class BlockStore {
   };
 
   fetchAndUploadData = () => {
+    this.isDateModal = false;
     this.isLoading = true;
     const block = { ...this.block };
     const blocks = [...this.blocks];

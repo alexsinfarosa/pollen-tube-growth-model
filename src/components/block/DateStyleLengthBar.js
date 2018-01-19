@@ -9,7 +9,7 @@ import { Row, Col, Button } from "antd";
 import { RowCentered } from "styles";
 
 // utils
-import { formatDate } from "utils/utils";
+import format from "date-fns/format";
 
 const DateStyleLengthBar = inject("app")(
   observer(function DateStyleLengthBar({ app: { bStore }, bl }) {
@@ -17,7 +17,9 @@ const DateStyleLengthBar = inject("app")(
       <Row type="flex" justify="space-between" align="center">
         {bl.startDate ? (
           <RowCentered style={{ height: 32 }}>
-            <Col>Model Start Date: {formatDate(bl.startDate)}</Col>
+            <Col>
+              Model Start Date: {format(bl.startDate, "YY/MM/DD HH:00")}
+            </Col>
           </RowCentered>
         ) : (
           <Button
