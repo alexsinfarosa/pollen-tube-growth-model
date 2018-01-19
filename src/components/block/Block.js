@@ -11,7 +11,7 @@ import SprayButton from "components/block/SprayButton";
 import SprayDateModal from "modals/SprayDateModal";
 
 import DateStyleLengthBar from "components/block/DateStyleLengthBar";
-// import USMap from "components/USMap";
+import USMap from "components/USMap";
 
 import { Spin } from "antd";
 
@@ -30,6 +30,7 @@ const Block = inject("app")(
                 {bl.dates.length < 4 && (
                   <SprayButton bl={bl} breakpoints={bpts} />
                 )}
+                {bStore.isMap && <USMap bl={bl} breakpoints={bpts} />}
                 <SprayDateModal bl={bl} breakpoints={bpts} />
               </div>
             ) : (
