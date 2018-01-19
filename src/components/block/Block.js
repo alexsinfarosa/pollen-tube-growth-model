@@ -6,7 +6,7 @@ import { BlockWrapper } from "styles";
 
 // components
 import BlockHeader from "./BlockHeader";
-// import ProgressionGraph from "components/ProgressionGraph";
+import ProgressionGraph from "components/ProgressionGraph";
 import SprayButton from "components/block/SprayButton";
 import DateStyleLengthBar from "components/block/DateStyleLengthBar";
 // import USMap from "components/USMap";
@@ -24,6 +24,7 @@ const Block = inject("app")(
             <BlockHeader bl={bl} breakpoints={bpts} />
             {bl.startDate && bl.avgStyleLength ? (
               <div>
+                <ProgressionGraph bl={bl} breakpoints={bpts} />
                 <SprayButton bl={bl} breakpoints={bpts} />
               </div>
             ) : (

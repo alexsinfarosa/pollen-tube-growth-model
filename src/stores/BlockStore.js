@@ -2,7 +2,7 @@ import { observable, action, computed, when } from "mobx";
 // import { toJS } from "mobx";
 
 // utils
-import { dailyToHourlyDates } from "utils/utils";
+import { roundDate, dailyToHourlyDates } from "utils/utils";
 import { loadACISData } from "utils/cleanFetchedData";
 
 // antd
@@ -11,7 +11,8 @@ import { message } from "antd";
 // models
 import BlockModel from "./BlockModel";
 
-import format from "date-fns/format";
+import moment from "moment";
+// import format from "date-fns/format";
 import getYear from "date-fns/get_year";
 // import isThisYear from "date-fns/is_this_year";
 import isAfter from "date-fns/is_after";
@@ -28,6 +29,7 @@ export default class BlockStore {
   // Modals
   @observable isBlockModal = false;
   @observable isDateModal = false;
+  @observable isSprayModal = false;
   @observable isStyleLengthModal = false;
   @observable isMap = false;
   @action toggleMap = () => (this.isMap = !this.isMap);
@@ -54,7 +56,7 @@ export default class BlockStore {
     if (isAfter(new Date(), this.seasonEndDate)) {
       return this.seasonEndDate;
     }
-    return new Date();
+    return roundDate(new Date(), moment.duration(60, "minutes"), "floor");
   }
 
   // style length
@@ -116,6 +118,19 @@ export default class BlockStore {
   @action
   addField = (name, val) => {
     this.block[name] = val;
+
+    if (
+      name === "startDate" ||
+      name === "firstSpray" ||
+      name === "secondSpray" ||
+      name === "thirdSpray"
+    ) {
+      this.block[name] = roundDate(
+        val,
+        moment.duration(60, "minutes"),
+        "floor"
+      );
+    }
 
     if (name === "variety") {
       this.block[name] = this.app.apples.get(val);
