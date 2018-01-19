@@ -11,6 +11,11 @@ import { message } from "antd";
 // models
 import BlockModel from "./BlockModel";
 
+import format from "date-fns/format";
+import getYear from "date-fns/get_year";
+// import isThisYear from "date-fns/is_this_year";
+import isAfter from "date-fns/is_after";
+
 export default class BlockStore {
   app;
   constructor(app) {
@@ -32,6 +37,41 @@ export default class BlockStore {
   @observable radioValue = "";
   @action setRadioValue = d => (this.radioValue = d);
 
+  // dates
+  @computed
+  get currentYear() {
+    if (this.block.startDate) {
+      return format(this.block.startDate, "YYYY");
+    }
+    return getYear(new Date());
+  }
+
+  @computed
+  get seasonStartDate() {
+    if (this.startDate) {
+      return `${this.currentYear}-03-01 00:00`;
+    }
+  }
+
+  @computed
+  get seasonEndDate() {
+    if (this.startDate) {
+      return `${this.currentYear}-07-01 23:00`;
+    }
+  }
+
+  @computed
+  get now() {
+    if (isAfter(Date.now(), this.seasonEndDate)) {
+      return this.seasonEndDate;
+    }
+    return format(Date.now(), "MM/DD/YY HH:00");
+  }
+
+  // style length
+  @observable styleLength;
+  setStyleLength = d => (this.styleLength = d);
+
   // blocks
   @observable blocks = [];
 
@@ -43,7 +83,6 @@ export default class BlockStore {
     variety: undefined,
     state: undefined,
     station: undefined,
-    styleLength: undefined,
     startDate: undefined,
     firstSpray: undefined,
     secondSpray: undefined,
@@ -57,6 +96,7 @@ export default class BlockStore {
 
   @action
   clearFields = () => {
+    this.styleLength = undefined;
     this.radioValue = "";
     this.isBlockModal = false;
     this.isDateModal = false;
@@ -66,7 +106,6 @@ export default class BlockStore {
     this.block.variety = undefined;
     this.block.state = undefined;
     this.block.station = undefined;
-    this.styleLength = undefined;
     this.block.startDate = undefined;
     this.block.firstSpray = undefined;
     this.block.secondSpray = undefined;
@@ -113,9 +152,9 @@ export default class BlockStore {
       const block = { ...this.block };
       block.isBeingSelected = true;
       block.id = Date.now();
-      this.blocks.push(new BlockModel(this, block));
+      this.blocks.push(new BlockModel(block));
       this.selectOneBlock(block.id);
-      // this.writeToLocalStorage();
+      this.writeToLocalStorage();
       this.clearFields();
       message.success(`${block.name} block has been created!`);
     }
@@ -143,10 +182,10 @@ export default class BlockStore {
     const block = { ...this.block };
     const blocks = [...this.blocks];
 
-    loadACISData(block.station, this.startDate, this.now).then(res => {
+    loadACISData(block.station, block.startDate, this.now).then(res => {
       block.data = dailyToHourlyDates(Array.from(res.get("cStationClean")));
       const idx = this.blocks.findIndex(b => b.id === block.id);
-      blocks.splice(idx, 1, block);
+      blocks.splice(idx, 1, new BlockModel(block));
       this.blocks = blocks;
       this.writeToLocalStorage();
       this.clearFields();
@@ -162,7 +201,7 @@ export default class BlockStore {
     block.isBeingEdited = false;
     block.styleLengths.forEach(sl => (sl.isEdit = false));
     const idx = this.blocks.findIndex(b => b.id === block.id);
-    blocks.splice(idx, 1, block);
+    blocks.splice(idx, 1, new BlockModel(block));
     this.blocks = blocks;
     this.selectOneBlock(block.id);
     this.writeToLocalStorage();
@@ -275,7 +314,7 @@ export default class BlockStore {
     if (data) {
       this.blocks.clear();
       data.forEach(json => {
-        this.blocks.push(new BlockModel(this, json));
+        this.blocks.push(new BlockModel(json));
       });
     }
   };

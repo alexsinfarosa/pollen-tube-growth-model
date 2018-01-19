@@ -12,13 +12,11 @@ import { roundDate, dailyToHourlyDates } from "utils/utils";
 // import isEqual from "date-fns/is_equal";
 
 export default class BlockModel {
-  store;
   id;
   @observable name;
   @observable variety;
   @observable state;
   @observable station;
-  @observable styleLength;
   @observable startDate;
   @observable firstSpray;
   @observable secondSpray;
@@ -29,29 +27,37 @@ export default class BlockModel {
   @observable isBeingSelected = false;
   @observable isBeingEdited = false;
 
-  constructor(store, { id, name, variety, state, station }) {
-    this.store = store;
+  constructor({
+    id,
+    name,
+    variety,
+    state,
+    station,
+    startDate,
+    firstSpray,
+    secondSpray,
+    thirdSpray,
+    endDate,
+    styleLengths,
+    data,
+    isBeingSelected,
+    isBeingEdited
+  }) {
     this.id = id;
     this.name = name;
     this.variety = variety;
     this.state = state;
     this.station = station;
+    this.startDate = startDate;
+    this.firstSpray = firstSpray;
+    this.secondSpray = secondSpray;
+    this.thirdSpray = thirdSpray;
+    this.endDate = endDate;
+    this.styleLengths = styleLengths;
+    this.data = data;
+    this.isBeingSelected = isBeingSelected;
+    this.isBeingEdited = isBeingEdited;
   }
-
-  @action setName = d => (this.name = d);
-  @action setVariety = d => (this.variety = d);
-  @action setState = d => (this.state = d);
-  @action setStation = d => (this.station = d);
-  @action setStyleLength = d => (this.styleLength = d);
-  @action setStartDate = d => (this.startDate = d);
-  @action setFirstSpray = d => (this.firstSpray = d);
-  @action setSecondSpray = d => (this.secondSpray = d);
-  @action setThirdSpray = d => (this.thirdSpray = d);
-  @action setEndDate = d => (this.endDate = d);
-
-  @action setData = d => (this.date = d);
-  @action setIsBeingSelected = d => (this.isBeingSelected = d);
-  @action setIsBeingEdited = d => (this.isBeingEdited = d);
 
   @computed
   get avgStyleLength() {

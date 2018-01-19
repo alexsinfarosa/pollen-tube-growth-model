@@ -8,6 +8,7 @@ import { BlockWrapper } from "styles";
 import BlockHeader from "./BlockHeader";
 // import ProgressionGraph from "components/ProgressionGraph";
 import SprayButton from "components/block/SprayButton";
+import DateStyleLengthBar from "components/block/DateStyleLengthBar";
 // import USMap from "components/USMap";
 
 import { Spin } from "antd";
@@ -21,7 +22,7 @@ const Block = inject("app")(
         ) : (
           <div>
             <BlockHeader bl={bl} breakpoints={bpts} />
-
+            <DateStyleLengthBar bl={bl} breakpoints={bpts} />
             <SprayButton bl={bl} breakpoints={bpts} />
           </div>
         )}

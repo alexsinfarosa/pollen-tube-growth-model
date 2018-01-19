@@ -15,7 +15,7 @@ const DateStyleLengthBar = inject("app")(
   observer(function DateStyleLengthBar({ app: { bStore }, bl }) {
     return (
       <Row type="flex" justify="space-between" align="center">
-        {bl.dates.length !== 0 ? (
+        {bl.startDate ? (
           <RowCentered style={{ height: 32 }}>
             <Col>Model Start Date: {formatDate(bl.startDate)}</Col>
           </RowCentered>
