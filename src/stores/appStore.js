@@ -50,13 +50,13 @@ export default class AppStore {
   }
 
   get currentStateStations() {
-    if (this.state) {
-      if (this.state.postalCode === "ALL") {
+    if (this.block.state) {
+      if (this.block.state.postalCode === "ALL") {
         return this.stations;
       }
 
       return this.stations.filter(
-        station => station.state === this.state.postalCode
+        station => station.state === this.block.state.postalCode
       );
     }
     return [];

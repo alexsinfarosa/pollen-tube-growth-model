@@ -8,10 +8,13 @@ import { BlockWrapper } from "styles";
 import BlockHeader from "./BlockHeader";
 import EmergenceGraph from "./EmergenceGraph";
 import SprayButton from "./SprayButton";
-import SprayDateModal from "modals/SprayDateModal";
 import DateStyleLengthBar from "./DateStyleLengthBar";
 import USMap from "./USMap";
 import BlockTabs from "./BlockTabs";
+
+// Modals
+import EditBlockModal from "modals/EditBlockModal";
+import SprayDateModal from "modals/SprayDateModal";
 
 import { Spin } from "antd";
 
@@ -33,6 +36,7 @@ const Block = inject("app")(
                 {bStore.isMap && <USMap bl={bl} breakpoints={bpts} />}
                 {!breakpoints.xs && <BlockTabs bl={bl} breakpoints={bpts} />}
                 <SprayDateModal bl={bl} breakpoints={bpts} />
+                <EditBlockModal bl={bl} breakpoints={bpts} />
               </div>
             ) : (
               <DateStyleLengthBar bl={bl} breakpoints={bpts} />

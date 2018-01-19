@@ -13,9 +13,8 @@ import BlockList from "components/block/BlockList";
 import Instructions from "components/Instructions";
 
 // Modals
-import BlockModal from "modals/BlockModal";
+import NewBlockModal from "modals/NewBlockModal";
 import StartDateModal from "modals/StartDateModal";
-// import SprayDateModal from "modals/SprayDateModal";
 import StyleLengthModal from "modals/StyleLengthModal";
 
 @inject("app")
@@ -33,7 +32,7 @@ class App extends Component {
             <SubHeaderRight>NEWA</SubHeaderRight>
           </Header>
 
-          <BlockModal />
+          <NewBlockModal />
 
           <AppToolBar breakpoints={bpts} />
           <StartDateModal breakpoints={bpts} />

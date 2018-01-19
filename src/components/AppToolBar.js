@@ -8,7 +8,7 @@ const { Option, OptGroup } = Select;
 
 const AppToolBar = inject("app")(
   observer(function AppToolBar({
-    app: { blockStore, blocks, filteredBlocks },
+    app: { bStore, blocks, filteredBlocks },
     breakpoints
   }) {
     const bpts = breakpoints;
@@ -46,7 +46,7 @@ const AppToolBar = inject("app")(
                 ghost
                 icon="plus"
                 style={{ marginRight: 16 }}
-                onClick={() => blockStore.showModal("isBlockModal")}
+                onClick={() => bStore.showModal("isBlockModal")}
               >
                 {bpts.xs ? null : "Block"}
               </Button>
@@ -57,13 +57,13 @@ const AppToolBar = inject("app")(
                 ghost={filteredBlocks.length > 1 ? false : true}
                 type="primary"
                 icon={bpts.xs ? "table" : null}
-                onClick={blockStore.selectAllBlocks}
+                onClick={bStore.selectAllBlocks}
               >
                 {bpts.xs ? null : "Blocks"}
                 {!bpts.xs && (
                   <Badge
                     overflowCount={99}
-                    count={blockStore.blocks.length}
+                    count={bStore.blocks.length}
                     style={{
                       marginLeft: 6,
                       marginBottom: 1,
@@ -82,7 +82,7 @@ const AppToolBar = inject("app")(
           <Select
             style={{ width: "100%" }}
             placeholder={`Block List`}
-            onChange={id => blockStore.selectOneBlock(id)}
+            onChange={id => bStore.selectOneBlock(id)}
             value={
               filteredBlocks.length === 1 ? filteredBlocks[0].name : undefined
             }
@@ -97,9 +97,9 @@ const AppToolBar = inject("app")(
               <Tooltip title="Toggle Map">
                 <Button
                   type="primary"
-                  ghost={blockStore.isMap ? false : true}
+                  ghost={bStore.isMap ? false : true}
                   icon="environment-o"
-                  onClick={blockStore.toggleMap}
+                  onClick={bStore.toggleMap}
                 >
                   Map
                 </Button>

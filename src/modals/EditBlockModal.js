@@ -1,9 +1,8 @@
 import React from "react";
 import { inject, observer } from "mobx-react";
-// import moment from "moment";
-// import { toJS } from "mobx";
-import { Row, Modal, Input, Select, Button } from "antd";
 
+// antd
+import { Row, Modal, Input, Select, Button } from "antd";
 const style = { width: "100%", marginBottom: 32 };
 
 // const disabledStartDate = current => {
@@ -12,27 +11,11 @@ const style = { width: "100%", marginBottom: 32 };
 //   return current && current.valueOf() > Date.now();
 // };
 
-const BlockModal = inject("app")(
-  observer(function BlockModal({
-    app: {
-      apples,
-      states,
-      currentStateStations,
-      block,
-      bStore,
-      blocks,
-      stations
-    }
+const EditBlockModal = inject("app")(
+  observer(function EditBlockModal({
+    app: { apples, states, currentStateStations, bStore, stations },
+    bl
   }) {
-    const {
-      addBlock,
-      updateBlock,
-      isBlockModal,
-      cancelButton,
-      addField,
-      areRequiredFieldsSet
-    } = bStore;
-
     // variety list
     const varietyList = apples.values().map(variety => {
       return (
@@ -72,13 +55,15 @@ const BlockModal = inject("app")(
     const Footer = () => {
       return (
         <div>
-          <Button onClick={cancelButton}>Cancel</Button>
+          <Button onClick={bStore.cancelButton}>Cancel</Button>
           <Button
-            disabled={!areRequiredFieldsSet}
+            disabled={!bStore.areRequiredFieldsSet}
             type="primary"
-            onClick={() => (block.isBeingEdited ? updateBlock() : addBlock())}
+            onClick={() =>
+              bl.isBeingEdited ? bStore.updateBlock() : bStore.addBlock()
+            }
           >
-            {block.isBeingEdited ? "UpdateBlock" : "Add Block"}
+            {bl.isBeingEdited ? "UpdateBlock" : "Add Block"}
           </Button>
         </div>
       );
@@ -90,8 +75,8 @@ const BlockModal = inject("app")(
         style={{ top: 32 }}
         closable={false}
         maskClosable={false}
-        title={block.isBeingEdited ? `Edit Block` : `New Block`}
-        visible={isBlockModal}
+        title={bl.isBeingEdited ? `Edit Block` : `New Block`}
+        visible={bStore.isBlockModal}
         // okText={block.isBeingEdited ? "UpdateBlock" : "Add Block"}
         // onOk={() => (block.isBeingEdited ? updateBlock() : addBlock())}
         // onCancel={cancelButton}
@@ -102,15 +87,15 @@ const BlockModal = inject("app")(
             name="name"
             style={style}
             placeholder="Insert block name (min. 3 letters)"
-            onChange={e => addField(e.target.name, e.target.value)}
-            value={block.name}
+            onChange={e => bStore.addField(e.target.name, e.target.value)}
+            value={bl.name}
           />
 
           <Select
             style={style}
             placeholder={`Select apple variety`}
-            onChange={val => addField("variety", val)}
-            value={block.variety ? block.variety.name : undefined}
+            onChange={val => bStore.addField("variety", val)}
+            value={bl.variety.name}
           >
             {varietyList}
           </Select>
@@ -119,8 +104,8 @@ const BlockModal = inject("app")(
             name="state"
             style={style}
             placeholder={`Select state`}
-            onChange={val => addField("state", val)}
-            value={block.state ? block.state.postalCode : undefined}
+            onChange={val => bStore.addField("state", val)}
+            value={bl.state.postalCode}
           >
             {stateList}
           </Select>
@@ -129,8 +114,8 @@ const BlockModal = inject("app")(
             name="station"
             style={style}
             placeholder={"Select station"}
-            onChange={val => addField("station", val)}
-            value={block.station ? block.station.name : undefined}
+            onChange={val => bStore.addField("station", val)}
+            value={bl.station.name}
           >
             {stationList}
           </Select>
@@ -140,4 +125,4 @@ const BlockModal = inject("app")(
   })
 );
 
-export default BlockModal;
+export default EditBlockModal;

@@ -237,7 +237,11 @@ export default class BlockStore {
       : this.blocks.forEach(bl => (bl.isBeingSelected = true));
   };
 
-  @action cancelButton = () => this.clearFields();
+  @action
+  cancelButton = () => {
+    // this.selectOneBlock(this.block.id);
+    this.clearFields();
+  };
 
   // Style length ---------------------------------------------------------------------
   @action
