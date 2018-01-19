@@ -1,14 +1,17 @@
 import { observable, action, computed } from "mobx";
 
-import getHours from "date-fns/get_hours";
-import format from "date-fns/format";
-import getYear from "date-fns/get_year";
-import isAfter from "date-fns/is_after";
-import isBefore from "date-fns/is_before";
-import addDays from "date-fns/add_days";
-import isEqual from "date-fns/is_equal";
+// utils
+import { roundDate, dailyToHourlyDates } from "utils/utils";
 
-export default class Block {
+// import getHours from "date-fns/get_hours";
+// import format from "date-fns/format";
+// import getYear from "date-fns/get_year";
+// import isAfter from "date-fns/is_after";
+// import isBefore from "date-fns/is_before";
+// import addDays from "date-fns/add_days";
+// import isEqual from "date-fns/is_equal";
+
+export default class BlockModel {
   store;
   id;
   @observable name;
@@ -22,12 +25,11 @@ export default class Block {
   @observable thirdSpray;
   @observable endDate;
   @observable styleLengths = [];
-  @observable dates = [];
   @observable data = [];
   @observable isBeingSelected = false;
   @observable isBeingEdited = false;
 
-  constructor(store, id, name, variety, state, station) {
+  constructor(store, { id, name, variety, state, station }) {
     this.store = store;
     this.id = id;
     this.name = name;
@@ -50,4 +52,15 @@ export default class Block {
   @action setData = d => (this.date = d);
   @action setIsBeingSelected = d => (this.isBeingSelected = d);
   @action setIsBeingEdited = d => (this.isBeingEdited = d);
+
+  @computed
+  get avgStyleLength() {
+    if (this.styleLengths.length !== 0) {
+      return (
+        this.styleLengths
+          .map(obj => obj.styleLength)
+          .reduce((p, c) => p + c, 0) / this.styleLengths.length
+      );
+    }
+  }
 }

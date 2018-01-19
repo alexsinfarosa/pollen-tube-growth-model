@@ -29,10 +29,7 @@ const BlockModal = inject("app")(
       updateBlock,
       isBlockModal,
       cancelButton,
-      setName,
-      setVariety,
-      setState,
-      setStation,
+      addField,
       areRequiredFieldsSet
     } = bStore;
 
@@ -105,14 +102,14 @@ const BlockModal = inject("app")(
             name="name"
             style={style}
             placeholder="Insert block name (min. 3 letters)"
-            onChange={e => setName(e.target.value)}
+            onChange={e => addField(e.target.name, e.target.value)}
             value={block.name}
           />
 
           <Select
             style={style}
             placeholder={`Select apple variety`}
-            onChange={val => setVariety(val)}
+            onChange={val => addField("variety", val)}
             value={block.variety ? block.variety.name : undefined}
           >
             {varietyList}
@@ -122,7 +119,7 @@ const BlockModal = inject("app")(
             name="state"
             style={style}
             placeholder={`Select state`}
-            onChange={val => setState(val)}
+            onChange={val => addField("state", val)}
             value={block.state ? block.state.postalCode : undefined}
           >
             {stateList}
@@ -132,7 +129,7 @@ const BlockModal = inject("app")(
             name="station"
             style={style}
             placeholder={"Select station"}
-            onChange={val => setStation(val)}
+            onChange={val => addField("station", val)}
             value={block.station ? block.station.name : undefined}
           >
             {stationList}

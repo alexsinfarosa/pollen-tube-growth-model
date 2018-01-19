@@ -41,6 +41,10 @@ export default class AppStore {
     return this.blockStore.blocks;
   }
 
+  get block() {
+    return this.blockStore.block;
+  }
+
   get filteredBlocks() {
     return this.blocks.filter(block => block.isBeingSelected);
   }
