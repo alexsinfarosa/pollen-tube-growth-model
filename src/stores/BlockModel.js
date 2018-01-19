@@ -115,7 +115,9 @@ export default class BlockModel {
         // percentage = cumulativeHrGrowth / this.avgStyleLength * 100;
 
         return {
+          date,
           Date: format(date, "MMM DD HA"),
+          HourlyGrowth: hourlyGrowth,
           Temperature: isNaN(Number(temp)) ? "No Data" : Number(temp),
           "Cumulative Hourly Growth": Number(
             cumulativeHrGrowthPartial.toFixed(3)

@@ -6,12 +6,12 @@ import { BlockWrapper } from "styles";
 
 // components
 import BlockHeader from "./BlockHeader";
-import ProgressionGraph from "components/block/ProgressionGraph";
-import SprayButton from "components/block/SprayButton";
+import ProgressionGraph from "./ProgressionGraph";
+import SprayButton from "./SprayButton";
 import SprayDateModal from "modals/SprayDateModal";
-
-import DateStyleLengthBar from "components/block/DateStyleLengthBar";
-import USMap from "components/block/USMap";
+import DateStyleLengthBar from "./DateStyleLengthBar";
+import USMap from "./USMap";
+import BlockTabs from "./BlockTabs";
 
 import { Spin } from "antd";
 
@@ -31,6 +31,7 @@ const Block = inject("app")(
                   <SprayButton bl={bl} breakpoints={bpts} />
                 )}
                 {bStore.isMap && <USMap bl={bl} breakpoints={bpts} />}
+                <BlockTabs bl={bl} breakpoints={bpts} />
                 <SprayDateModal bl={bl} breakpoints={bpts} />
               </div>
             ) : (

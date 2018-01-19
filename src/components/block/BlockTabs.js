@@ -2,15 +2,15 @@ import React from "react";
 import { inject, observer } from "mobx-react";
 
 import { BFooter } from "styles";
-import GrowthTable from "components/GrowthTable";
-import GrowthGraph from "components/GrowthGraph";
+import GrowthTable from "./GrowthTable";
+import GrowthGraph from "./GrowthGraph";
 
 // antd
 import { Tabs, Icon } from "antd";
 const TabPane = Tabs.TabPane;
 
-const BlockFooter = inject("app")(
-  observer(function BlockFooter({ app, bl }) {
+const BlockTabs = inject("app")(
+  observer(function BlockTabs({ app, bl }) {
     return (
       <BFooter>
         <Tabs
@@ -45,4 +45,4 @@ const BlockFooter = inject("app")(
   })
 );
 
-export default BlockFooter;
+export default BlockTabs;

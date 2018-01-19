@@ -20,7 +20,6 @@ const SprayDateModal = inject("app")(
     if (count === 1) sprayLabel = "firstSpray";
     if (count === 2) sprayLabel = "secondSpray";
     if (count === 3) sprayLabel = "thirdSpray";
-    console.log(sprayLabel);
 
     return (
       <Modal

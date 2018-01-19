@@ -18,6 +18,7 @@ const ProgressionGraph = inject("app")(
       <div style={{ width: "100%", height: "25vh" }}>
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart
+            syncId="ciccio"
             data={bl.modelData}
             margin={{ top: 30, right: 30, left: 0, bottom: 30 }}
             style={{ background: "white", borderRadius: "5px" }}

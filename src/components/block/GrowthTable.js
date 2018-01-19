@@ -2,7 +2,7 @@ import React from "react";
 import { inject, observer } from "mobx-react";
 import { Table } from "antd";
 // import isBefore from "date-fns/is_before";
-// import format from "date-fns/format";
+import format from "date-fns/format";
 import { getTime } from "date-fns";
 
 //columns for the growth table
@@ -13,13 +13,13 @@ const columns = [
     key: "date",
     width: "20%",
     defaultSortOrder: "descend",
-    sorter: (a, b) => new Date(a.date) - new Date(b.date)
-    // render: d => format(d, "YYYY-MM-DD HH:00")
+    sorter: (a, b) => new Date(a.date) - new Date(b.date),
+    render: d => format(d, "YYYY-MM-DD HH:00")
   },
   {
     title: "Air Temp (˚F)",
-    dataIndex: "temp",
-    key: "temp",
+    dataIndex: "Temperature",
+    key: "Temperature",
     width: "20%"
   },
   {
@@ -28,8 +28,8 @@ const columns = [
     children: [
       {
         title: "Hourly",
-        dataIndex: "hourlyGrowth",
-        key: "hourlyGrowth",
+        dataIndex: "HourlyGrowth",
+        key: "HourlyGrowth",
         width: "20%",
         render: d => Number(d).toFixed(2)
       },
@@ -44,8 +44,8 @@ const columns = [
   },
   {
     title: "% of Target",
-    dataIndex: "percentageSpray",
-    key: "percentageSpray",
+    dataIndex: "Emergence",
+    key: "Emergence",
     width: "20%",
     render: perc => Number(perc).toFixed(0)
   }
@@ -53,7 +53,7 @@ const columns = [
 
 const GrowthTable = inject("app")(
   observer(function GrowthTable({ app: { bStore }, bl }) {
-    const dates = bl.stepDate.map(d => getTime(d.date));
+    const dates = bl.dates.map(d => getTime(d));
     const sprayDateRow = date => {
       if (dates.includes(getTime(date))) {
         return "hilight";

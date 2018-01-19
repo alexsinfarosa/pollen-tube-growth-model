@@ -40,7 +40,7 @@ const GrowthGraph = inject("app")(
               <YAxis />
               <CartesianGrid strokeDasharray="3 3" vertical={false} />
               <Tooltip />
-              <Line dataKey="Temperature" stroke="#8F2D56" dot={false} />
+              <Line dataKey="Temperature" stroke="#172A3A" dot={false} />
             </LineChart>
 
             <br />
@@ -72,8 +72,8 @@ const GrowthGraph = inject("app")(
               <Area
                 type="monotone"
                 dataKey="Cumulative Hourly Growth"
-                stroke="#FFBC42"
-                fill="#FFBC42"
+                stroke="#48BEFF"
+                fill="#48BEFF"
               />
 
               {bl.modelData.length >= 20 && (
