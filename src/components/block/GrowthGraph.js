@@ -9,7 +9,6 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  Brush,
   ComposedChart,
   Area
 } from "recharts";
@@ -75,14 +74,6 @@ const GrowthGraph = inject("app")(
                 stroke="#48BEFF"
                 fill="#48BEFF"
               />
-
-              {bl.modelData.length >= 20 && (
-                <Brush
-                  tickFormatter={x => bl.modelData[x].Date}
-                  height={30}
-                  startIndex={0}
-                />
-              )}
             </ComposedChart>
           </div>
         </ResponsiveContainer>

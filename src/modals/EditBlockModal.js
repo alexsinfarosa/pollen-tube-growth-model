@@ -12,11 +12,19 @@ const disabledStartDate = current => {
   return current && current.valueOf() > Date.now();
 };
 
+const disabledSprayDate = current => {
+  // console.log(current);
+};
+
 const EditBlockModal = inject("app")(
   observer(function EditBlockModal({
     app: { apples, states, currentStateStations, bStore, stations },
     bl
   }) {
+    const dates = bl.dates.filter(date => date);
+    const countDates = dates.length;
+    const lastDate = dates[countDates - 1];
+    console.log(dates, lastDate);
     // variety list
     const varietyList = apples.values().map(variety => {
       return (
@@ -127,59 +135,58 @@ const EditBlockModal = inject("app")(
             name="startDate"
             style={style}
             showTime={{ format: "HH:00" }}
-            value={moment(bl.startDate)}
+            value={bl.startDate ? moment(bl.startDate) : undefined}
             allowClear={false}
             format="MMM Do YYYY, HH:00"
             placeholder={`Select Date and Time`}
             disabledDate={current => current && current.valueOf() > Date.now()}
             showToday={true}
             onChange={date => bStore.addField("startDate", date)}
-            onOk={bStore.updateBlock}
           />
 
           <label>First Spray: </label>
           <DatePicker
+            disabled={countDates > 1 ? false : true}
             name="firstSpray"
             style={style}
             showTime={{ format: "HH:00" }}
-            value={moment(bl.firstSpray)}
+            value={bl.firstSpray ? moment(bl.firstSpray) : undefined}
             allowClear={false}
             format="MMM Do YYYY, HH:00"
             placeholder={`Select Date and Time`}
-            disabledDate={current => current && current.valueOf() > Date.now()}
+            disabledDate={current => disabledSprayDate(current)}
             showToday={true}
             onChange={date => bStore.addField("firstSpray", date)}
-            onOk={bStore.updateBlock}
           />
 
           <label>Second Spray: </label>
           <DatePicker
+            disabled={countDates > 2 ? false : true}
             name="secondSpray"
             style={style}
             showTime={{ format: "HH:00" }}
-            value={moment(bl.secondSpray)}
+            value={bl.secondSpray ? moment(bl.secondSpray) : undefined}
             allowClear={false}
             format="MMM Do YYYY, HH:00"
             placeholder={`Select Date and Time`}
-            disabledDate={current => current && current.valueOf() > Date.now()}
+            disabledDate={current => disabledSprayDate(current)}
             showToday={true}
             onChange={date => bStore.addField("secondSpray", date)}
-            onOk={bStore.updateBlock}
           />
 
           <label>Third Spray: </label>
           <DatePicker
+            disabled={countDates > 3 ? false : true}
             name="thirdSpray"
             style={style}
             showTime={{ format: "HH:00" }}
-            value={moment(bl.thirdSpray)}
+            value={bl.thirdSpray ? moment(bl.thirdSpray) : undefined}
             allowClear={false}
             format="MMM Do YYYY, HH:00"
             placeholder={`Select Date and Time`}
-            disabledDate={current => current && current.valueOf() > Date.now()}
+            disabledDate={current => disabledSprayDate(current)}
             showToday={true}
             onChange={date => bStore.addField("thirdSpray", date)}
-            onOk={bStore.updateBlock}
           />
 
           <label>End Date: </label>
@@ -187,14 +194,13 @@ const EditBlockModal = inject("app")(
             name="endDate"
             style={style}
             showTime={{ format: "HH:00" }}
-            value={moment(bl.endDate)}
+            value={bl.endDate ? moment(bl.endDate) : undefined}
             allowClear={false}
             format="MMM Do YYYY, HH:00"
             placeholder={`Select Date and Time`}
-            disabledDate={current => current && current.valueOf() > Date.now()}
+            disabledDate={current => disabledSprayDate(current)}
             showToday={true}
             onChange={date => bStore.addField("endSpray", date)}
-            onOk={bStore.updateBlock}
           />
         </Row>
       </Modal>
