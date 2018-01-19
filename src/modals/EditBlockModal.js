@@ -1,15 +1,16 @@
 import React from "react";
 import { inject, observer } from "mobx-react";
+import moment from "moment";
 
 // antd
-import { Row, Modal, Input, Select, Button } from "antd";
-const style = { width: "100%", marginBottom: 32 };
+import { Row, Modal, Input, Select, Button, DatePicker } from "antd";
+const style = { width: "100%", marginBottom: 16 };
 
-// const disabledStartDate = current => {
-//   // const { date } = this.props;
-//   // Try Date.now(date)
-//   return current && current.valueOf() > Date.now();
-// };
+const disabledStartDate = current => {
+  // const { date } = this.props;
+  // Try Date.now(date)
+  return current && current.valueOf() > Date.now();
+};
 
 const EditBlockModal = inject("app")(
   observer(function EditBlockModal({
@@ -74,12 +75,13 @@ const EditBlockModal = inject("app")(
         width={400}
         style={{ top: 32 }}
         closable={false}
-        maskClosable={false}
+        maskClosable={true}
         title={bl.isBeingEdited ? `Edit Block` : `New Block`}
         visible={bStore.isEditBlockModal}
         footer={<Footer />}
       >
         <Row align="middle">
+          <label>Name:</label>
           <Input
             name="name"
             style={style}
@@ -88,6 +90,7 @@ const EditBlockModal = inject("app")(
             value={bl.name}
           />
 
+          <label>Variety: </label>
           <Select
             style={style}
             placeholder={`Select apple variety`}
@@ -97,6 +100,7 @@ const EditBlockModal = inject("app")(
             {varietyList}
           </Select>
 
+          <label>State: </label>
           <Select
             name="state"
             style={style}
@@ -107,6 +111,7 @@ const EditBlockModal = inject("app")(
             {stateList}
           </Select>
 
+          <label>Station:</label>
           <Select
             name="station"
             style={style}
@@ -116,6 +121,81 @@ const EditBlockModal = inject("app")(
           >
             {stationList}
           </Select>
+
+          <label>Start Date: </label>
+          <DatePicker
+            name="startDate"
+            style={style}
+            showTime={{ format: "HH:00" }}
+            value={moment(bl.startDate)}
+            allowClear={false}
+            format="MMM Do YYYY, HH:00"
+            placeholder={`Select Date and Time`}
+            disabledDate={current => current && current.valueOf() > Date.now()}
+            showToday={true}
+            onChange={date => bStore.addField("startDate", date)}
+            onOk={bStore.updateBlock}
+          />
+
+          <label>First Spray: </label>
+          <DatePicker
+            name="firstSpray"
+            style={style}
+            showTime={{ format: "HH:00" }}
+            value={moment(bl.firstSpray)}
+            allowClear={false}
+            format="MMM Do YYYY, HH:00"
+            placeholder={`Select Date and Time`}
+            disabledDate={current => current && current.valueOf() > Date.now()}
+            showToday={true}
+            onChange={date => bStore.addField("firstSpray", date)}
+            onOk={bStore.updateBlock}
+          />
+
+          <label>Second Spray: </label>
+          <DatePicker
+            name="secondSpray"
+            style={style}
+            showTime={{ format: "HH:00" }}
+            value={moment(bl.secondSpray)}
+            allowClear={false}
+            format="MMM Do YYYY, HH:00"
+            placeholder={`Select Date and Time`}
+            disabledDate={current => current && current.valueOf() > Date.now()}
+            showToday={true}
+            onChange={date => bStore.addField("secondSpray", date)}
+            onOk={bStore.updateBlock}
+          />
+
+          <label>Third Spray: </label>
+          <DatePicker
+            name="thirdSpray"
+            style={style}
+            showTime={{ format: "HH:00" }}
+            value={moment(bl.thirdSpray)}
+            allowClear={false}
+            format="MMM Do YYYY, HH:00"
+            placeholder={`Select Date and Time`}
+            disabledDate={current => current && current.valueOf() > Date.now()}
+            showToday={true}
+            onChange={date => bStore.addField("thirdSpray", date)}
+            onOk={bStore.updateBlock}
+          />
+
+          <label>End Date: </label>
+          <DatePicker
+            name="endDate"
+            style={style}
+            showTime={{ format: "HH:00" }}
+            value={moment(bl.endDate)}
+            allowClear={false}
+            format="MMM Do YYYY, HH:00"
+            placeholder={`Select Date and Time`}
+            disabledDate={current => current && current.valueOf() > Date.now()}
+            showToday={true}
+            onChange={date => bStore.addField("endSpray", date)}
+            onOk={bStore.updateBlock}
+          />
         </Row>
       </Modal>
     );
