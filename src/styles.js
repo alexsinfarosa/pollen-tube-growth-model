@@ -154,27 +154,27 @@ export const Section = styled.div`
 `;
 
 export const SectionMap = Section.extend`
-  width: 100%;
-  height: 35vh;
+  width: calc(100% - 32px);
+  margin: 0 auto;
+  height: 30vh;
 
   @media (min-width: ${sm}) {
-    height: 35vh;
+    height: 30vh;
   }
 
   @media (min-width: ${md}) {
-    height: 40vh;
+    height: 35vh;
   }
 
   @media (min-width: ${lg}) {
-    height: 45vh;
+    height: 40vh;
   }
 `;
 
 export const BlockWrapper = Section.extend`
   border: 1px solid #eee;
   border-radius: 4px;
-  padding: 8px;
-  margin-bottom: 32px;
+  margin: 16px;
 `;
 
 export const BHeader = styled.div`

@@ -12,8 +12,8 @@ import {
   Area
 } from "recharts";
 
-const ProgressionGraph = inject("app")(
-  observer(function ProgressionGraph({ app: { bStore }, bl }) {
+const EmergenceGraph = inject("app")(
+  observer(function EmergenceGraph({ app: { bStore }, bl }) {
     return (
       <div style={{ width: "100%", height: "25vh" }}>
         <ResponsiveContainer width="100%" height="100%">
@@ -55,4 +55,4 @@ const ProgressionGraph = inject("app")(
   })
 );
 
-export default ProgressionGraph;
+export default EmergenceGraph;

@@ -6,7 +6,7 @@ import { BlockWrapper } from "styles";
 
 // components
 import BlockHeader from "./BlockHeader";
-import ProgressionGraph from "./ProgressionGraph";
+import EmergenceGraph from "./EmergenceGraph";
 import SprayButton from "./SprayButton";
 import SprayDateModal from "modals/SprayDateModal";
 import DateStyleLengthBar from "./DateStyleLengthBar";
@@ -16,7 +16,7 @@ import BlockTabs from "./BlockTabs";
 import { Spin } from "antd";
 
 const Block = inject("app")(
-  observer(function Block({ app: { bpts, bStore }, bl }) {
+  observer(function Block({ app: { bpts, bStore }, bl, breakpoints }) {
     return (
       <BlockWrapper>
         {bStore.isLoading ? (
@@ -26,12 +26,12 @@ const Block = inject("app")(
             <BlockHeader bl={bl} breakpoints={bpts} />
             {bl.startDate && bl.avgStyleLength ? (
               <div>
-                <ProgressionGraph bl={bl} breakpoints={bpts} />
+                <EmergenceGraph bl={bl} breakpoints={bpts} />
                 {bl.dates.length < 4 && (
                   <SprayButton bl={bl} breakpoints={bpts} />
                 )}
                 {bStore.isMap && <USMap bl={bl} breakpoints={bpts} />}
-                <BlockTabs bl={bl} breakpoints={bpts} />
+                {!breakpoints.xs && <BlockTabs bl={bl} breakpoints={bpts} />}
                 <SprayDateModal bl={bl} breakpoints={bpts} />
               </div>
             ) : (
