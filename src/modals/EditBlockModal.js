@@ -43,14 +43,14 @@ const EditBlockModal = inject("app")(
       );
     });
 
-    // let stationCount = "Select Station";
-    // if (block.state) {
-    //   if (block.state === "ALL") {
-    //     stationCount = `Select Station (${stations.length})`;
-    //   } else {
-    //     stationCount = `Select Station (${currentStateStations.length})`;
-    //   }
-    // }
+    let stationCount = "Select Station";
+    if (bl.state) {
+      if (bl.state.postalCode === "ALL") {
+        stationCount = `Select Station (${stations.length})`;
+      } else {
+        stationCount = `Select Station (${currentStateStations.length})`;
+      }
+    }
 
     const Footer = () => {
       return (
@@ -59,11 +59,9 @@ const EditBlockModal = inject("app")(
           <Button
             disabled={!bStore.areRequiredFieldsSet}
             type="primary"
-            onClick={() =>
-              bl.isBeingEdited ? bStore.updateBlock() : bStore.addBlock()
-            }
+            onClick={bStore.updateBlock}
           >
-            {bl.isBeingEdited ? "UpdateBlock" : "Add Block"}
+            UpdateBlock
           </Button>
         </div>
       );
@@ -77,9 +75,6 @@ const EditBlockModal = inject("app")(
         maskClosable={false}
         title={bl.isBeingEdited ? `Edit Block` : `New Block`}
         visible={bStore.isBlockModal}
-        // okText={block.isBeingEdited ? "UpdateBlock" : "Add Block"}
-        // onOk={() => (block.isBeingEdited ? updateBlock() : addBlock())}
-        // onCancel={cancelButton}
         footer={<Footer />}
       >
         <Row align="middle">
@@ -113,7 +108,7 @@ const EditBlockModal = inject("app")(
           <Select
             name="station"
             style={style}
-            placeholder={"Select station"}
+            placeholder={stationCount}
             onChange={val => bStore.addField("station", val)}
             value={bl.station.name}
           >

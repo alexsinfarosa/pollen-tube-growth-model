@@ -52,11 +52,9 @@ const NewBlockModal = inject("app")(
           <Button
             disabled={!bStore.areRequiredFieldsSet}
             type="primary"
-            onClick={() =>
-              block.isBeingEdited ? bStore.updateBlock() : bStore.addBlock()
-            }
+            onClick={bStore.addBlock}
           >
-            {block.isBeingEdited ? "UpdateBlock" : "Add Block"}
+            Add Block
           </Button>
         </div>
       );
