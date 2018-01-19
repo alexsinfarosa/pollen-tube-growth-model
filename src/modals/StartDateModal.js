@@ -5,7 +5,7 @@ import { inject, observer } from "mobx-react";
 import { Modal, DatePicker } from "antd";
 
 const StartDateModal = inject("app")(
-  observer(function StartDateModal({ app: { formatDate, bStore }, bl }) {
+  observer(function StartDateModal({ app: { bStore } }) {
     const width = window.screen.width;
     // hack! Fix it.
     const margin = (width - 280 - 24) / 2;

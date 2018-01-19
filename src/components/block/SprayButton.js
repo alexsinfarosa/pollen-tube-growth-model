@@ -6,11 +6,10 @@ import { Row, Col, Button } from "antd";
 const SprayButton = inject("app")(
   observer(function SprayButton({ app: { bpts, bStore }, bl, breakpoints }) {
     let sprayButtonLabel;
-    let count = 2;
-    if (bl.stepDate) count = bl.stepDate.length;
-    if (count === 2) sprayButtonLabel = "Set 1st Spray";
-    if (count === 3) sprayButtonLabel = "Set 2nd Spray";
-    if (count === 4) sprayButtonLabel = "Set 3rd Spray";
+    const count = bl.dates.filter(date => date).length;
+    if (count === 1) sprayButtonLabel = "Set 1st Spray";
+    if (count === 2) sprayButtonLabel = "Set 2nd Spray";
+    if (count === 3) sprayButtonLabel = "Set 3rd Spray";
 
     return (
       count < 5 && (
@@ -19,7 +18,7 @@ const SprayButton = inject("app")(
             <Button
               size={breakpoints.xs ? "small" : "default"}
               style={{ marginTop: 16 }}
-              onClick={() => bStore.addSprayDate(bl.id)}
+              onClick={() => bStore.selectBlock("isSprayModal", bl.id)}
             >
               {sprayButtonLabel}
             </Button>

@@ -117,7 +117,9 @@ export default class BlockStore {
 
   @action
   addField = (name, val) => {
-    this.block[name] = val;
+    if (name === "name") {
+      this.block[name] = val.charAt(0).toUpperCase() + val.slice(1);
+    }
 
     if (
       name === "startDate" ||
@@ -191,6 +193,7 @@ export default class BlockStore {
       const idx = this.blocks.findIndex(b => b.id === block.id);
       blocks.splice(idx, 1, new BlockModel(block));
       this.blocks = blocks;
+      this.selectOneBlock(block.id);
       this.writeToLocalStorage();
       this.clearFields();
       this.isLoading = false;
@@ -200,6 +203,9 @@ export default class BlockStore {
 
   @action
   updateBlock = () => {
+    console.log("updateBlock");
+    this.isDateModal = false;
+    this.isSprayModal = false;
     const block = { ...this.block };
     const blocks = [...this.blocks];
     block.isBeingEdited = false;

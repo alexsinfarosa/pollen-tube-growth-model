@@ -10,6 +10,18 @@ const SprayDateModal = inject("app")(
     // hack! Fix it.
     const margin = (width - 280 - 24) / 2;
 
+    // const sprayDate = d => {
+    //   const dates = bl.dates.filter(date => date)
+    //   return dates[dates.length - 1]
+    // }
+
+    let sprayLabel;
+    const count = bl.dates.filter(date => date).length;
+    if (count === 1) sprayLabel = "firstSpray";
+    if (count === 2) sprayLabel = "secondSpray";
+    if (count === 3) sprayLabel = "thirdSpray";
+    console.log(sprayLabel);
+
     return (
       <Modal
         width={280}
@@ -35,8 +47,8 @@ const SprayDateModal = inject("app")(
           placeholder={`Select Date and Time`}
           disabledDate={current => current && current.valueOf() > Date.now()}
           showToday={true}
-          onChange={date => bStore.addField("startDate", date)}
-          onOk={bStore.fetchAndUploadData}
+          onChange={date => bStore.addField(sprayLabel, date)}
+          onOk={bStore.updateBlock}
         />
       </Modal>
     );

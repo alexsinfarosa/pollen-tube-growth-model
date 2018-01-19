@@ -15,7 +15,7 @@ import Instructions from "components/Instructions";
 // Modals
 import BlockModal from "modals/BlockModal";
 import StartDateModal from "modals/StartDateModal";
-import SprayDateModal from "modals/SprayDateModal";
+// import SprayDateModal from "modals/SprayDateModal";
 import StyleLengthModal from "modals/StyleLengthModal";
 
 @inject("app")
@@ -37,7 +37,6 @@ class App extends Component {
 
           <AppToolBar breakpoints={bpts} />
           <StartDateModal breakpoints={bpts} />
-          <SprayDateModal breakpoints={bpts} />
           <StyleLengthModal breakpoints={bpts} />
 
           <Main>

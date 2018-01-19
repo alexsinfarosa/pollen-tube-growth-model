@@ -78,13 +78,7 @@ export default class BlockModel {
 
   @computed
   get dates() {
-    return [
-      this.startDate,
-      this.firstSpray,
-      this.secondSpray,
-      this.thirdSpray,
-      this.endDate
-    ];
+    return [this.startDate, this.firstSpray, this.secondSpray, this.thirdSpray];
   }
 
   @computed
