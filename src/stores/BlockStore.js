@@ -27,7 +27,8 @@ export default class BlockStore {
   @observable isLoading = false;
 
   // Modals
-  @observable isBlockModal = false;
+  @observable isNewBlockModal = false;
+  @observable isEditBlockModal = false;
   @observable isDateModal = false;
   @observable isSprayModal = false;
   @observable isStyleLengthModal = false;
@@ -89,8 +90,10 @@ export default class BlockStore {
   clearFields = () => {
     this.styleLength = undefined;
     this.radioValue = "";
-    this.isBlockModal = false;
+    this.isNewBlockModal = false;
+    this.isEditBlockModal = false;
     this.isDateModal = false;
+    this.isSprayModal = false;
     this.isStyleLengthModal = false;
     this.block.id = null;
     this.block.name = "";
@@ -179,7 +182,7 @@ export default class BlockStore {
     const block = this.blocks.find(b => b.id === id);
     block.isBeingEdited = true;
     this.block = block;
-    this.showModal("isBlockModal");
+    this.showModal("isEditBlockModal");
   };
 
   fetchAndUploadData = () => {
@@ -206,6 +209,7 @@ export default class BlockStore {
     console.log("updateBlock");
     this.isDateModal = false;
     this.isSprayModal = false;
+    this.isEditBlockModal = false;
     const block = { ...this.block };
     const blocks = [...this.blocks];
     block.isBeingEdited = false;
@@ -237,11 +241,7 @@ export default class BlockStore {
       : this.blocks.forEach(bl => (bl.isBeingSelected = true));
   };
 
-  @action
-  cancelButton = () => {
-    // this.selectOneBlock(this.block.id);
-    this.clearFields();
-  };
+  @action cancelButton = () => this.clearFields();
 
   // Style length ---------------------------------------------------------------------
   @action

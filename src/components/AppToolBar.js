@@ -46,7 +46,7 @@ const AppToolBar = inject("app")(
                 ghost
                 icon="plus"
                 style={{ marginRight: 16 }}
-                onClick={() => bStore.showModal("isBlockModal")}
+                onClick={() => bStore.showModal("isNewBlockModal")}
               >
                 {bpts.xs ? null : "Block"}
               </Button>

@@ -67,7 +67,7 @@ const NewBlockModal = inject("app")(
         closable={false}
         maskClosable={false}
         title={block.isBeingEdited ? `Edit Block` : `New Block`}
-        visible={bStore.isBlockModal}
+        visible={bStore.isNewBlockModal}
         footer={<Footer />}
       >
         <Row align="middle">

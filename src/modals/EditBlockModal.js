@@ -55,7 +55,9 @@ const EditBlockModal = inject("app")(
     const Footer = () => {
       return (
         <div>
-          <Button onClick={bStore.cancelButton}>Cancel</Button>
+          <Button onClick={() => bStore.hideModal("isEditBlockModal")}>
+            Cancel
+          </Button>
           <Button
             disabled={!bStore.areRequiredFieldsSet}
             type="primary"
@@ -74,7 +76,7 @@ const EditBlockModal = inject("app")(
         closable={false}
         maskClosable={false}
         title={bl.isBeingEdited ? `Edit Block` : `New Block`}
-        visible={bStore.isBlockModal}
+        visible={bStore.isEditBlockModal}
         footer={<Footer />}
       >
         <Row align="middle">
