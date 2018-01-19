@@ -6,12 +6,12 @@ import { BlockWrapper } from "styles";
 
 // components
 import BlockHeader from "./BlockHeader";
-import ProgressionGraph from "components/ProgressionGraph";
+import ProgressionGraph from "components/block/ProgressionGraph";
 import SprayButton from "components/block/SprayButton";
 import SprayDateModal from "modals/SprayDateModal";
 
 import DateStyleLengthBar from "components/block/DateStyleLengthBar";
-import USMap from "components/USMap";
+import USMap from "components/block/USMap";
 
 import { Spin } from "antd";
 
