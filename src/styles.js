@@ -175,7 +175,7 @@ export const SectionMap = Section.extend`
 export const BlockWrapper = Section.extend`
   border: 1px solid #eee;
   border-radius: 4px;
-  margin: 16px;
+  padding: 8px;
 `;
 
 export const BHeader = styled.div`
@@ -186,13 +186,6 @@ export const BHeader = styled.div`
   margin-bottom: ${margin};
 `;
 
-export const BFooter = styled.div`
-  color: #fff;
-  padding: 8px 16px;
-  border-radius: 4px;
-  // margin-top: ${margin};
-`;
-
 export const RowCentered = styled.div`
   display: flex;
   flex-direction: ${props => (props.column ? "column" : "row")};
@@ -201,20 +194,20 @@ export const RowCentered = styled.div`
   height: 100%;
 `;
 
-export const BlockBodyWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
+export const GraphWrapper = styled.div`
+  width: 100%;
+  height: 20vh;
 
   @media (min-width: ${sm}) {
-    flex-direction: row;
+    height: 20vh;
   }
 
   @media (min-width: ${md}) {
-    flex-direction: row;
+    height: 25vh;
   }
 
   @media (min-width: ${lg}) {
-    flex-direction: row;
+    height: 30vh;
   }
 `;
 
