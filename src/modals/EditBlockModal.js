@@ -6,14 +6,14 @@ import moment from "moment";
 import { Row, Modal, Input, Select, Button, DatePicker } from "antd";
 const style = { width: "100%", marginBottom: 16 };
 
-const disabledStartDate = current => {
-  // const { date } = this.props;
-  // Try Date.now(date)
-  return current && current.valueOf() > Date.now();
-};
+// const disabledStartDate = current => {
+//   // const { date } = this.props;
+//   // Try Date.now(date)
+//   return current && current.valueOf() > Date.now();
+// };
 
 const disabledSprayDate = current => {
-  // console.log(current);
+  return;
 };
 
 const EditBlockModal = inject("app")(
@@ -23,8 +23,8 @@ const EditBlockModal = inject("app")(
   }) {
     const dates = bl.dates.filter(date => date);
     const countDates = dates.length;
-    const lastDate = dates[countDates - 1];
-    console.log(dates, lastDate);
+    // const lastDate = dates[countDates - 1];
+    // console.log(dates, lastDate);
     // variety list
     const varietyList = apples.values().map(variety => {
       return (

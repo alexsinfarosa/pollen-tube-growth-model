@@ -1,7 +1,6 @@
 import React from "react";
 import { inject, observer } from "mobx-react";
 
-import { BFooter } from "styles";
 import GrowthTable from "./GrowthTable";
 import CumulativeGrowthGraph from "./CumulativeGrowthGraph";
 import HourlyTempGraph from "./HourlyTempGraph";
@@ -38,7 +37,7 @@ const BlockTabs = inject("app")(
           key="2"
         >
           <HourlyTempGraph bl={bl} />
-          <div style={{ margin: "40px 0" }}>
+          <div style={{ margin: "32px 0" }}>
             <CumulativeGrowthGraph bl={bl} />
           </div>
         </TabPane>

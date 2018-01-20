@@ -1,9 +1,11 @@
 import React from "react";
 import { inject, observer } from "mobx-react";
 import format from "date-fns/format";
-import isEqual from "date-fns/is_equal";
 import isAfter from "date-fns/is_after";
+import isEqual from "date-fns/is_equal";
 import isBefore from "date-fns/is_before";
+import addHours from "date-fns/add_hours";
+import subHours from "date-fns/sub_hours";
 
 import {
   XAxis,
@@ -17,6 +19,33 @@ import {
   ReferenceLine
 } from "recharts";
 import { GraphWrapper } from "../../styles";
+
+const CustomTooltip = props => {
+  const { payload } = props;
+  const obj = payload[0];
+  return (
+    <div
+      style={{
+        padding: 8,
+        background: "white",
+        border: "1px solid #ededed",
+        borderRadius: 4
+      }}
+    >
+      {obj && (
+        <div>
+          <div style={{ marginBottom: 8 }}>
+            <b>{obj.payload.date}</b>
+          </div>
+
+          <div style={{ color: obj.stroke }}>
+            Emergence: {obj.payload.Emergence}%
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
 
 const EmergenceGraph = inject("app")(
   observer(function EmergenceGraph({ app: { bStore }, bl }) {
@@ -55,22 +84,26 @@ const EmergenceGraph = inject("app")(
             />
             <YAxis unit={"%"} hide={false} axisLine={false} />
             <CartesianGrid strokeDasharray="3 3" vertical={false} />}
-            <Tooltip />
+            <Tooltip content={<CustomTooltip />} />
             <Area
               type="monotone"
               dataKey={obj =>
-                isAfter(obj.date, bl.now) ? obj.Emergence : null
+                isBefore(new Date(obj.date), new Date(addHours(bl.now, 1)))
+                  ? obj.Emergence
+                  : null
               }
-              stroke="#FFE0A9"
-              fill="#FFE0A9"
+              stroke="#FFBC42"
+              fill="#FFBC42"
             />
             <Area
               type="monotone"
               dataKey={obj =>
-                isBefore(obj.date, bl.now) ? obj.Emergence : null
+                isAfter(new Date(obj.date), new Date(subHours(bl.now, 1)))
+                  ? obj.Emergence
+                  : null
               }
-              stroke="#FFBC42"
-              fill="#FFBC42"
+              stroke="#FFE0A9"
+              fill="#FFE0A9"
             />
             {lineReference(datesPlusNow)}
             {bl.modelData.length >= 20 && (

@@ -12,6 +12,32 @@ import {
 } from "recharts";
 import { GraphWrapper } from "../../styles";
 
+const CustomTooltip = props => {
+  const { payload } = props;
+  const obj = payload[0];
+  return (
+    <div
+      style={{
+        padding: 8,
+        background: "white",
+        border: "1px solid #ededed",
+        borderRadius: 4
+      }}
+    >
+      {obj && (
+        <div>
+          <div style={{ marginBottom: 8 }}>
+            <b>{obj.payload.date}</b>
+          </div>
+          <div style={{ color: obj.stroke }}>
+            Temperature: {obj.payload.Temperature}˚F
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
 const HourlyTempGraph = inject("app")(
   observer(function HourlyTempGraph({ app: { bStore }, bl }) {
     return (
@@ -34,7 +60,7 @@ const HourlyTempGraph = inject("app")(
             />
             <YAxis />
             <CartesianGrid strokeDasharray="3 3" vertical={false} />
-            <Tooltip />
+            <Tooltip content={<CustomTooltip />} />
             <Line dataKey="Temperature" stroke="#63a07f" dot={false} />
           </LineChart>
         </ResponsiveContainer>
