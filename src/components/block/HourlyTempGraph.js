@@ -35,7 +35,7 @@ const HourlyTempGraph = inject("app")(
             <YAxis />
             <CartesianGrid strokeDasharray="3 3" vertical={false} />
             <Tooltip />
-            <Line dataKey="Temperature" stroke="#172A3A" dot={false} />
+            <Line dataKey="Temperature" stroke="#63a07f" dot={false} />
           </LineChart>
         </ResponsiveContainer>
       </GraphWrapper>

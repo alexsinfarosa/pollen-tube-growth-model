@@ -36,12 +36,12 @@ const CumulativeGrowthGraph = inject("app")(
             <YAxis />
             <CartesianGrid strokeDasharray="3 3" vertical={false} />
             <Tooltip />
-            <Line dataKey="Average Style Length" stroke="#D81159" dot={false} />
+            <Line dataKey="Average Style Length" stroke="#8D6A9F" dot={false} />
             <Area
               type="monotone"
               dataKey="Cumulative Hourly Growth"
-              stroke="#48BEFF"
-              fill="#48BEFF"
+              stroke="#CBBBD3"
+              fill="#CBBBD3"
             />
           </ComposedChart>
         </ResponsiveContainer>
