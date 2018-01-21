@@ -32,7 +32,7 @@ const BlockHeader = inject("app")(
               {bl.station.name}, {bl.state.postalCode}
             </Col>
           )}
-          {bl.average && <Col>{bl.avgStyleLength} mm</Col>}
+          {bl.avgStyleLength && <Col>{bl.avgStyleLength} mm</Col>}
           <Col>
             <Row type="flex" justify="space-between">
               <Col>

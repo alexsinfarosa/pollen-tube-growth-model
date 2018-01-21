@@ -87,6 +87,41 @@ export default class BlockModel {
   }
 
   @computed
+  get datesForGraph() {
+    // returns an array of dates with the same format as modelData.date
+    const emergValues = this.modelData.map(obj => obj.Emergence);
+    let threshold = 100;
+    while (emergValues.lastIndexOf(threshold) === -1) {
+      threshold--;
+    }
+    const endIndex = emergValues.lastIndexOf(threshold);
+    const lastDate = this.modelData[endIndex].date;
+    const dates = [...this.dates, this.now, lastDate];
+    return dates.map(date => format(date, "YYYY-MM-DD HH:00"));
+  }
+
+  @computed
+  get datesIdxForGraph() {
+    const idxArr = this.datesForGraph
+      .map(date => this.modelData.findIndex(obj => obj.date === date))
+      .map(date => date - 1);
+    idxArr[0] = idxArr[0] + 1;
+    idxArr[idxArr.length - 1] = idxArr[idxArr.length - 1] + 1;
+    idxArr[idxArr.length - 2] = idxArr[idxArr.length - 2] + 1;
+    return idxArr;
+  }
+
+  @computed
+  get todayIdx() {
+    return this.datesIdxForGraph[this.datesIdxForGraph.length - 2];
+  }
+
+  @computed
+  get lastIdx() {
+    return this.datesIdxForGraph[this.datesIdxForGraph.length - 1];
+  }
+
+  @computed
   get modelData() {
     if (this.startDate && this.avgStyleLength) {
       const startHour = getHours(this.startDate);
@@ -121,7 +156,7 @@ export default class BlockModel {
 
         return {
           date,
-          Date: format(date, "MMM DD HA"),
+          Date: format(date, "MMM DD HH:00"),
           HourlyGrowth: hourlyGrowth,
           Temperature: isNaN(Number(temp)) ? "No Data" : Number(temp),
           "Cumulative Hourly Growth": Number(
@@ -132,5 +167,16 @@ export default class BlockModel {
         };
       });
     }
+  }
+
+  @computed
+  get modelDataUpTo100() {
+    const emergValues = this.modelData.map(obj => obj.Emergence);
+    let threshold = 100;
+    while (emergValues.lastIndexOf(threshold) === -1) {
+      threshold--;
+    }
+    const endIndex = emergValues.lastIndexOf(threshold);
+    return this.modelData.slice(0, endIndex + 1);
   }
 }

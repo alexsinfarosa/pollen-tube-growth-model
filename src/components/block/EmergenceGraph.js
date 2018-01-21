@@ -22,56 +22,89 @@ import { GraphWrapper } from "../../styles";
 
 const CustomTooltip = props => {
   const { payload } = props;
-  const obj = payload[0];
-  return (
-    <div
-      style={{
-        padding: 8,
-        background: "white",
-        border: "1px solid #ededed",
-        borderRadius: 4
-      }}
-    >
-      {obj && (
-        <div>
-          <div style={{ marginBottom: 8 }}>
-            <b>{obj.payload.date}</b>
-          </div>
+  if (payload) {
+    const obj = payload[0];
+    return (
+      <div
+        style={{
+          padding: 8,
+          background: "white",
+          border: "1px solid #ededed",
+          borderRadius: 4
+        }}
+      >
+        {obj && (
+          <div>
+            <div style={{ marginBottom: 8 }}>
+              <b>{obj.payload.date}</b>
+            </div>
 
-          <div style={{ color: obj.stroke }}>
-            Emergence: {obj.payload.Emergence}%
+            <div style={{ color: obj.stroke }}>
+              Emergence: {obj.payload.Emergence}%
+            </div>
           </div>
-        </div>
-      )}
-    </div>
-  );
+        )}
+      </div>
+    );
+  }
+  return null;
 };
 
 const EmergenceGraph = inject("app")(
   observer(function EmergenceGraph({ app: { bStore }, bl }) {
-    const datesPlusNow = [...bl.dates, bl.now];
-
-    const lineReference = dates =>
-      dates.slice(1).map((date, c) => {
+    const lineReference = arr =>
+      arr.slice(1, -1).map((date, c) => {
         const x = format(date, "MMM DD HA");
         const isToday = isEqual(new Date(date), new Date(bl.now));
         return (
           <ReferenceLine
             key={c}
             x={x}
-            stroke="green"
+            stroke="#eeeeee"
             label={isToday ? "Today" : `${c + 1}˚Spray`}
           />
         );
       });
+
+    const CustomizedLabel = props => {
+      const { x, y, stroke, value, index } = props;
+      const isEmergence = bl.datesIdxForGraph
+        .slice(1)
+        .some(idx => idx === index);
+      const isToday = bl.todayIdx === index;
+      if (isEmergence && x !== null && y !== null) {
+        return (
+          <g>
+            <text
+              x={x}
+              y={y}
+              dy={-6}
+              fill={stroke}
+              fontSize={13}
+              textAnchor="middle"
+            >
+              {value}%
+            </text>
+            <circle
+              className={isToday ? "pulse" : null}
+              cx={x}
+              cy={y}
+              r={isToday ? "5" : "3"}
+              stroke={stroke}
+            />
+          </g>
+        );
+      }
+      return null;
+    };
 
     return (
       <GraphWrapper>
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart
             syncId="ciccio"
-            data={bl.modelData}
-            margin={{ top: 10, right: 10, left: -20, bottom: 10 }}
+            data={bl.modelDataUpTo100}
+            margin={{ top: 20, right: 30, left: -20, bottom: 20 }}
             style={{ background: "white", borderRadius: "5px" }}
           >
             <XAxis
@@ -94,6 +127,7 @@ const EmergenceGraph = inject("app")(
               }
               stroke="#FFBC42"
               fill="#FFBC42"
+              label={<CustomizedLabel />}
             />
             <Area
               type="monotone"
@@ -104,17 +138,16 @@ const EmergenceGraph = inject("app")(
               }
               stroke="#FFE0A9"
               fill="#FFE0A9"
+              label={<CustomizedLabel />}
             />
-            {lineReference(datesPlusNow)}
-            {bl.modelData.length >= 20 && (
-              <Brush
-                style={{ borderRadius: 10 }}
-                tickFormatter={x => bl.modelData[x].Date}
-                height={20}
-                startIndex={0}
-                // endIndex={endIndex}
-              />
-            )}
+            {lineReference(bl.datesForGraph)}
+            <Brush
+              style={{ borderRadius: 10 }}
+              tickFormatter={x => bl.modelData[x].date}
+              height={20}
+              // startIndex={0}
+              // endIndex={bl.lastIdx === -1 ? null : bl.lastIdx}
+            />
           </ComposedChart>
         </ResponsiveContainer>
       </GraphWrapper>

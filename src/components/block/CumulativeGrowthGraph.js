@@ -20,45 +20,79 @@ import { GraphWrapper } from "../../styles";
 const CustomTooltip = props => {
   const { payload } = props;
   const obj = payload[0];
-  return (
-    <div
-      style={{
-        padding: 8,
-        background: "white",
-        border: "1px solid #ededed",
-        borderRadius: 4
-      }}
-    >
-      {obj && (
-        <div>
-          <div style={{ marginBottom: 8 }}>
-            <b>{obj.payload.date}</b>
-          </div>
+  if (obj) {
+    return (
+      <div
+        style={{
+          padding: 8,
+          background: "white",
+          border: "1px solid #ededed",
+          borderRadius: 4
+        }}
+      >
+        {obj && (
+          <div>
+            <div style={{ marginBottom: 8 }}>
+              <b>{obj.payload.date}</b>
+            </div>
 
-          <div style={{ color: obj.stroke }}>
-            Cumulative HG: {obj.payload["Cumulative Hourly Growth"].toFixed(1)}mm
+            <div style={{ color: obj.stroke }}>
+              Cumulative HPTG:{" "}
+              {obj.payload["Cumulative Hourly Growth"].toFixed(1)}mm
+            </div>
           </div>
-        </div>
-      )}
-    </div>
-  );
+        )}
+      </div>
+    );
+  }
+  return null;
 };
 
 const CumulativeGrowthGraph = inject("app")(
   observer(function CumulativeGrowthGraph({ app: { bStore }, bl }) {
+    const CustomizedLabel = props => {
+      const { x, y, stroke, value, index } = props;
+      const isEmergence = bl.datesIdxForGraph
+        .slice(1)
+        .some(idx => idx === index);
+      const isToday = bl.todayIdx === index;
+      if (isEmergence && x !== null && y !== null) {
+        return (
+          <g>
+            <text
+              x={x}
+              y={y}
+              dy={-6}
+              fill={stroke}
+              fontSize={13}
+              textAnchor="middle"
+            >
+              {value.toFixed(1)}mm
+            </text>
+            <circle
+              className={isToday ? "pulse" : null}
+              cx={x}
+              cy={y}
+              r={isToday ? "5" : "3"}
+              stroke={stroke}
+            />
+          </g>
+        );
+      }
+      return null;
+    };
     return (
       <GraphWrapper>
         <h4>Cumulative Hourly Pollen Tube Growth (mm)</h4>
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart
             syncId="ciccio"
-            data={bl.modelData}
-            margin={{ top: 10, right: 10, left: -20, bottom: 10 }}
+            data={bl.modelDataUpTo100}
+            margin={{ top: 20, right: 30, left: -20, bottom: 20 }}
             style={{ background: "#fafafa", borderRadius: "5px" }}
           >
             <XAxis
               dataKey="Date"
-              // domain={["dataMin", "dataMax"]}
               minTickGap={40}
               tickSize={10}
               interval="preserveStartEnd"
@@ -77,6 +111,7 @@ const CumulativeGrowthGraph = inject("app")(
               }
               stroke="#8D6A9F"
               fill="#8D6A9F"
+              label={<CustomizedLabel />}
             />
 
             <Area
@@ -88,6 +123,7 @@ const CumulativeGrowthGraph = inject("app")(
               }
               stroke="#CBBBD3"
               fill="#CBBBD3"
+              label={<CustomizedLabel />}
             />
           </ComposedChart>
         </ResponsiveContainer>
