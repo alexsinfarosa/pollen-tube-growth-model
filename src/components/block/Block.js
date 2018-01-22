@@ -37,6 +37,7 @@ const Block = inject("app")(
                   <SprayButton bl={bl} breakpoints={bpts} />
                 )}
                 {bStore.isMap && <USMap bl={bl} breakpoints={bpts} />}
+                <BlockTabs bl={bl} breakpoints={bpts} />
               </div>
             ) : (
               <DateStyleLengthBar bl={bl} breakpoints={bpts} />
