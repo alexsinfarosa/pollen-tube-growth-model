@@ -1,5 +1,6 @@
 import React from "react";
 import { inject, observer } from "mobx-react";
+// import moment from "moment";
 
 // antd
 import { Modal, DatePicker } from "antd";
@@ -29,11 +30,11 @@ const StartDateModal = inject("app")(
         <DatePicker
           open={bStore.isDateModal}
           showTime={{ format: "HH:00" }}
-          //  value={moment(bl.dates[0])}
+          // value={moment(bStore.bl.startDate)}
           allowClear={false}
           format="MMM Do YYYY, HH:00"
           placeholder={`Select Date and Time`}
-          disabledDate={current => current && current.valueOf() > Date.now()}
+          // disabledDate={current => current && current.valueOf() > Date.now()}
           showToday={true}
           onChange={date => bStore.addField("startDate", date)}
           onOk={bStore.fetchAndUploadData}

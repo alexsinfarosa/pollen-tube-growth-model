@@ -26,17 +26,17 @@ const Block = inject("app")(
           <Spin />
         ) : (
           <div>
+            <SprayDateModal bl={bl} breakpoints={bpts} />
+            <EditBlockModal bl={bl} breakpoints={bpts} />
+
             <BlockHeader bl={bl} breakpoints={bpts} />
             {bl.startDate && bl.avgStyleLength ? (
               <div>
-                <EmergenceGraph bl={bl} breakpoints={bpts} />
+                {bl.modelData && <EmergenceGraph bl={bl} breakpoints={bpts} />}
                 {bl.dates.length < 4 && (
                   <SprayButton bl={bl} breakpoints={bpts} />
                 )}
                 {bStore.isMap && <USMap bl={bl} breakpoints={bpts} />}
-                {!breakpoints.xs && <BlockTabs bl={bl} breakpoints={bpts} />}
-                <SprayDateModal bl={bl} breakpoints={bpts} />
-                <EditBlockModal bl={bl} breakpoints={bpts} />
               </div>
             ) : (
               <DateStyleLengthBar bl={bl} breakpoints={bpts} />

@@ -86,97 +86,116 @@ export default class BlockModel {
     ].filter(date => date);
   }
 
-  @computed
-  get datesForGraph() {
-    // returns an array of dates with the same format as modelData.date
-    const emergValues = this.modelData.map(obj => obj.Emergence);
-    let threshold = 100;
-    while (emergValues.lastIndexOf(threshold) === -1) {
-      threshold--;
-    }
-    const endIndex = emergValues.lastIndexOf(threshold);
-    const lastDate = this.modelData[endIndex].date;
-    const dates = [...this.dates, this.now, lastDate];
-    return dates.map(date => format(date, "YYYY-MM-DD HH:00"));
-  }
+  // @computed
+  // get datesForGraph() {
+  //   // returns an array of dates with the same format as modelData.date
+  //   if (this.modelData) {
+  //     // const todayIdx = this.modelData.findIndex(obj =>
+  //     //   isEqual(new Date(obj.date), new Date(this.now))
+  //     // );
+  //     // console.log(todayIdx);
+  //     const emergValues = this.modelData.map(obj => obj.Emergence);
+  //     let threshold = 100;
+  //     if (threshold !== 0) {
+  //       console.log("1 while loop");
+  //       while (emergValues.lastIndexOf(threshold) === -1) {
+  //         threshold--;
+  //       }
+  //     }
+  //     const endIndex = emergValues.lastIndexOf(threshold);
+  //     const lastDate = this.modelData[endIndex].date;
+  //     console.log(lastDate);
+  //     const dates = [...this.dates, this.now, lastDate];
+  //     return dates.map(date => format(date, "YYYY-MM-DD HH:00"));
+  //   }
+  // }
 
-  @computed
-  get datesIdxForGraph() {
-    const idxArr = this.datesForGraph
-      .map(date => this.modelData.findIndex(obj => obj.date === date))
-      .map(date => date - 1);
-    idxArr[0] = idxArr[0] + 1;
-    idxArr[idxArr.length - 1] = idxArr[idxArr.length - 1] + 1;
-    idxArr[idxArr.length - 2] = idxArr[idxArr.length - 2] + 1;
-    return idxArr;
-  }
+  // @computed
+  // get datesIdxForGraph() {
+  //   if (this.datesForGraph) {
+  //     const idxArr = this.datesForGraph
+  //       .map(date => this.modelData.findIndex(obj => obj.date === date))
+  //       .map(date => date - 1);
+  //     idxArr[0] = idxArr[0] + 1;
+  //     idxArr[idxArr.length - 1] = idxArr[idxArr.length - 1] + 1;
+  //     idxArr[idxArr.length - 2] = idxArr[idxArr.length - 2] + 1;
+  //     return idxArr;
+  //   }
+  // }
 
-  @computed
-  get todayIdx() {
-    return this.datesIdxForGraph[this.datesIdxForGraph.length - 2];
-  }
+  // @computed
+  // get todayIdx() {
+  //   return this.datesIdxForGraph[this.datesIdxForGraph.length - 2];
+  // }
 
-  @computed
-  get lastIdx() {
-    return this.datesIdxForGraph[this.datesIdxForGraph.length - 1];
-  }
+  // @computed
+  // get lastIdx() {
+  //   return this.datesIdxForGraph[this.datesIdxForGraph.length - 1];
+  // }
 
   @computed
   get modelData() {
-    if (this.startDate && this.avgStyleLength) {
-      const startHour = getHours(this.startDate);
-      const data = this.data.slice(startHour);
+    if (this.data.length !== 0) {
+      if (this.startDate && this.avgStyleLength) {
+        const startHour = getHours(this.startDate);
+        const data = this.data.slice(startHour);
 
-      // let cumulativeHrGrowth = 0;
-      // let percentage = 0;
+        // let cumulativeHrGrowth = 0;
+        // let percentage = 0;
 
-      let cumulativeHrGrowthPartial = 0;
-      let percentagePartial = 0;
+        let cumulativeHrGrowthPartial = 0;
+        let percentagePartial = 0;
 
-      return data.map((arr, i) => {
-        const { date, temp } = arr;
-        const { hrGrowth, temps } = this.variety;
+        return data.map((arr, i) => {
+          const { date, temp } = arr;
+          const { hrGrowth, temps } = this.variety;
 
-        const idx = temps.findIndex(t => t.toString() === temp);
-        let hourlyGrowth = hrGrowth[idx];
-        if (temp < 35 || temp > 106 || temp === "M") hourlyGrowth = 0;
+          const idx = temps.findIndex(t => t.toString() === temp);
+          let hourlyGrowth = hrGrowth[idx];
+          if (temp < 35 || temp > 106 || temp === "M") hourlyGrowth = 0;
 
-        const isOneOfTheDates = this.dates.some(d => isEqual(date, d));
-        if (isOneOfTheDates) {
-          cumulativeHrGrowthPartial = 0;
-          percentagePartial = 0;
-        }
+          const isOneOfTheDates = this.dates.some(d => isEqual(date, d));
+          if (isOneOfTheDates) {
+            cumulativeHrGrowthPartial = 0;
+            percentagePartial = 0;
+          }
 
-        cumulativeHrGrowthPartial += hourlyGrowth;
-        percentagePartial =
-          cumulativeHrGrowthPartial / this.avgStyleLength * 100;
+          cumulativeHrGrowthPartial += hourlyGrowth;
+          percentagePartial =
+            cumulativeHrGrowthPartial / this.avgStyleLength * 100;
 
-        // cumulativeHrGrowth += hourlyGrowth;
-        // percentage = cumulativeHrGrowth / this.avgStyleLength * 100;
+          // cumulativeHrGrowth += hourlyGrowth;
+          // percentage = cumulativeHrGrowth / this.avgStyleLength * 100;
 
-        return {
-          date,
-          Date: format(date, "MMM DD HH:00"),
-          HourlyGrowth: hourlyGrowth,
-          Temperature: isNaN(Number(temp)) ? "No Data" : Number(temp),
-          "Cumulative Hourly Growth": Number(
-            cumulativeHrGrowthPartial.toFixed(3)
-          ),
-          Emergence: Number(percentagePartial.toFixed(0)),
-          "Average Style Length": Number(this.avgStyleLength)
-        };
-      });
+          return {
+            date,
+            Date: format(date, "MMM DD HH:00"),
+            HourlyGrowth: hourlyGrowth,
+            Temperature: isNaN(Number(temp)) ? "No Data" : Number(temp),
+            "Cumulative Hourly Growth": Number(
+              cumulativeHrGrowthPartial.toFixed(3)
+            ),
+            Emergence: Number(percentagePartial.toFixed(0)),
+            "Average Style Length": Number(this.avgStyleLength)
+          };
+        });
+      }
     }
   }
 
-  @computed
-  get modelDataUpTo100() {
-    const emergValues = this.modelData.map(obj => obj.Emergence);
-    let threshold = 100;
-    while (emergValues.lastIndexOf(threshold) === -1) {
-      threshold--;
-    }
-    const endIndex = emergValues.lastIndexOf(threshold);
-    return this.modelData.slice(0, endIndex + 1);
-  }
+  // @computed
+  // get modelDataUpTo100() {
+  //   if (this.modelData.length !== 0) {
+  //     const emergValues = this.modelData.map(obj => obj.Emergence);
+  //     let threshold = 100;
+  //     if (threshold !== 0) {
+  //       console.log("2 while loop");
+  //       while (emergValues.lastIndexOf(threshold) === -1) {
+  //         threshold--;
+  //       }
+  //     }
+  //     const endIndex = emergValues.lastIndexOf(threshold);
+  //     return this.modelData.slice(0, endIndex + 1);
+  //   }
+  // }
 }

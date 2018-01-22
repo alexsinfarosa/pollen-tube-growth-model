@@ -51,7 +51,7 @@ const CustomTooltip = props => {
 };
 
 const EmergenceGraph = inject("app")(
-  observer(function EmergenceGraph({ app: { bStore }, bl }) {
+  observer(function EmergenceGraph({ app, bl }) {
     const lineReference = arr =>
       arr.slice(1, -1).map((date, c) => {
         const x = format(date, "MMM DD HA");
@@ -66,44 +66,44 @@ const EmergenceGraph = inject("app")(
         );
       });
 
-    const CustomizedLabel = props => {
-      const { x, y, stroke, value, index } = props;
-      const isEmergence = bl.datesIdxForGraph
-        .slice(1)
-        .some(idx => idx === index);
-      const isToday = bl.todayIdx === index;
-      if (isEmergence && x !== null && y !== null) {
-        return (
-          <g>
-            <text
-              x={x}
-              y={y}
-              dy={-6}
-              fill={stroke}
-              fontSize={13}
-              textAnchor="middle"
-            >
-              {value}%
-            </text>
-            <circle
-              className={isToday ? "pulse" : null}
-              cx={x}
-              cy={y}
-              r={isToday ? "5" : "3"}
-              stroke={stroke}
-            />
-          </g>
-        );
-      }
-      return null;
-    };
+    // const CustomizedLabel = props => {
+    //   const { x, y, stroke, value, index } = props;
+    //   const isEmergence = bl.datesIdxForGraph
+    //     .slice(1)
+    //     .some(idx => idx === index);
+    //   const isToday = bl.todayIdx === index;
+    //   if (isEmergence && x !== null && y !== null) {
+    //     return (
+    //       <g>
+    //         <text
+    //           x={x}
+    //           y={y}
+    //           dy={-6}
+    //           fill={stroke}
+    //           fontSize={13}
+    //           textAnchor="middle"
+    //         >
+    //           {value}%
+    //         </text>
+    //         <circle
+    //           className={isToday ? "pulse" : null}
+    //           cx={x}
+    //           cy={y}
+    //           r={isToday ? "5" : "3"}
+    //           stroke={stroke}
+    //         />
+    //       </g>
+    //     );
+    //   }
+    //   return null;
+    // };
 
     return (
       <GraphWrapper>
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart
             syncId="ciccio"
-            data={bl.modelDataUpTo100}
+            data={bl.modelData}
             margin={{ top: 20, right: 30, left: -20, bottom: 20 }}
             style={{ background: "white", borderRadius: "5px" }}
           >
@@ -127,7 +127,7 @@ const EmergenceGraph = inject("app")(
               }
               stroke="#FFBC42"
               fill="#FFBC42"
-              label={<CustomizedLabel />}
+              // label={<CustomizedLabel />}
             />
             <Area
               type="monotone"
@@ -138,9 +138,8 @@ const EmergenceGraph = inject("app")(
               }
               stroke="#FFE0A9"
               fill="#FFE0A9"
-              label={<CustomizedLabel />}
+              // label={<CustomizedLabel />}
             />
-            {lineReference(bl.datesForGraph)}
             <Brush
               style={{ borderRadius: 10 }}
               tickFormatter={x => bl.modelData[x].date}

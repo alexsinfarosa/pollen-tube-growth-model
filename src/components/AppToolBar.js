@@ -92,6 +92,8 @@ const AppToolBar = inject("app")(
         </Col>
 
         {filteredBlocks.length === 1 &&
+          filteredBlocks[0].avgStyleLength &&
+          filteredBlocks[0].startDate &&
           !bpts.xs && (
             <Col right>
               <Tooltip title="Toggle Map">

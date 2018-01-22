@@ -116,10 +116,12 @@ export default class BlockStore {
     this.showModal(name);
     const block = this.blocks.find(b => b.id === id);
     this.block = block;
+    console.log(this.block);
   };
 
   @action
   addField = (name, val) => {
+    console.log(name, val);
     if (name === "name") {
       this.block[name] = val.charAt(0).toUpperCase() + val.slice(1);
     }
@@ -179,6 +181,7 @@ export default class BlockStore {
 
   @action
   editBlock = id => {
+    console.log("edit");
     const block = this.blocks.find(b => b.id === id);
     block.isBeingEdited = true;
     this.block = block;
