@@ -34,6 +34,10 @@ export default class BlockStore {
   @observable isStyleLengthModal = false;
   @observable isMap = false;
   @action toggleMap = () => (this.isMap = !this.isMap);
+  @observable isTable = false;
+  @action toggleTable = () => (this.isTable = !this.isTable);
+  @observable isGraph = false;
+  @action toggleGraph = () => (this.isGraph = !this.isGraph);
   @action showModal = name => (this[name] = true);
   @action hideModal = name => (this[name] = false);
 

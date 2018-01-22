@@ -197,6 +197,7 @@ export const RowCentered = styled.div`
 export const GraphWrapper = styled.div`
   width: 100%;
   height: 35vh;
+  margin-top: 16px;
 
   @media (min-width: ${sm}) {
     height: 25vh;

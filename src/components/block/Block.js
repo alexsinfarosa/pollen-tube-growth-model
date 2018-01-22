@@ -10,7 +10,9 @@ import EmergenceGraph from "./EmergenceGraph";
 import SprayButton from "./SprayButton";
 import DateStyleLengthBar from "./DateStyleLengthBar";
 import USMap from "./USMap";
-import BlockTabs from "./BlockTabs";
+import GrowthTable from "./GrowthTable";
+import CumulativeGrowthGraph from "./CumulativeGrowthGraph";
+import HourlyTempGraph from "./HourlyTempGraph";
 
 // Modals
 import EditBlockModal from "modals/EditBlockModal";
@@ -37,7 +39,9 @@ const Block = inject("app")(
                   <SprayButton bl={bl} breakpoints={bpts} />
                 )}
                 {bStore.isMap && <USMap bl={bl} breakpoints={bpts} />}
-                <BlockTabs bl={bl} breakpoints={bpts} />
+                {bStore.isTable && <GrowthTable bl={bl} />}
+                {bStore.isGraph && <HourlyTempGraph bl={bl} />}
+                {bStore.isGraph && <CumulativeGrowthGraph bl={bl} />}
               </div>
             ) : (
               <DateStyleLengthBar bl={bl} breakpoints={bpts} />
