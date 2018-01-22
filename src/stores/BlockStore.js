@@ -121,7 +121,6 @@ export default class BlockStore {
 
   @action
   addField = (name, val) => {
-    console.log(name, val);
     if (name === "name") {
       this.block[name] = val.charAt(0).toUpperCase() + val.slice(1);
     }

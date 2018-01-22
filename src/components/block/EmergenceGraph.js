@@ -66,37 +66,41 @@ const EmergenceGraph = inject("app")(
         );
       });
 
-    // const CustomizedLabel = props => {
-    //   const { x, y, stroke, value, index } = props;
-    //   const isEmergence = bl.datesIdxForGraph
-    //     .slice(1)
-    //     .some(idx => idx === index);
-    //   const isToday = bl.todayIdx === index;
-    //   if (isEmergence && x !== null && y !== null) {
-    //     return (
-    //       <g>
-    //         <text
-    //           x={x}
-    //           y={y}
-    //           dy={-6}
-    //           fill={stroke}
-    //           fontSize={13}
-    //           textAnchor="middle"
-    //         >
-    //           {value}%
-    //         </text>
-    //         <circle
-    //           className={isToday ? "pulse" : null}
-    //           cx={x}
-    //           cy={y}
-    //           r={isToday ? "5" : "3"}
-    //           stroke={stroke}
-    //         />
-    //       </g>
-    //     );
-    //   }
-    //   return null;
-    // };
+    const CustomizedLabel = props => {
+      const { x, y, stroke, value, index } = props;
+      const isEmergence = bl.datesIdxForGraph
+        .slice(1)
+        .some(idx => idx === index);
+      const isToday = bl.todayIdx === index;
+      if (isEmergence && x !== null && y !== null) {
+        return (
+          <g>
+            <text
+              x={x}
+              y={y}
+              dy={-4}
+              fill={stroke}
+              fontSize={13}
+              textAnchor="middle"
+            >
+              {value}%
+            </text>
+            <circle
+              className={isToday ? "pulse" : null}
+              cx={x}
+              cy={y}
+              r={isToday ? "5" : "3"}
+              stroke={stroke}
+            />
+          </g>
+        );
+      }
+      return null;
+    };
+
+    const brushedData = (s, e) => {
+      return bl.modelData.slice(s, e);
+    };
 
     return (
       <GraphWrapper>
@@ -127,7 +131,7 @@ const EmergenceGraph = inject("app")(
               }
               stroke="#FFBC42"
               fill="#FFBC42"
-              // label={<CustomizedLabel />}
+              label={<CustomizedLabel />}
             />
             <Area
               type="monotone"
@@ -138,12 +142,14 @@ const EmergenceGraph = inject("app")(
               }
               stroke="#FFE0A9"
               fill="#FFE0A9"
-              // label={<CustomizedLabel />}
+              label={<CustomizedLabel />}
             />
             <Brush
               style={{ borderRadius: 10 }}
+              stroke="#63A07F"
               tickFormatter={x => bl.modelData[x].date}
               height={20}
+              // onChange={e => console.log(e.startIndex, e.endIndex)}
               // startIndex={0}
               // endIndex={bl.lastIdx === -1 ? null : bl.lastIdx}
             />

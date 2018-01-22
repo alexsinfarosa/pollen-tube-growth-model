@@ -1,4 +1,4 @@
-import { observable, computed } from "mobx";
+import { observable, computed, action } from "mobx";
 
 // utils
 import { roundDate } from "utils/utils";
@@ -86,52 +86,80 @@ export default class BlockModel {
     ].filter(date => date);
   }
 
-  // @computed
-  // get datesForGraph() {
-  //   // returns an array of dates with the same format as modelData.date
-  //   if (this.modelData) {
-  //     // const todayIdx = this.modelData.findIndex(obj =>
-  //     //   isEqual(new Date(obj.date), new Date(this.now))
-  //     // );
-  //     // console.log(todayIdx);
-  //     const emergValues = this.modelData.map(obj => obj.Emergence);
-  //     let threshold = 100;
-  //     if (threshold !== 0) {
-  //       console.log("1 while loop");
-  //       while (emergValues.lastIndexOf(threshold) === -1) {
-  //         threshold--;
-  //       }
-  //     }
-  //     const endIndex = emergValues.lastIndexOf(threshold);
-  //     const lastDate = this.modelData[endIndex].date;
-  //     console.log(lastDate);
-  //     const dates = [...this.dates, this.now, lastDate];
-  //     return dates.map(date => format(date, "YYYY-MM-DD HH:00"));
-  //   }
-  // }
+  @computed
+  get todayIdx() {
+    if (this.modelData) {
+      return this.modelData.findIndex(obj =>
+        isEqual(new Date(obj.date), new Date(this.now))
+      );
+    }
+  }
 
-  // @computed
-  // get datesIdxForGraph() {
-  //   if (this.datesForGraph) {
-  //     const idxArr = this.datesForGraph
-  //       .map(date => this.modelData.findIndex(obj => obj.date === date))
-  //       .map(date => date - 1);
-  //     idxArr[0] = idxArr[0] + 1;
-  //     idxArr[idxArr.length - 1] = idxArr[idxArr.length - 1] + 1;
-  //     idxArr[idxArr.length - 2] = idxArr[idxArr.length - 2] + 1;
-  //     return idxArr;
-  //   }
-  // }
+  @computed
+  get todayEmergence() {
+    if (this.modelData) {
+      return this.modelData[this.todayIdx]["Emergence"];
+    }
+  }
 
-  // @computed
-  // get todayIdx() {
-  //   return this.datesIdxForGraph[this.datesIdxForGraph.length - 2];
-  // }
+  @computed
+  get lastDayIdx() {
+    if (this.modelData) {
+      return this.modelData.length - 1;
+    }
+  }
 
-  // @computed
-  // get lastIdx() {
-  //   return this.datesIdxForGraph[this.datesIdxForGraph.length - 1];
-  // }
+  @computed
+  get lastDayEmergence() {
+    if (this.modelData) {
+      return this.modelData[this.modelData.length - 1]["Emergence"];
+    }
+  }
+
+  @computed
+  get lastDate() {
+    if (this.modelData) {
+      return this.modelData[this.modelData.length - 1].date;
+    }
+  }
+
+  @computed
+  get idxAtThreshold() {
+    if (this.todayEmergence < 100) {
+      const emergValues = this.modelData.map(obj => obj.Emergence);
+      let thold = 100;
+      if (thold !== 80) {
+        while (emergValues.lastIndexOf(thold) === -1) {
+          console.log("while loop");
+          thold--;
+        }
+      }
+      return emergValues.lastIndexOf(100);
+    }
+  }
+
+  @computed
+  get datesForGraph() {
+    // returns an array of dates with the same format as modelData.date
+    if (this.modelData) {
+      const dates = [...this.dates, this.now, this.lastDate];
+      // console.log(dates);
+      return dates.map(date => format(date, "YYYY-MM-DD HH:00"));
+    }
+  }
+
+  @computed
+  get datesIdxForGraph() {
+    if (this.datesForGraph) {
+      const idxArr = this.datesForGraph
+        .map(date => this.modelData.findIndex(obj => obj.date === date))
+        .map(date => date - 1);
+      idxArr[0] = idxArr[0] + 1;
+      idxArr[idxArr.length - 1] = idxArr[idxArr.length - 1] + 1;
+      idxArr[idxArr.length - 2] = idxArr[idxArr.length - 2] + 1;
+      return [...idxArr.slice(0, -1), this.idxAtThreshold];
+    }
+  }
 
   @computed
   get modelData() {
@@ -185,17 +213,10 @@ export default class BlockModel {
 
   // @computed
   // get modelDataUpTo100() {
-  //   if (this.modelData.length !== 0) {
-  //     const emergValues = this.modelData.map(obj => obj.Emergence);
-  //     let threshold = 100;
-  //     if (threshold !== 0) {
-  //       console.log("2 while loop");
-  //       while (emergValues.lastIndexOf(threshold) === -1) {
-  //         threshold--;
-  //       }
-  //     }
-  //     const endIndex = emergValues.lastIndexOf(threshold);
-  //     return this.modelData.slice(0, endIndex + 1);
+  //   if (this.todayEmergence < 100) {
+  //     return this.modelData.slice(0, this.idxAtThreshold + 1);
+  //   } else {
+  //     return this.modelData;
   //   }
   // }
 }

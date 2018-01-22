@@ -40,7 +40,7 @@ export const loadACISData = (station, seasonStartDate, selectedDate) => {
 
     res.set("cStationClean", cStationClean);
 
-    console.log(res);
+    // console.log(res);
     return res;
   });
 };
