@@ -156,19 +156,19 @@ export const Section = styled.div`
 export const SectionMap = Section.extend`
   width: calc(100% - 32px);
   margin: 0 auto;
-  height: 30vh;
+  height: 35vh;
   margin-top: 32px;
 
   @media (min-width: ${sm}) {
-    height: 30vh;
+    height: 25vh;
   }
 
   @media (min-width: ${md}) {
-    height: 35vh;
+    height: 25vh;
   }
 
   @media (min-width: ${lg}) {
-    height: 40vh;
+    height: 25vh;
   }
 `;
 
@@ -196,10 +196,10 @@ export const RowCentered = styled.div`
 
 export const GraphWrapper = styled.div`
   width: 100%;
-  height: 20vh;
+  height: 35vh;
 
   @media (min-width: ${sm}) {
-    height: 20vh;
+    height: 25vh;
   }
 
   @media (min-width: ${md}) {
@@ -207,7 +207,7 @@ export const GraphWrapper = styled.div`
   }
 
   @media (min-width: ${lg}) {
-    height: 30vh;
+    height: 25vh;
   }
 `;
 

@@ -12,11 +12,11 @@ const SprayButton = inject("app")(
     if (count === 3) sprayButtonLabel = "Set 3rd Spray";
 
     return (
-      <Row>
-        <Col xs={8} sm={24} md={24} lg={24} style={{ textAlign: "center" }}>
+      <Row style={{ textAlign: "center" }}>
+        <Col>
           <Button
             size={breakpoints.xs ? "small" : "default"}
-            style={{ marginTop: 16 }}
+            style={{ marginTop: 8, marginBottom: 8 }}
             onClick={() => bStore.selectBlock("isSprayModal", bl.id)}
           >
             {sprayButtonLabel}
