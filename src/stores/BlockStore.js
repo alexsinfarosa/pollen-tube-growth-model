@@ -188,6 +188,7 @@ export default class BlockStore {
   };
 
   fetchAndUploadData = () => {
+    console.log("fetchAndUploadData");
     this.isDateModal = false;
     this.isLoading = true;
     const block = { ...this.block };

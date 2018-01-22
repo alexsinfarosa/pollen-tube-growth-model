@@ -50,28 +50,57 @@ const CustomTooltip = props => {
   return null;
 };
 
+// const ForecastLabel = props => {
+//   console.log(props);
+//   const { x, y } = props.viewBox;
+//   return (
+//     <div>
+//       <small>FORECAST</small>
+//       <text x={x} y={y} dy={10} fontSize={12} textAnchor="middle">
+//         <small>{format(props.date, "MM-DD HH:00")}</small>
+//       </text>
+//     </div>
+//   );
+// };
+
 const EmergenceGraph = inject("app")(
   observer(function EmergenceGraph({ app, bl }) {
-    const lineReference = arr =>
-      arr.slice(1, -1).map((date, c) => {
-        const x = format(date, "MMM DD HA");
-        const isToday = isEqual(new Date(date), new Date(bl.now));
-        return (
-          <ReferenceLine
-            key={c}
-            x={x}
-            stroke="#eeeeee"
-            label={isToday ? "Today" : `${c + 1}˚Spray`}
-          />
-        );
-      });
+    // const lineReference = arr =>
+    //   arr.slice(1).map((date, c) => {
+    //     const x = format(date, "MMM DD HH:00");
+    //     const isToday = isEqual(new Date(date), new Date(bl.now));
+    //     const isLastDay = isEqual(new Date(date), new Date(bl.dateAtThreshold));
+    //     if (isLastDay) {
+    //       return (
+    //         <ReferenceLine
+    //           key={c}
+    //           x={x}
+    //           stroke="#eeeeee"
+    //           label={`${format(bl.dateAtThreshold, "MM-DD HH:00")}`}
+    //         />
+    //       );
+    //     } else {
+    //       return (
+    //         <ReferenceLine
+    //           key={c}
+    //           x={x}
+    //           stroke="#eeeeee"
+    //           label={isToday ? "Now" : `${c + 1}˚Spray`}
+    //         />
+    //       );
+    //     }
+    //   });
 
     const CustomizedLabel = props => {
       const { x, y, stroke, value, index } = props;
       const isEmergence = bl.datesIdxForGraph
         .slice(1)
         .some(idx => idx === index);
-      const isToday = bl.todayIdx === index;
+      const isToday = isEqual(
+        new Date(bl.modelData[bl.todayIdx].date),
+        new Date(bl.modelData[index].date)
+      );
+      // console.log(bl.modelData[bl.todayIdx].date, bl.modelData[index].date);
       if (isEmergence && x !== null && y !== null) {
         return (
           <g>
@@ -98,16 +127,12 @@ const EmergenceGraph = inject("app")(
       return null;
     };
 
-    const brushedData = (s, e) => {
-      return bl.modelData.slice(s, e);
-    };
-
     return (
       <GraphWrapper>
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart
             syncId="ciccio"
-            data={bl.modelData}
+            data={bl.modelDataUpTo100}
             margin={{ top: 20, right: 30, left: -20, bottom: 20 }}
             style={{ background: "white", borderRadius: "5px" }}
           >

@@ -1,4 +1,4 @@
-import { observable, computed, action } from "mobx";
+import { observable, computed } from "mobx";
 
 // utils
 import { roundDate } from "utils/utils";
@@ -134,7 +134,14 @@ export default class BlockModel {
           thold--;
         }
       }
-      return emergValues.lastIndexOf(100);
+      return emergValues.lastIndexOf(thold);
+    }
+  }
+
+  @computed
+  get dateAtThreshold() {
+    if (this.idxAtThreshold) {
+      return this.modelData[this.idxAtThreshold].date;
     }
   }
 
@@ -142,7 +149,7 @@ export default class BlockModel {
   get datesForGraph() {
     // returns an array of dates with the same format as modelData.date
     if (this.modelData) {
-      const dates = [...this.dates, this.now, this.lastDate];
+      const dates = [...this.dates, this.now, this.dateAtThreshold];
       // console.log(dates);
       return dates.map(date => format(date, "YYYY-MM-DD HH:00"));
     }
@@ -211,12 +218,12 @@ export default class BlockModel {
     }
   }
 
-  // @computed
-  // get modelDataUpTo100() {
-  //   if (this.todayEmergence < 100) {
-  //     return this.modelData.slice(0, this.idxAtThreshold + 1);
-  //   } else {
-  //     return this.modelData;
-  //   }
-  // }
+  @computed
+  get modelDataUpTo100() {
+    if (this.todayEmergence < 100) {
+      return this.modelData.slice(0, this.idxAtThreshold + 1);
+    } else {
+      return this.modelData;
+    }
+  }
 }
