@@ -28,7 +28,7 @@ const NewBlockModal = inject("app")(
     });
 
     // station list
-    const stationList = stations.map(station => {
+    const stationList = currentStateStations.map(station => {
       return (
         <Select.Option key={station.id} value={station.id}>
           {station.name}
