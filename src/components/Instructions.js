@@ -52,6 +52,7 @@ const Instructions = inject("app")(
             <div>
               <a
                 target="_blank"
+                rel="noopener noreferrer"
                 href="https://doi.org/10.17660/ActaHortic.2013.1001.23"
               >
                 https://doi.org/10.17660/ActaHortic.2013.1001.23
@@ -65,6 +66,7 @@ const Instructions = inject("app")(
             <div>
               <a
                 target="_blank"
+                rel="noopener noreferrer"
                 href=" https://doi.org/10.17660/ActaHortic.2016.1137.7"
               >
                 {" "}
@@ -80,6 +82,7 @@ const Instructions = inject("app")(
             <div>
               <a
                 target="_blank"
+                rel="noopener noreferrer"
                 href="https://doi.org/10.21273/HORTSCI11412-16"
               >
                 https://doi.org/10.21273/HORTSCI11412-16

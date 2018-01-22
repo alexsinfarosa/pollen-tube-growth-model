@@ -1,6 +1,6 @@
 import React from "react";
 import { inject, observer } from "mobx-react";
-import format from "date-fns/format";
+// import format from "date-fns/format";
 import isAfter from "date-fns/is_after";
 import isEqual from "date-fns/is_equal";
 import isBefore from "date-fns/is_before";
@@ -15,8 +15,7 @@ import {
   ResponsiveContainer,
   Brush,
   ComposedChart,
-  Area,
-  ReferenceLine
+  Area
 } from "recharts";
 import { GraphWrapper } from "../../styles";
 

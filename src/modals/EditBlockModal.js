@@ -1,7 +1,7 @@
 import React from "react";
 import { inject, observer } from "mobx-react";
 import moment from "moment";
-import isEqual from "date-fns/is_equal";
+// import isEqual from "date-fns/is_equal";
 
 // antd
 import { Row, Modal, Input, Select, Button, DatePicker } from "antd";
