@@ -56,8 +56,9 @@ const GrowthTable = inject("app")(
     const dates = bl.dates.map(d => getTime(d));
     const sprayDateRow = date => {
       if (dates.includes(getTime(date))) {
-        return "hilight";
+        return "table hilight";
       }
+      return "table";
     };
 
     return (

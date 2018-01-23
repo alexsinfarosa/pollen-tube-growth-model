@@ -7,7 +7,7 @@ import { BlockWrapper } from "styles";
 // components
 import BlockHeader from "./BlockHeader";
 import EmergenceGraph from "./EmergenceGraph";
-import SprayButton from "./SprayButton";
+import ControlButtons from "./ControlButtons";
 import DateStyleLengthBar from "./DateStyleLengthBar";
 import USMap from "./USMap";
 import GrowthTable from "./GrowthTable";
@@ -36,7 +36,7 @@ const Block = inject("app")(
               <div>
                 {bl.modelData && <EmergenceGraph bl={bl} breakpoints={bpts} />}
                 {bl.dates.length < 4 && (
-                  <SprayButton bl={bl} breakpoints={bpts} />
+                  <ControlButtons bl={bl} breakpoints={bpts} />
                 )}
                 {bStore.isMap && <USMap bl={bl} breakpoints={bpts} />}
                 {bStore.isTable && <GrowthTable bl={bl} />}

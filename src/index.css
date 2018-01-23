@@ -42,11 +42,6 @@ circle {
   background: #dfe8e3;
 }
 
-.ciccio {
-  background: white !important;
-  color: red !important;
-}
-
 .ant-progress-status-success .ant-progress-circle-path {
   stroke: #4ea27d !important;
 }
@@ -60,23 +55,62 @@ circle {
   color: red;
 }
 
-.green {
-  background: #a1e5ab;
+.table {
+  font-size: 0.5rem;
+  text-align: center;
+}
+table > .ant-table-thead > tr > th {
+  text-align: center;
+  font-size: 0.5rem;
 }
 
-.yellow {
-  background: #e9d985;
+.ant-table-thead > tr > th,
+.ant-table-tbody > tr > td {
+  word-break: normal !important;
 }
 
-.red {
-  background: #d33f49;
+@media screen and (min-width: 576px) {
+  .table {
+    font-size: 0.9rem;
+  }
+  table > .ant-table-thead > tr > th {
+    text-align: center;
+    font-size: 0.85rem !important;
+  }
+  .ant-table-thead > tr > th,
+  .ant-table-tbody > tr > td {
+    word-break: normal !important;
+  }
 }
 
-.circle {
-  width: 100px;
-  height: 100px;
-  background: red;
-  -moz-border-radius: 50px;
-  -webkit-border-radius: 50px;
-  border-radius: 50px;
+@media screen and (min-width: 768px) {
+  .table {
+    font-size: 0.9rem;
+  }
+
+  table > .ant-table-thead > tr > th {
+    text-align: center;
+    font-size: 0.85rem !important;
+  }
+
+  .ant-table-thead > tr > th,
+  .ant-table-tbody > tr > td {
+    word-break: normal !important;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .table {
+    font-size: 0.9rem;
+  }
+
+  table > .ant-table-thead > tr > th {
+    text-align: center;
+    font-size: 0.85rem !important;
+  }
+
+  .ant-table-thead > tr > th,
+  .ant-table-tbody > tr > td {
+    word-break: normal !important;
+  }
 }

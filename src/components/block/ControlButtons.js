@@ -3,8 +3,8 @@ import { inject, observer } from "mobx-react";
 
 import { Row, Col, Button } from "antd";
 
-const SprayButton = inject("app")(
-  observer(function SprayButton({ app: { bpts, bStore }, bl, breakpoints }) {
+const ControlButtons = inject("app")(
+  observer(function ControlButtons({ app: { bpts, bStore }, bl, breakpoints }) {
     let sprayButtonLabel;
     const count = bl.dates.filter(date => date).length;
     if (count === 1) sprayButtonLabel = "Set 1st Spray";
@@ -20,45 +20,50 @@ const SprayButton = inject("app")(
       >
         <Col span={4}>
           <Button
+            icon={"calendar"}
             type="primary"
+            shape={breakpoints.xs ? "circle" : null}
             size={breakpoints.xs ? "small" : "default"}
             ghost={true}
             onClick={() => bStore.selectBlock("isSprayModal", bl.id)}
           >
-            {sprayButtonLabel}
+            {breakpoints.xs ? null : sprayButtonLabel}
           </Button>
         </Col>
         <Col span={4}>
           <Button
             icon={"table"}
             type="primary"
+            shape={breakpoints.xs ? "circle" : null}
             size={breakpoints.xs ? "small" : "default"}
             ghost={bStore.isTable ? false : true}
             onClick={bStore.toggleTable}
           >
-            Growth Table
+            {breakpoints.xs ? null : "Growth Table"}
           </Button>
         </Col>
         <Col span={4}>
           <Button
             icon={"dot-chart"}
             type="primary"
+            shape={breakpoints.xs ? "circle" : null}
             size={breakpoints.xs ? "small" : "default"}
             ghost={bStore.isGraph ? false : true}
             onClick={bStore.toggleGraph}
           >
-            Growth Graph
+            {breakpoints.xs ? null : "Growth Graph"}
           </Button>
         </Col>
         <Col span={4}>
           <Button
             icon={"environment-o"}
             type="primary"
+            shape={breakpoints.xs ? "circle" : null}
             size={breakpoints.xs ? "small" : "default"}
             ghost={bStore.isMap ? false : true}
             onClick={bStore.toggleMap}
           >
-            Map
+            {breakpoints.xs ? null : "Stations Map"}
           </Button>
         </Col>
       </Row>
@@ -66,4 +71,4 @@ const SprayButton = inject("app")(
   })
 );
 
-export default SprayButton;
+export default ControlButtons;

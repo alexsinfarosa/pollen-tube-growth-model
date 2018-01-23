@@ -74,7 +74,7 @@ export default class USMap extends Component {
       <SectionMap>
         <LMap
           style={{ width: "100%", height: "100%" }}
-          zoomControl={true}
+          zoomControl={this.props.breakpoints.xs ? false : true}
           scrollWheelZoom={false}
           center={[state.lat, state.lon]}
           zoom={state.zoom}
