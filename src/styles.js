@@ -13,7 +13,7 @@ const lg = "1024px";
 const fontSm = "14px";
 const fontMd = "18px";
 // paddings
-// const padding = "8px";
+const padding = "8px";
 const paddingSm = "16px";
 const paddingMd = "24px";
 // margins
@@ -53,7 +53,7 @@ export const ColMb = styled.div`
 
 export const Header = Row.extend`
   background: #1da57a;
-  margin-bottom: ${marginSm};
+  margin-bottom: ${margin};
 
   @media (min-width: ${sm}) {
     margin-bottom: ${marginSm};
@@ -66,7 +66,7 @@ export const Header = Row.extend`
 
 export const SubHeader = styled.div`
   font-size: ${fontSm};
-  padding: ${paddingSm};
+  padding: ${padding};
   letter-spacing: 1px;
   color: white;
 
@@ -181,6 +181,19 @@ export const BHeader = styled.div`
   padding: 8px 16px;
   border-radius: 4px;
   margin-bottom: ${margin};
+  font-size: 12px;
+
+  @media (min-width: ${sm}) {
+    font-size: ${fontSm};
+  }
+
+  @media (min-width: ${md}) {
+    font-size: ${fontSm};
+  }
+
+  @media (min-width: ${lg}) {
+    font-size: ${fontSm};
+  }
 `;
 
 export const RowCentered = styled.div`

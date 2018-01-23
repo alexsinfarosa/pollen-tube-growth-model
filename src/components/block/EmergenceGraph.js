@@ -49,47 +49,8 @@ const CustomTooltip = props => {
   return null;
 };
 
-// const ForecastLabel = props => {
-//   console.log(props);
-//   const { x, y } = props.viewBox;
-//   return (
-//     <div>
-//       <small>FORECAST</small>
-//       <text x={x} y={y} dy={10} fontSize={12} textAnchor="middle">
-//         <small>{format(props.date, "MM-DD HH:00")}</small>
-//       </text>
-//     </div>
-//   );
-// };
-
 const EmergenceGraph = inject("app")(
-  observer(function EmergenceGraph({ app, bl }) {
-    // const lineReference = arr =>
-    //   arr.slice(1).map((date, c) => {
-    //     const x = format(date, "MMM DD HH:00");
-    //     const isToday = isEqual(new Date(date), new Date(bl.now));
-    //     const isLastDay = isEqual(new Date(date), new Date(bl.dateAtThreshold));
-    //     if (isLastDay) {
-    //       return (
-    //         <ReferenceLine
-    //           key={c}
-    //           x={x}
-    //           stroke="#eeeeee"
-    //           label={`${format(bl.dateAtThreshold, "MM-DD HH:00")}`}
-    //         />
-    //       );
-    //     } else {
-    //       return (
-    //         <ReferenceLine
-    //           key={c}
-    //           x={x}
-    //           stroke="#eeeeee"
-    //           label={isToday ? "Now" : `${c + 1}˚Spray`}
-    //         />
-    //       );
-    //     }
-    //   });
-
+  observer(function EmergenceGraph({ app, bl, breakpoints }) {
     const CustomizedLabel = props => {
       const { x, y, stroke, value, index } = props;
       const isEmergence = bl.datesIdxForGraph
@@ -99,7 +60,6 @@ const EmergenceGraph = inject("app")(
         new Date(bl.modelData[bl.todayIdx].date),
         new Date(bl.modelData[index].date)
       );
-      // console.log(bl.modelData[bl.todayIdx].date, bl.modelData[index].date);
       if (isEmergence && x !== null && y !== null) {
         return (
           <g>
@@ -108,7 +68,7 @@ const EmergenceGraph = inject("app")(
               y={y}
               dy={-4}
               fill={stroke}
-              fontSize={13}
+              fontSize={breakpoints.xs ? 9 : 13}
               textAnchor="middle"
             >
               {value}%
@@ -126,24 +86,73 @@ const EmergenceGraph = inject("app")(
       return null;
     };
 
+    const CustomXLabel = props => {
+      const { x, y, payload } = props;
+      return (
+        <g transform={`translate(${x},${y})`}>
+          <text
+            x={0}
+            y={0}
+            dy={12}
+            fontSize={breakpoints.xs ? 8 : 11}
+            textAnchor="middle"
+            fill="#666"
+            transform="rotate(-10)"
+          >
+            {payload.value}
+          </text>
+        </g>
+      );
+    };
+
+    const CustomYLabel = props => {
+      const { x, y, payload } = props;
+      return (
+        <g>
+          <text
+            x={x}
+            y={y}
+            // dy={0}
+            dx={-15}
+            fontSize={breakpoints.xs ? 8 : 12}
+            textAnchor="middle"
+            fill="#666"
+          >
+            {payload.value}
+          </text>
+        </g>
+      );
+    };
+
     return (
       <GraphWrapper>
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart
             syncId="ciccio"
             data={bl.modelDataUpTo100}
-            margin={{ top: 20, right: 20, left: -15, bottom: 20 }}
+            margin={{
+              top: breakpoints.xs ? 10 : 15,
+              right: breakpoints.xs ? 10 : 20,
+              left: breakpoints.xs ? -40 : -15,
+              bottom: breakpoints.xs ? 10 : 15
+            }}
             style={{ background: "#fafafa", borderRadius: "5px" }}
           >
             <XAxis
               dataKey="Date"
               // domain={["dataMin", "dataMax"]}
-              minTickGap={40}
-              tickSize={10}
-              interval="preserveStartEnd"
+              // minTickGap={40}
+              // tickSize={10}
+              interval="preserveStart"
               axisLine={false}
+              tick={<CustomXLabel />}
             />
-            <YAxis unit={"%"} hide={false} axisLine={false} />
+            <YAxis
+              unit={"%"}
+              hide={false}
+              axisLine={false}
+              tick={<CustomYLabel />}
+            />
             <CartesianGrid strokeDasharray="3 3" vertical={false} />}
             <Tooltip content={<CustomTooltip />} />
             <Area
@@ -168,15 +177,14 @@ const EmergenceGraph = inject("app")(
               fill="#FFE0A9"
               label={<CustomizedLabel />}
             />
-            <Brush
-              style={{ borderRadius: 10 }}
-              stroke="#63A07F"
-              tickFormatter={x => bl.modelData[x].date}
-              height={20}
-              // onChange={e => console.log(e.startIndex, e.endIndex)}
-              // startIndex={0}
-              // endIndex={bl.lastIdx === -1 ? null : bl.lastIdx}
-            />
+            {!breakpoints.xs && (
+              <Brush
+                style={{ borderRadius: 10, marginTop: 5, paddingTop: 5 }}
+                stroke="#63A07F"
+                tickFormatter={x => bl.modelData[x].date}
+                height={breakpoints.xs ? 15 : 20}
+              />
+            )}
           </ComposedChart>
         </ResponsiveContainer>
       </GraphWrapper>

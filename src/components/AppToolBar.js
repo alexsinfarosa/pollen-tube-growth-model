@@ -37,7 +37,7 @@ const AppToolBar = inject("app")(
     });
 
     return (
-      <Row type="flex" style={{ marginBottom: 16 }}>
+      <Row type="flex" style={{ marginBottom: breakpoints.xs ? 16 : 32 }}>
         <Col span={6}>
           <Row type="flex">
             <Tooltip title="New block">
@@ -46,6 +46,7 @@ const AppToolBar = inject("app")(
                 ghost
                 icon="plus"
                 style={{ marginRight: 16 }}
+                size={bpts.xs ? "small" : "default"}
                 onClick={() => bStore.showModal("isNewBlockModal")}
               >
                 {bpts.xs ? null : "Block"}
@@ -56,6 +57,7 @@ const AppToolBar = inject("app")(
               <Button
                 ghost={filteredBlocks.length > 1 ? false : true}
                 type="primary"
+                size={bpts.xs ? "small" : "default"}
                 icon={bpts.xs ? "table" : null}
                 onClick={bStore.selectAllBlocks}
               >
@@ -80,6 +82,7 @@ const AppToolBar = inject("app")(
 
         <Col span={18}>
           <Select
+            size={bpts.xs ? "small" : "default"}
             style={{ width: "100%" }}
             placeholder={`Block List`}
             onChange={id => bStore.selectOneBlock(id)}
