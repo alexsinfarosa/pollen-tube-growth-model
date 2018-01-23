@@ -112,13 +112,13 @@ const EmergenceGraph = inject("app")(
           <text
             x={x}
             y={y}
-            // dy={0}
-            dx={-15}
+            dy={breakpoints.xs ? 2 : 5}
+            dx={breakpoints.xs ? -8 : -15}
             fontSize={breakpoints.xs ? 8 : 12}
             textAnchor="middle"
             fill="#666"
           >
-            {payload.value}
+            {payload.value}%
           </text>
         </g>
       );
@@ -131,9 +131,9 @@ const EmergenceGraph = inject("app")(
             syncId="ciccio"
             data={bl.modelDataUpTo100}
             margin={{
-              top: breakpoints.xs ? 10 : 15,
+              top: breakpoints.xs ? 20 : 30,
               right: breakpoints.xs ? 10 : 20,
-              left: breakpoints.xs ? -40 : -15,
+              left: breakpoints.xs ? -30 : -15,
               bottom: breakpoints.xs ? 10 : 15
             }}
             style={{ background: "#fafafa", borderRadius: "5px" }}
