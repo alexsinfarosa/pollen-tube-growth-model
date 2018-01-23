@@ -45,7 +45,7 @@ const HourlyTempGraph = inject("app")(
               tick={<CustomYLabel bpts={bpts} unit={"˚F"} />}
             />
             <CartesianGrid strokeDasharray="3 3" vertical={false} />
-            <Tooltip content={<CustomTooltip />} />
+            <Tooltip content={<CustomTooltip unit={"˚F"} />} />
             <Line dataKey="Temperature" stroke="#63a07f" dot={false} />
           </LineChart>
         </ResponsiveContainer>

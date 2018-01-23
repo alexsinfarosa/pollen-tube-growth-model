@@ -1,7 +1,7 @@
 import React from "react";
 
 const CustomTooltip = props => {
-  const { payload } = props;
+  const { payload, unit } = props;
   if (payload) {
     const obj = payload[0];
     return (
@@ -20,7 +20,8 @@ const CustomTooltip = props => {
             </div>
 
             <div style={{ color: obj.stroke }}>
-              Emergence: {obj.payload.Emergence}%
+              Emergence: {obj.payload.Emergence}
+              {unit}
             </div>
           </div>
         )}

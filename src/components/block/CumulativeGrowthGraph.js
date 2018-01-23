@@ -50,7 +50,7 @@ const CumulativeGrowthGraph = inject("app")(
               tick={<CustomYLabel bpts={bpts} unit={"mm"} />}
             />
             <CartesianGrid strokeDasharray="3 3" vertical={false} />
-            <Tooltip content={<CustomTooltip />} />
+            <Tooltip content={<CustomTooltip unit={"mm"} />} />
             <Line dataKey="Average Style Length" stroke="#8D6A9F" dot={false} />
             <Area
               type="monotone"

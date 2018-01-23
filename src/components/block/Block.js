@@ -13,6 +13,7 @@ import USMap from "./USMap";
 import GrowthTable from "./GrowthTable";
 import CumulativeGrowthGraph from "./CumulativeGrowthGraph";
 import HourlyTempGraph from "./HourlyTempGraph";
+import Message from "./Message";
 
 // Modals
 import EditBlockModal from "modals/EditBlockModal";
@@ -36,6 +37,7 @@ const Block = inject("app")(
               <div>
                 {bl.startDate && bl.avgStyleLength ? (
                   <div>
+                    <Message bl={bl} breakpoints={bpts} />
                     {bl.modelData && (
                       <EmergenceGraph bl={bl} breakpoints={bpts} />
                     )}
