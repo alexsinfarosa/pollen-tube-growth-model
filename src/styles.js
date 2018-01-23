@@ -152,11 +152,9 @@ export const Section = styled.div`
   }
 `;
 
-export const SectionMap = Section.extend`
-  width: 100%;
-  margin: 0 auto;
+export const SectionMap = styled.div`
+  margin: 16px auto;
   height: 35vh;
-  margin-top: 16px;
 
   @media (min-width: ${sm}) {
     height: 25vh;
@@ -195,9 +193,8 @@ export const RowCentered = styled.div`
 
 export const GraphWrapper = styled.div`
   width: 100%;
+  margin: 16px auto;
   height: 35vh;
-  margin-top: 16px;
-  margin-bottom: 40px;
 
   @media (min-width: ${sm}) {
     height: 25vh;

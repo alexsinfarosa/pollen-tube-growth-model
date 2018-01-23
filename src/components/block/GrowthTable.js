@@ -63,7 +63,7 @@ const GrowthTable = inject("app")(
 
     return (
       <Table
-        style={{ marginTop: 16 }}
+        style={{ margin: "16px auto" }}
         rowClassName={(rec, idx) => sprayDateRow(rec.date)}
         size="middle"
         dataSource={bl.modelData}

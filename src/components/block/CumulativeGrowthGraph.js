@@ -82,7 +82,7 @@ const CumulativeGrowthGraph = inject("app")(
       return null;
     };
     return (
-      <GraphWrapper>
+      <GraphWrapper style={{ marginTop: 40 }}>
         <h4>Cumulative Hourly Pollen Tube Growth (mm)</h4>
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart
