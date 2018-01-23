@@ -64,11 +64,6 @@ export default class BlockModel {
   }
 
   @computed
-  get message() {
-    return this.isMessage;
-  }
-
-  @computed
   get avgStyleLength() {
     if (this.styleLengths.length !== 0) {
       return (

@@ -8,25 +8,30 @@ import registerServiceWorker from "./registerServiceWorker";
 import { Provider } from "mobx-react";
 import AppStore from "stores/AppStore";
 
+// hot reload
+import { AppContainer } from "react-hot-loader";
+
 const fetcher = url => window.fetch(url).then(response => response.json());
 const app = new AppStore(fetcher);
 
-ReactDOM.render(
-  <Provider app={app}>
-    <App />
-  </Provider>,
-  document.getElementById("root")
-);
+const render = Component => {
+  ReactDOM.render(
+    <AppContainer>
+      <Provider app={app}>
+        <App />
+      </Provider>
+    </AppContainer>,
+    document.getElementById("root")
+  );
+};
+
 registerServiceWorker();
+
+// Render once
+render(App);
 
 if (module.hot) {
   module.hot.accept("stores/AppStore", () => {
-    const NewApp = require("stores/AppStore").default;
-    ReactDOM.render(
-      <Provider app={app}>
-        <NewApp />
-      </Provider>,
-      document.getElementById("root")
-    );
+    render(App);
   });
 }
