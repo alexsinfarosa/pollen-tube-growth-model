@@ -85,6 +85,7 @@ export default class BlockStore {
     secondSpray: undefined,
     thirdSpray: undefined,
     endDate: undefined,
+    isMessage: true,
     styleLengths: [],
     data: [],
     isBeingSelected: false,
@@ -114,6 +115,14 @@ export default class BlockStore {
     this.block.data = [];
     this.block.isBeingSelected = false;
     this.block.isBeingEdited = false;
+  };
+
+  @action
+  toggleIsMessage = id => {
+    const block = this.blocks.find(b => b.id === id);
+    this.block = block;
+    this.block.isMessage = !this.block.isMessage;
+    this.updateBlock();
   };
 
   @action

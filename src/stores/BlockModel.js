@@ -23,6 +23,7 @@ export default class BlockModel {
   @observable secondSpray;
   @observable thirdSpray;
   @observable endDate;
+  @observable isMessage = true;
   @observable styleLengths = [];
   @observable data = [];
   @observable isBeingSelected = false;
@@ -39,6 +40,7 @@ export default class BlockModel {
     secondSpray,
     thirdSpray,
     endDate,
+    isMessage,
     styleLengths,
     data,
     isBeingSelected,
@@ -54,10 +56,16 @@ export default class BlockModel {
     this.secondSpray = secondSpray;
     this.thirdSpray = thirdSpray;
     this.endDate = endDate;
+    this.isMessage = isMessage;
     this.styleLengths = styleLengths;
     this.data = data;
     this.isBeingSelected = isBeingSelected;
     this.isBeingEdited = isBeingEdited;
+  }
+
+  @computed
+  get message() {
+    return this.isMessage;
   }
 
   @computed

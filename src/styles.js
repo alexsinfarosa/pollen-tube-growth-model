@@ -222,6 +222,14 @@ export const GraphWrapper = styled.div`
   }
 `;
 
-// export const StepIcon = styled(Icon)`
-//   animation: 2s infinite ${bounceAnimation};
-// `;
+export const MessageWrap = styled.div`
+  font-size: 0.6rem;
+
+  @media (min-width: ${sm}) {
+    font-size: 0.8rem;
+  }
+
+  @media (min-width: ${md}) {
+    font-size: 0.8rem;
+  }
+`;

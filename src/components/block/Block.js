@@ -37,7 +37,7 @@ const Block = inject("app")(
               <div>
                 {bl.startDate && bl.avgStyleLength ? (
                   <div>
-                    <Message bl={bl} breakpoints={bpts} />
+                    {bl.isMessage && <Message bl={bl} breakpoints={bpts} />}
                     {bl.modelData && (
                       <EmergenceGraph bl={bl} breakpoints={bpts} />
                     )}
