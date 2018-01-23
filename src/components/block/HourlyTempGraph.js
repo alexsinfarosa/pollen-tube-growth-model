@@ -1,6 +1,10 @@
 import React from "react";
 import { inject, observer } from "mobx-react";
 
+import CustomXLabel from "./graphComponents/CustomXLabel";
+import CustomYLabel from "./graphComponents/CustomYLabel";
+import CustomTooltip from "./graphComponents/CustomTooltip";
+
 import {
   LineChart,
   Line,
@@ -12,37 +16,12 @@ import {
 } from "recharts";
 import { GraphWrapper } from "../../styles";
 
-const CustomTooltip = props => {
-  const { payload } = props;
-  const obj = payload[0];
-  if (obj) {
-    return (
-      <div
-        style={{
-          padding: 8,
-          background: "white",
-          border: "1px solid #ededed",
-          borderRadius: 4
-        }}
-      >
-        {obj && (
-          <div>
-            <div style={{ marginBottom: 8 }}>
-              <b>{obj.payload.date}</b>
-            </div>
-            <div style={{ color: obj.stroke }}>
-              Temperature: {obj.payload.Temperature}˚F
-            </div>
-          </div>
-        )}
-      </div>
-    );
-  }
-  return null;
-};
-
 const HourlyTempGraph = inject("app")(
-  observer(function HourlyTempGraph({ app: { bStore }, bl }) {
+  observer(function HourlyTempGraph({
+    app: { bStore },
+    bl,
+    breakpoints: bpts
+  }) {
     return (
       <GraphWrapper>
         <h4>Rounded Average Hourly Temperatures (˚F)</h4>
@@ -55,13 +34,16 @@ const HourlyTempGraph = inject("app")(
           >
             <XAxis
               dataKey="Date"
-              // domain={["dataMin", "dataMax"]}
-              minTickGap={40}
-              tickSize={10}
-              interval="preserveStartEnd"
+              interval="preserveStart"
               axisLine={false}
+              tick={<CustomXLabel bpts={bpts} />}
             />
-            <YAxis domain={["dataMin", "dataMax"]} />
+            <YAxis
+              domain={["dataMin", "dataMax"]}
+              hide={false}
+              axisLine={false}
+              tick={<CustomYLabel bpts={bpts} unit={"˚F"} />}
+            />
             <CartesianGrid strokeDasharray="3 3" vertical={false} />
             <Tooltip content={<CustomTooltip />} />
             <Line dataKey="Temperature" stroke="#63a07f" dot={false} />

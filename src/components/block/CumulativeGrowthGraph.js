@@ -5,6 +5,11 @@ import isBefore from "date-fns/is_before";
 import addHours from "date-fns/add_hours";
 import subHours from "date-fns/sub_hours";
 
+import CustomXLabel from "./graphComponents/CustomXLabel";
+import CustomYLabel from "./graphComponents/CustomYLabel";
+import CustomTooltip from "./graphComponents/CustomTooltip";
+import CustomAreaLabel from "./graphComponents/CustomAreaLabel";
+
 import {
   Line,
   XAxis,
@@ -17,70 +22,12 @@ import {
 } from "recharts";
 import { GraphWrapper } from "../../styles";
 
-const CustomTooltip = props => {
-  const { payload } = props;
-  const obj = payload[0];
-  if (obj) {
-    return (
-      <div
-        style={{
-          padding: 8,
-          background: "white",
-          border: "1px solid #ededed",
-          borderRadius: 4
-        }}
-      >
-        {obj && (
-          <div>
-            <div style={{ marginBottom: 8 }}>
-              <b>{obj.payload.date}</b>
-            </div>
-
-            <div style={{ color: obj.stroke }}>
-              Cumulative HPTG:{" "}
-              {obj.payload["Cumulative Hourly Growth"].toFixed(1)}mm
-            </div>
-          </div>
-        )}
-      </div>
-    );
-  }
-  return null;
-};
-
 const CumulativeGrowthGraph = inject("app")(
-  observer(function CumulativeGrowthGraph({ app: { bStore }, bl }) {
-    const CustomizedLabel = props => {
-      const { x, y, stroke, value, index } = props;
-      const isEmergence = bl.datesIdxForGraph
-        .slice(1)
-        .some(idx => idx === index);
-      const isToday = bl.todayIdx === index;
-      if (isEmergence && x !== null && y !== null) {
-        return (
-          <g>
-            <text
-              x={x}
-              y={y}
-              dy={-6}
-              fill={stroke}
-              fontSize={13}
-              textAnchor="middle"
-            >
-              {value.toFixed(1)}mm
-            </text>
-            <circle
-              className={isToday ? "pulse" : null}
-              cx={x}
-              cy={y}
-              r={isToday ? "5" : "3"}
-              stroke={stroke}
-            />
-          </g>
-        );
-      }
-      return null;
-    };
+  observer(function CumulativeGrowthGraph({
+    app: { bStore },
+    bl,
+    breakpoints: bpts
+  }) {
     return (
       <GraphWrapper style={{ marginTop: 40 }}>
         <h4>Cumulative Hourly Pollen Tube Growth (mm)</h4>
@@ -93,12 +40,15 @@ const CumulativeGrowthGraph = inject("app")(
           >
             <XAxis
               dataKey="Date"
-              minTickGap={40}
-              tickSize={10}
-              interval="preserveStartEnd"
+              interval="preserveStart"
               axisLine={false}
+              tick={<CustomXLabel bpts={bpts} />}
             />
-            <YAxis />
+            <YAxis
+              hide={false}
+              axisLine={false}
+              tick={<CustomYLabel bpts={bpts} unit={"mm"} />}
+            />
             <CartesianGrid strokeDasharray="3 3" vertical={false} />
             <Tooltip content={<CustomTooltip />} />
             <Line dataKey="Average Style Length" stroke="#8D6A9F" dot={false} />
@@ -111,7 +61,7 @@ const CumulativeGrowthGraph = inject("app")(
               }
               stroke="#8D6A9F"
               fill="#8D6A9F"
-              label={<CustomizedLabel />}
+              label={<CustomAreaLabel bl={bl} bpts={bpts} />}
             />
 
             <Area
@@ -123,7 +73,7 @@ const CumulativeGrowthGraph = inject("app")(
               }
               stroke="#CBBBD3"
               fill="#CBBBD3"
-              label={<CustomizedLabel />}
+              label={<CustomAreaLabel bl={bl} bpts={bpts} />}
             />
           </ComposedChart>
         </ResponsiveContainer>

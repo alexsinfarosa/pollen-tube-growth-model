@@ -40,8 +40,12 @@ const Block = inject("app")(
                 )}
                 {bStore.isMap && <USMap bl={bl} breakpoints={bpts} />}
                 {bStore.isTable && <GrowthTable bl={bl} />}
-                {bStore.isGraph && <HourlyTempGraph bl={bl} />}
-                {bStore.isGraph && <CumulativeGrowthGraph bl={bl} />}
+                {bStore.isGraph && (
+                  <HourlyTempGraph bl={bl} breakpoints={bpts} />
+                )}
+                {bStore.isGraph && (
+                  <CumulativeGrowthGraph bl={bl} breakpoints={bpts} />
+                )}
               </div>
             ) : (
               <DateStyleLengthBar bl={bl} breakpoints={bpts} />
