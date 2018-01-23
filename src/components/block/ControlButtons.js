@@ -16,18 +16,20 @@ const ControlButtons = inject("app")(
 
     return (
       <ControlBarWrapper>
-        <Col span={6} style={{ textAlign: "center" }}>
-          <Button
-            icon={"calendar"}
-            type="primary"
-            shape={bpts.md ? null : "circle"}
-            size={bpts.xs ? "small" : "default"}
-            ghost={true}
-            onClick={() => bStore.selectBlock("isSprayModal", bl.id)}
-          >
-            {bpts.md ? sprayButtonLabel : null}
-          </Button>
-        </Col>
+        {bl.dates.length < 4 && (
+          <Col span={6} style={{ textAlign: "center" }}>
+            <Button
+              icon={"calendar"}
+              type="primary"
+              shape={bpts.md ? null : "circle"}
+              size={bpts.xs ? "small" : "default"}
+              ghost={true}
+              onClick={() => bStore.selectBlock("isSprayModal", bl.id)}
+            >
+              {bpts.md ? sprayButtonLabel : null}
+            </Button>
+          </Col>
+        )}
         <Col span={6} style={{ textAlign: "center" }}>
           <Button
             icon={"table"}

@@ -24,8 +24,7 @@ const EditBlockModal = inject("app")(
   }) {
     const dates = bl.dates.filter(date => date);
     const countDates = dates.length;
-    // const lastDate = dates[countDates - 1];
-    // console.log(dates, lastDate);
+
     // variety list
     const varietyList = apples.values().map(variety => {
       return (
@@ -53,6 +52,7 @@ const EditBlockModal = inject("app")(
       );
     });
 
+    // station label count
     let stationCount = "Select Station";
     if (bl.state) {
       if (bl.state.postalCode === "ALL") {
@@ -62,6 +62,7 @@ const EditBlockModal = inject("app")(
       }
     }
 
+    // Modal footer
     const Footer = () => {
       return (
         <div>

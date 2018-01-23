@@ -32,23 +32,29 @@ const Block = inject("app")(
             <EditBlockModal bl={bl} breakpoints={bpts} />
 
             <BlockHeader bl={bl} breakpoints={bpts} />
-            {bl.startDate && bl.avgStyleLength ? (
+            {!bStore.isDateModal && (
               <div>
-                {bl.modelData && <EmergenceGraph bl={bl} breakpoints={bpts} />}
-                {bl.dates.length < 4 && (
-                  <ControlButtons bl={bl} breakpoints={bpts} />
-                )}
-                {bStore.isMap && <USMap bl={bl} breakpoints={bpts} />}
-                {bStore.isTable && <GrowthTable bl={bl} />}
-                {bStore.isGraph && (
-                  <HourlyTempGraph bl={bl} breakpoints={bpts} />
-                )}
-                {bStore.isGraph && (
-                  <CumulativeGrowthGraph bl={bl} breakpoints={bpts} />
+                {bl.startDate && bl.avgStyleLength ? (
+                  <div>
+                    {bl.modelData && (
+                      <EmergenceGraph bl={bl} breakpoints={bpts} />
+                    )}
+
+                    <ControlButtons bl={bl} breakpoints={bpts} />
+
+                    {bStore.isMap && <USMap bl={bl} breakpoints={bpts} />}
+                    {bStore.isTable && <GrowthTable bl={bl} />}
+                    {bStore.isGraph && (
+                      <HourlyTempGraph bl={bl} breakpoints={bpts} />
+                    )}
+                    {bStore.isGraph && (
+                      <CumulativeGrowthGraph bl={bl} breakpoints={bpts} />
+                    )}
+                  </div>
+                ) : (
+                  <DateStyleLengthBar bl={bl} breakpoints={bpts} />
                 )}
               </div>
-            ) : (
-              <DateStyleLengthBar bl={bl} breakpoints={bpts} />
             )}
           </div>
         )}

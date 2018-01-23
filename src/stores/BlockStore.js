@@ -24,6 +24,7 @@ export default class BlockStore {
     when(() => this.blocks.length === 0, () => this.readFromLocalStorage());
   }
 
+  // Loading...
   @observable isLoading = false;
 
   // Modals

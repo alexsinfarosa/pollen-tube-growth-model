@@ -53,7 +53,8 @@ const columns = [
 
 const GrowthTable = inject("app")(
   observer(function GrowthTable({ app: { bStore }, bl }) {
-    const dates = bl.dates.map(d => getTime(d));
+    const dates = bl.datesForGraph.map(d => getTime(d));
+
     const sprayDateRow = date => {
       if (dates.includes(getTime(date))) {
         return "table hilight";
@@ -64,7 +65,7 @@ const GrowthTable = inject("app")(
     return (
       <Table
         style={{ margin: "16px auto" }}
-        rowClassName={(rec, idx) => sprayDateRow(rec.date)}
+        rowClassName={rec => sprayDateRow(rec.date)}
         size="middle"
         dataSource={bl.modelData}
         columns={columns}

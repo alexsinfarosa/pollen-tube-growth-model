@@ -14,7 +14,7 @@ const CustomAreaLabel = props => {
         <text
           x={x}
           y={y}
-          dy={-4}
+          dy={-10}
           fill={stroke}
           fontSize={bpts.xs ? 9 : 13}
           textAnchor="middle"
