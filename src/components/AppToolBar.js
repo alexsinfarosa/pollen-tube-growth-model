@@ -2,7 +2,7 @@ import React from "react";
 import { inject, observer } from "mobx-react";
 import getYear from "date-fns/get_year";
 
-import { ToolBarWrapper, Col } from "styles";
+import { Col } from "styles";
 import { Row, Tooltip, Button, Badge, Select } from "antd";
 const { Option, OptGroup } = Select;
 
@@ -37,8 +37,8 @@ const AppToolBar = inject("app")(
     });
 
     return (
-      <ToolBarWrapper>
-        <Col>
+      <Row type="flex" style={{ marginBottom: 16 }}>
+        <Col span={6}>
           <Row type="flex">
             <Tooltip title="New block">
               <Button
@@ -78,7 +78,7 @@ const AppToolBar = inject("app")(
           </Row>
         </Col>
 
-        <Col style={{ flex: "2 2 200px" }}>
+        <Col span={18}>
           <Select
             style={{ width: "100%" }}
             placeholder={`Block List`}
@@ -90,25 +90,7 @@ const AppToolBar = inject("app")(
             {blockList}
           </Select>
         </Col>
-
-        {filteredBlocks.length === 1 &&
-          filteredBlocks[0].avgStyleLength &&
-          filteredBlocks[0].startDate &&
-          !bpts.xs && (
-            <Col right>
-              <Tooltip title="Toggle Map">
-                <Button
-                  type="primary"
-                  ghost={bStore.isMap ? false : true}
-                  icon="environment-o"
-                  onClick={bStore.toggleMap}
-                >
-                  Map
-                </Button>
-              </Tooltip>
-            </Col>
-          )}
-      </ToolBarWrapper>
+      </Row>
     );
   })
 );

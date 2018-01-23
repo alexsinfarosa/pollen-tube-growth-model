@@ -95,21 +95,20 @@ export const SubHeaderRight = SubHeader.extend`
   }
 `;
 
-export const ToolBarWrapper = Row.extend`
-  margin-left: ${margin};
-  margin-right: ${margin};
-  margin-bottom: ${marginSm};
+export const ControlBarWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
 
   @media (min-width: ${sm}) {
-    margin-left: ${marginSm};
-    margin-right: ${marginSm};
-    margin-bottom: ${marginSm};
+    justify-content: space-between;
   }
 
   @media (min-width: ${md}) {
-    margin-left: ${marginMd};
-    margin-right: ${marginMd};
-    margin-bottom: ${marginMd};
+    justify-content: space-between;
+  }
+
+  @media (min-width: ${lg}) {
+    justify-content: center;
   }
 `;
 

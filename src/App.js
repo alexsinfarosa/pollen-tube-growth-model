@@ -34,11 +34,11 @@ class App extends Component {
 
           <NewBlockModal />
 
-          <AppToolBar breakpoints={bpts} />
           <StartDateModal breakpoints={bpts} />
           <StyleLengthModal breakpoints={bpts} />
 
           <Main>
+            <AppToolBar breakpoints={bpts} />
             {bStore.blocks.length !== 0 ? <BlockList /> : <Instructions />}
           </Main>
         </MatchMediaProvider>

@@ -1,10 +1,13 @@
 import React from "react";
 import { inject, observer } from "mobx-react";
 
-import { Row, Col, Button } from "antd";
+import { ControlBarWrapper } from "styles";
+import { Col, Button } from "antd";
 
 const ControlButtons = inject("app")(
-  observer(function ControlButtons({ app: { bpts, bStore }, bl, breakpoints }) {
+  observer(function ControlButtons({ app: { bStore }, bl, breakpoints }) {
+    const bpts = breakpoints;
+
     let sprayButtonLabel;
     const count = bl.dates.filter(date => date).length;
     if (count === 1) sprayButtonLabel = "Set 1st Spray";
@@ -12,61 +15,56 @@ const ControlButtons = inject("app")(
     if (count === 3) sprayButtonLabel = "Set 3rd Spray";
 
     return (
-      <Row
-        type="flex"
-        justify="center"
-        align="center"
-        style={{ marginTop: 16 }}
-      >
-        <Col span={4}>
+      <ControlBarWrapper>
+        <Col span={6} style={{ textAlign: "center" }}>
           <Button
             icon={"calendar"}
             type="primary"
-            shape={breakpoints.xs ? "circle" : null}
-            size={breakpoints.xs ? "small" : "default"}
+            shape={bpts.md ? null : "circle"}
+            size={bpts.xs ? "small" : "default"}
             ghost={true}
             onClick={() => bStore.selectBlock("isSprayModal", bl.id)}
           >
-            {breakpoints.xs ? null : sprayButtonLabel}
+            {bpts.md ? sprayButtonLabel : null}
           </Button>
         </Col>
-        <Col span={4}>
+        <Col span={6} style={{ textAlign: "center" }}>
           <Button
             icon={"table"}
             type="primary"
-            shape={breakpoints.xs ? "circle" : null}
-            size={breakpoints.xs ? "small" : "default"}
+            shape={bpts.md ? null : "circle"}
+            size={bpts.xs ? "small" : "default"}
             ghost={bStore.isTable ? false : true}
             onClick={bStore.toggleTable}
           >
-            {breakpoints.xs ? null : "Growth Table"}
+            {bpts.md ? "Growth Table" : null}
           </Button>
         </Col>
-        <Col span={4}>
+        <Col span={6} style={{ textAlign: "center" }}>
           <Button
             icon={"dot-chart"}
             type="primary"
-            shape={breakpoints.xs ? "circle" : null}
-            size={breakpoints.xs ? "small" : "default"}
+            shape={bpts.md ? null : "circle"}
+            size={bpts.xs ? "small" : "default"}
             ghost={bStore.isGraph ? false : true}
             onClick={bStore.toggleGraph}
           >
-            {breakpoints.xs ? null : "Growth Graph"}
+            {bpts.md ? "Growth Graph" : null}
           </Button>
         </Col>
-        <Col span={4}>
+        <Col span={6} style={{ textAlign: "center" }}>
           <Button
             icon={"environment-o"}
             type="primary"
-            shape={breakpoints.xs ? "circle" : null}
-            size={breakpoints.xs ? "small" : "default"}
+            shape={bpts.md ? null : "circle"}
+            size={bpts.xs ? "small" : "default"}
             ghost={bStore.isMap ? false : true}
             onClick={bStore.toggleMap}
           >
-            {breakpoints.xs ? null : "Stations Map"}
+            {bpts.md ? "Stations Map" : null}
           </Button>
         </Col>
-      </Row>
+      </ControlBarWrapper>
     );
   })
 );
