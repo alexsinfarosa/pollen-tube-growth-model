@@ -6,10 +6,17 @@ import { inject, observer } from "mobx-react";
 import { Modal, DatePicker } from "antd";
 
 const StartDateModal = inject("app")(
-  observer(function StartDateModal({ app: { bStore } }) {
+  observer(function StartDateModal({ app: { bStore }, bl }) {
     const width = window.screen.width;
     // hack! Fix it.
     const margin = (width - 280 - 24) / 2;
+
+    const disablePreviousSprayDates = (prev, curr) => {
+      if (curr) {
+        return curr.valueOf() < prev.valueOf() && curr;
+      }
+      return curr && curr.valueOf() > Date.now();
+    };
 
     return (
       <Modal
@@ -34,7 +41,7 @@ const StartDateModal = inject("app")(
           allowClear={false}
           format="MMM Do YYYY, HH:00"
           placeholder={`Select Date and Time`}
-          // disabledDate={current => current && current.valueOf() > Date.now()}
+          disabledDate={curr => disablePreviousSprayDates(bl.lastOfDates, curr)}
           showToday={true}
           onChange={date => bStore.addField("startDate", date)}
           onOk={bStore.fetchAndUploadData}

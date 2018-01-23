@@ -18,6 +18,8 @@ import Message from "./Message";
 // Modals
 import EditBlockModal from "modals/EditBlockModal";
 import SprayDateModal from "modals/SprayDateModal";
+import StartDateModal from "modals/StartDateModal";
+import StyleLengthModal from "modals/StyleLengthModal";
 
 import { Spin } from "antd";
 
@@ -31,6 +33,8 @@ const Block = inject("app")(
           <div>
             <SprayDateModal bl={bl} breakpoints={bpts} />
             <EditBlockModal bl={bl} breakpoints={bpts} />
+            <StartDateModal bl={bl} breakpoints={bpts} />
+            <StyleLengthModal breakpoints={bpts} />
 
             <BlockHeader bl={bl} breakpoints={bpts} />
             {!bStore.isDateModal && (

@@ -14,8 +14,6 @@ import Instructions from "components/Instructions";
 
 // Modals
 import NewBlockModal from "modals/NewBlockModal";
-import StartDateModal from "modals/StartDateModal";
-import StyleLengthModal from "modals/StyleLengthModal";
 
 @inject("app")
 @observer
@@ -34,9 +32,6 @@ class App extends Component {
 
           <NewBlockModal />
 
-          <StartDateModal breakpoints={bpts} />
-          <StyleLengthModal breakpoints={bpts} />
-
           <Main>
             <AppToolBar breakpoints={bpts} />
             {bStore.blocks.length !== 0 ? <BlockList /> : <Instructions />}
@@ -44,7 +39,6 @@ class App extends Component {
         </MatchMediaProvider>
       </div>
     );
-    // return <div>ciccio</div>;
   }
 }
 

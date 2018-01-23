@@ -90,6 +90,16 @@ export default class BlockModel {
   }
 
   @computed
+  get countDates() {
+    return this.dates.length;
+  }
+
+  @computed
+  get lastOfDates() {
+    return moment(this.dates[this.dates.length - 1]);
+  }
+
+  @computed
   get todayIdx() {
     if (this.modelData) {
       return this.modelData.findIndex(obj =>

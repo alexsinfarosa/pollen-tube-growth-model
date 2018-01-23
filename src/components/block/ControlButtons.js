@@ -24,7 +24,7 @@ const ControlButtons = inject("app")(
               shape={bpts.md ? null : "circle"}
               size={bpts.xs ? "small" : "default"}
               ghost={true}
-              onClick={() => bStore.selectBlock("isSprayModal", bl.id)}
+              onClick={() => bStore.selectBlock("isDateModal", bl.id)}
             >
               {bpts.md ? sprayButtonLabel : null}
             </Button>

@@ -7,11 +7,10 @@ import moment from "moment";
 import { Row, Modal, Input, Select, Button, DatePicker } from "antd";
 const style = { width: "100%", marginBottom: 16 };
 
-// const disabledStartDate = current => {
-//   // const { date } = this.props;
-//   // Try Date.now(date)
-//   return current && current.valueOf() > Date.now();
-// };
+const disablePreviousSprayDates = (prev, curr) => {
+  // console.log(prev, curr, curr.valueOf(), prev.valueOf());
+  return curr.valueOf() < prev.valueOf() && curr;
+};
 
 const disabledSprayDate = current => {
   return;
@@ -22,9 +21,6 @@ const EditBlockModal = inject("app")(
     app: { apples, states, currentStateStations, bStore, stations },
     bl
   }) {
-    const dates = bl.dates.filter(date => date);
-    const countDates = dates.length;
-
     // variety list
     const varietyList = apples.values().map(variety => {
       return (
@@ -148,7 +144,7 @@ const EditBlockModal = inject("app")(
 
           <label>First Spray: </label>
           <DatePicker
-            disabled={countDates > 1 ? false : true}
+            disabled={bl.countDates > 1 ? false : true}
             name="firstSpray"
             style={style}
             showTime={{ format: "HH:00" }}
@@ -156,14 +152,16 @@ const EditBlockModal = inject("app")(
             allowClear={false}
             format="MMM Do YYYY, HH:00"
             placeholder={`Select Date and Time`}
-            disabledDate={current => disabledSprayDate(current)}
+            disabledDate={curr =>
+              disablePreviousSprayDates(bl.lastOfDates, curr)
+            }
             showToday={true}
             onChange={date => bStore.addField("firstSpray", date)}
           />
 
           <label>Second Spray: </label>
           <DatePicker
-            disabled={countDates > 2 ? false : true}
+            disabled={bl.countDates > 2 ? false : true}
             name="secondSpray"
             style={style}
             showTime={{ format: "HH:00" }}
@@ -178,7 +176,7 @@ const EditBlockModal = inject("app")(
 
           <label>Third Spray: </label>
           <DatePicker
-            disabled={countDates > 3 ? false : true}
+            disabled={bl.countDates > 3 ? false : true}
             name="thirdSpray"
             style={style}
             showTime={{ format: "HH:00" }}
