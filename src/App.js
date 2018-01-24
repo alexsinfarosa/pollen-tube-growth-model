@@ -19,7 +19,6 @@ import NewBlockModal from "modals/NewBlockModal";
 class App extends Component {
   render() {
     const { bpts, bStore } = this.props.app;
-
     return (
       <div>
         <MatchMediaProvider breakpoints={bpts}>

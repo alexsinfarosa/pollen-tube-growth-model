@@ -2,9 +2,6 @@ import React from "react";
 import { inject, observer } from "mobx-react";
 import moment from "moment";
 
-// utils
-import { disablePastHrs, disableFutureHrs } from "utils/utils";
-
 // antd
 import { Modal, DatePicker } from "antd";
 
@@ -24,10 +21,11 @@ const StartDateModal = inject("app")(
 
     // disable dates
     const disablePreviousSprayDates = (prev, curr) => {
-      if (bl.startDate) {
-        return curr.valueOf() < prev.valueOf();
+      if (prev) {
+        return curr && curr < moment(prev).endOf("day");
+      } else {
+        return curr && curr.valueOf() > Date.now();
       }
-      return curr.valueOf() > Date.now();
     };
 
     return (
@@ -48,15 +46,14 @@ const StartDateModal = inject("app")(
       >
         <DatePicker
           open={bStore.isDateModal}
-          showTime={{
-            format: "HH:00",
-            disabledHours: bl.startDate ? disablePastHrs : disableFutureHrs
-          }}
+          showTime={{ format: "HH:00" }}
           value={moment(bStore.block[sprayButtonLabel])}
           allowClear={false}
           format="MMM Do YYYY, HH:00"
           placeholder={`Select Date and Time`}
-          disabledDate={curr => disablePreviousSprayDates(bl.lastOfDates, curr)}
+          disabledDate={curr =>
+            disablePreviousSprayDates(bl.lastSelectableDate, curr)
+          }
           showToday={true}
           onChange={date => bStore.addField(sprayButtonLabel, date)}
           onOk={bStore.fetchAndUploadData}

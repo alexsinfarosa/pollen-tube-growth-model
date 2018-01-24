@@ -12,10 +12,6 @@ import { message } from "antd";
 import BlockModel from "./BlockModel";
 
 import moment from "moment";
-// import format from "date-fns/format";
-import getYear from "date-fns/get_year";
-// import isThisYear from "date-fns/is_this_year";
-import isAfter from "date-fns/is_after";
 
 export default class BlockStore {
   app;
@@ -50,23 +46,12 @@ export default class BlockStore {
   @observable radioValue = "";
   @action setRadioValue = d => (this.radioValue = d);
 
-  // dates
-  @computed
-  get seasonStartDate() {
-    return new Date(`${getYear(this.block.startDate)}-03-01 00:00`);
-  }
-
-  @computed
-  get seasonEndDate() {
-    return new Date(`${getYear(this.block.startDate)}-07-01 23:00`);
-  }
-
   @computed
   get now() {
-    if (isAfter(new Date(), this.seasonEndDate)) {
-      return this.seasonEndDate;
+    if (moment().diff(this.block.endDate) < 0) {
+      return moment().startOf("hour");
     }
-    return moment().startOf("hour");
+    return this.block.endDate;
   }
 
   // style length
@@ -160,7 +145,8 @@ export default class BlockStore {
       name === "startDate" ||
       name === "firstSpray" ||
       name === "secondSpray" ||
-      name === "thirdSpray"
+      name === "thirdSpray" ||
+      name === "endDate"
     ) {
       this.block[name] = moment(val).startOf("hour");
     }
@@ -176,7 +162,7 @@ export default class BlockStore {
     }
   };
 
-  @computed //FIX
+  @computed
   get areRequiredFieldsSet() {
     const { name, variety, state, station } = this.block;
     return name.length >= 3 && variety && state && station;
@@ -230,7 +216,6 @@ export default class BlockStore {
 
   fetchAndUploadData = () => {
     console.log("fetchAndUploadData");
-    this.isDateModal = false;
     this.isLoading = true;
     const block = { ...this.block };
     const blocks = [...this.blocks];
@@ -243,6 +228,11 @@ export default class BlockStore {
       this.selectOneBlock(block.id);
       this.writeToLocalStorage();
       this.clearFields();
+      this.isNewBlockModal = false;
+      this.isEditBlockModal = false;
+      this.isDateModal = false;
+      this.isSprayModal = false;
+      this.isStyleLengthModal = false;
       this.isLoading = false;
       message.success(`${block.name} block has been updated!`);
     });
@@ -257,11 +247,6 @@ export default class BlockStore {
     this.isSprayModal = false;
     this.isStyleLengthModal = false;
     const block = { ...this.block };
-    // block.startDate = moment(block.startDate);
-    // block.firstSpray = moment(block.firstSpray);
-    // block.secondSpray = moment(block.secondSpray);
-    // block.thirdSpray = moment(block.thirdSpray);
-    // block.endDate = moment(block.endDate);
     block.isBeingEdited = false;
     block.styleLengths.forEach(sl => (sl.isEdit = false));
     const idx = this.blocks.findIndex(b => b.id === block.id);

@@ -204,10 +204,10 @@ const range = (start, end) => {
   return result;
 };
 
-export const disableFutureHrs = () => {
-  return range(0, 24).splice(moment().hour() + 1);
+export const disableFutureHrs = date => {
+  return range(0, 24).splice(moment(date).hour() + 1);
 };
 
-export const disablePastHrs = () => {
-  return range(0, 24).splice(0, moment().hour() + 1);
+export const disablePastHrs = date => {
+  return range(0, 24).splice(0, moment(date).hour() + 1);
 };

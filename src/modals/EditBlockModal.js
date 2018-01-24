@@ -3,9 +3,6 @@ import { inject, observer } from "mobx-react";
 import moment from "moment";
 // import isEqual from "date-fns/is_equal";
 
-// utils
-import { disablePastHrs, disableFutureHrs } from "utils/utils";
-
 // antd
 import { Row, Modal, Input, Select, Button, DatePicker } from "antd";
 const style = { width: "100%", marginBottom: 16 };
@@ -17,10 +14,10 @@ const EditBlockModal = inject("app")(
   }) {
     // disable dates
     const disablePreviousSprayDates = (prev, curr) => {
-      if (bl.startDate) {
-        return curr.valueOf() < prev.valueOf();
+      if (prev) {
+        return curr && curr < moment(prev).endOf("day");
       }
-      return curr.valueOf() > Date.now();
+      return curr && curr.valueOf() > Date.now();
     };
 
     // variety list
@@ -129,18 +126,13 @@ const EditBlockModal = inject("app")(
           <label>Start Date: </label>
           <DatePicker
             name="startDate"
-            showTime={{
-              format: "HH:00"
-              // disabledHours: bl.startDate ? disablePastHrs : disableFutureHrs
-            }}
+            showTime={{ format: "HH:00" }}
             style={style}
             value={block.startDate ? moment(block.startDate) : undefined}
             allowClear={false}
             format="MMM Do YYYY, HH:00"
             placeholder={`Select Date and Time`}
-            // disabledDate={curr =>
-            //   disablePreviousSprayDates(bl.lastOfDates, curr)
-            // }
+            disabledDate={curr => disablePreviousSprayDates(undefined, curr)}
             showToday={true}
             onChange={date => bStore.addField("startDate", date)}
           />
@@ -148,19 +140,14 @@ const EditBlockModal = inject("app")(
           <label>First Spray: </label>
           <DatePicker
             name="firstSpray"
-            showTime={{
-              format: "HH:00",
-              disabledHours: bl.startDate ? disablePastHrs : disableFutureHrs
-            }}
+            showTime={{ format: "HH:00" }}
             disabled={bl.countDates > 1 ? false : true}
             style={style}
             value={block.firstSpray ? moment(block.firstSpray) : undefined}
             allowClear={false}
             format="MMM Do YYYY, HH:00"
             placeholder={`Select Date and Time`}
-            disabledDate={curr =>
-              disablePreviousSprayDates(bl.lastOfDates, curr)
-            }
+            disabledDate={curr => disablePreviousSprayDates(bl.startDate, curr)}
             showToday={true}
             onChange={date => bStore.addField("firstSpray", date)}
           />
@@ -168,10 +155,7 @@ const EditBlockModal = inject("app")(
           <label>Second Spray: </label>
           <DatePicker
             name="secondSpray"
-            showTime={{
-              format: "HH:00",
-              disabledHours: bl.startDate ? disablePastHrs : disableFutureHrs
-            }}
+            showTime={{ format: "HH:00" }}
             disabled={bl.countDates > 2 ? false : true}
             style={style}
             value={block.secondSpray ? moment(block.secondSpray) : undefined}
@@ -179,7 +163,7 @@ const EditBlockModal = inject("app")(
             format="MMM Do YYYY, HH:00"
             placeholder={`Select Date and Time`}
             disabledDate={curr =>
-              disablePreviousSprayDates(bl.lastOfDates, curr)
+              disablePreviousSprayDates(bl.firstSpray, curr)
             }
             showToday={true}
             onChange={date => bStore.addField("secondSpray", date)}
@@ -188,10 +172,7 @@ const EditBlockModal = inject("app")(
           <label>Third Spray: </label>
           <DatePicker
             name="thirdSpray"
-            showTime={{
-              format: "HH:00",
-              disabledHours: bl.startDate ? disablePastHrs : disableFutureHrs
-            }}
+            showTime={{ format: "HH:00" }}
             disabled={bl.countDates > 1 ? false : true}
             style={style}
             value={block.thirdSpray ? moment(block.thirdSpray) : undefined}
@@ -199,7 +180,7 @@ const EditBlockModal = inject("app")(
             format="MMM Do YYYY, HH:00"
             placeholder={`Select Date and Time`}
             disabledDate={curr =>
-              disablePreviousSprayDates(bl.lastOfDates, curr)
+              disablePreviousSprayDates(bl.secondSpray, curr)
             }
             showToday={true}
             onChange={date => bStore.addField("thirdSpray", date)}
@@ -208,10 +189,7 @@ const EditBlockModal = inject("app")(
           <label>End Date: </label>
           <DatePicker
             name="endDate"
-            showTime={{
-              format: "HH:00",
-              disabledHours: bl.startDate ? disablePastHrs : disableFutureHrs
-            }}
+            showTime={{ format: "HH:00" }}
             disabled={bl.countDates > 1 ? false : true}
             style={style}
             value={block.endDate ? moment(block.endDate) : undefined}
@@ -219,7 +197,7 @@ const EditBlockModal = inject("app")(
             format="MMM Do YYYY, HH:00"
             placeholder={`Select Date and Time`}
             disabledDate={curr =>
-              disablePreviousSprayDates(bl.lastOfDates, curr)
+              disablePreviousSprayDates(bl.lastSelectableDate, curr)
             }
             showToday={true}
             onChange={date => bStore.addField("endDate", date)}
