@@ -17,7 +17,7 @@ const CustomTooltip = props => {
         {obj && (
           <div>
             <div style={{ marginBottom: 8 }}>
-              <b>{format(obj.payload.date, "MMM DD HH:00")}</b>
+              <b>{format(obj.payload.date, "MMM Do HH:00")}</b>
             </div>
 
             <div style={{ color: obj.stroke }}>

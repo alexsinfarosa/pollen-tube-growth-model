@@ -1,15 +1,8 @@
 import { observable, computed } from "mobx";
 
-// utils
-import { roundDate } from "utils/utils";
-
 import moment from "moment";
 import getHours from "date-fns/get_hours";
 import format from "date-fns/format";
-// import getYear from "date-fns/get_year";
-// import isAfter from "date-fns/is_after";
-// import isBefore from "date-fns/is_before";
-// import addDays from "date-fns/add_days";
 import isEqual from "date-fns/is_equal";
 
 export default class BlockModel {
@@ -76,7 +69,7 @@ export default class BlockModel {
 
   @computed
   get now() {
-    return roundDate(new Date(), moment.duration(60, "minutes"), "floor");
+    return moment().startOf("hour");
   }
 
   @computed
@@ -96,7 +89,10 @@ export default class BlockModel {
 
   @computed
   get lastOfDates() {
-    return moment(this.dates[this.dates.length - 1]);
+    if (this.dates.length !== 0) {
+      return moment(this.dates[this.dates.length - 1]);
+    }
+    return undefined;
   }
 
   @computed

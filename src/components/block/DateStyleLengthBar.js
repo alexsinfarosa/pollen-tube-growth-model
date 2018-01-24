@@ -1,15 +1,13 @@
 import React from "react";
 import { inject, observer } from "mobx-react";
 // import { toJS } from "mobx";
-
 // antd
 import { Row, Col, Button } from "antd";
 
 // styled components
 import { RowCentered } from "styles";
 
-// utils
-import format from "date-fns/format";
+import moment from "moment";
 
 const DateStyleLengthBar = inject("app")(
   observer(function DateStyleLengthBar({ app: { bStore }, bl }) {
@@ -18,7 +16,7 @@ const DateStyleLengthBar = inject("app")(
         {bl.startDate ? (
           <RowCentered style={{ height: 32 }}>
             <Col>
-              Model Start Date: {format(bl.startDate, "YY/MM/DD HH:00")}
+              Model Start Date: {moment(bl.startDate).format("YY/MM/DD HH:00")}
             </Col>
           </RowCentered>
         ) : (

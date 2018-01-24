@@ -61,7 +61,7 @@ const CumulativeGrowthGraph = inject("app")(
               }
               stroke="#8D6A9F"
               fill="#8D6A9F"
-              label={<CustomAreaLabel bl={bl} bpts={bpts} />}
+              label={<CustomAreaLabel bl={bl} bpts={bpts} unit={"mm"} />}
             />
 
             <Area
@@ -73,7 +73,7 @@ const CumulativeGrowthGraph = inject("app")(
               }
               stroke="#CBBBD3"
               fill="#CBBBD3"
-              label={<CustomAreaLabel bl={bl} bpts={bpts} />}
+              label={<CustomAreaLabel bl={bl} bpts={bpts} unit={"mm"} />}
             />
           </ComposedChart>
         </ResponsiveContainer>

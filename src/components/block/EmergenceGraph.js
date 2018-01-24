@@ -61,7 +61,7 @@ const EmergenceGraph = inject("app")(
               }
               stroke="#FFBC42"
               fill="#FFBC42"
-              label={<CustomAreaLabel bl={bl} bpts={bpts} />}
+              label={<CustomAreaLabel bl={bl} bpts={bpts} unit={"%"} />}
             />
             <Area
               type="monotone"
@@ -72,7 +72,7 @@ const EmergenceGraph = inject("app")(
               }
               stroke="#FFE0A9"
               fill="#FFE0A9"
-              label={<CustomAreaLabel bl={bl} bpts={bpts} />}
+              label={<CustomAreaLabel bl={bl} bpts={bpts} unit={"%"} />}
             />
             {!bpts.xs && (
               <Brush

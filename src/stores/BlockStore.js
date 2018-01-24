@@ -2,7 +2,7 @@ import { observable, action, computed, when } from "mobx";
 // import { toJS } from "mobx";
 
 // utils
-import { roundDate, dailyToHourlyDates } from "utils/utils";
+import { dailyToHourlyDates } from "utils/utils";
 import { loadACISData } from "utils/cleanFetchedData";
 
 // antd
@@ -40,7 +40,11 @@ export default class BlockStore {
   @observable isGraph = false;
   @action toggleGraph = () => (this.isGraph = !this.isGraph);
   @action showModal = name => (this[name] = true);
-  @action hideModal = name => (this[name] = false);
+  @action
+  hideModal = (name, id) => {
+    this[name] = false;
+    this.block.startDate = undefined;
+  };
 
   // radioValue
   @observable radioValue = "";
@@ -62,7 +66,7 @@ export default class BlockStore {
     if (isAfter(new Date(), this.seasonEndDate)) {
       return this.seasonEndDate;
     }
-    return roundDate(new Date(), moment.duration(60, "minutes"), "floor");
+    return moment().startOf("hour");
   }
 
   // style length
@@ -84,7 +88,7 @@ export default class BlockStore {
     firstSpray: undefined,
     secondSpray: undefined,
     thirdSpray: undefined,
-    endDate: undefined,
+    endDate: moment(`${moment().year()}-07-01 23:00`),
     isMessage: true,
     styleLengths: [],
     data: [],
@@ -128,9 +132,22 @@ export default class BlockStore {
   @action
   selectBlock = (name, id) => {
     this.showModal(name);
-    const block = this.blocks.find(b => b.id === id);
-    this.block = block;
-    console.log(this.block);
+    const b = this.blocks.find(b => b.id === id);
+    this.block.id = b.id;
+    this.block.name = b.name;
+    this.block.variety = b.variety;
+    this.block.state = b.state;
+    this.block.station = b.station;
+    this.block.startDate = b.startDate;
+    this.block.firstSpray = b.firstSpray;
+    this.block.secondSpray = b.secondSpray;
+    this.block.thirdSpray = b.thirdSpray;
+    this.block.endDate = b.endDate;
+    this.block.isMessage = b.isMessage;
+    this.block.styleLengths = b.styleLengths;
+    this.block.data = b.data;
+    this.block.isBeingSelected = b.isBeingSelected;
+    this.block.isBeingEdited = b.isBeingEdited;
   };
 
   @action
@@ -145,11 +162,7 @@ export default class BlockStore {
       name === "secondSpray" ||
       name === "thirdSpray"
     ) {
-      this.block[name] = roundDate(
-        val,
-        moment.duration(60, "minutes"),
-        "floor"
-      );
+      this.block[name] = moment(val).startOf("hour");
     }
 
     if (name === "variety") {
@@ -189,15 +202,29 @@ export default class BlockStore {
     const block = { ...this.blocks[idx] };
     this.blocks.splice(idx, 1);
     this.writeToLocalStorage();
+    this.clearFields();
     message.success(`${block.name} block has been deleted!`);
   };
 
   @action
   editBlock = id => {
     console.log("edit");
-    const block = this.blocks.find(b => b.id === id);
-    block.isBeingEdited = true;
-    this.block = block;
+    const b = this.blocks.find(b => b.id === id);
+    this.block.id = b.id;
+    this.block.name = b.name;
+    this.block.variety = b.variety;
+    this.block.state = b.state;
+    this.block.station = b.station;
+    this.block.startDate = b.startDate;
+    this.block.firstSpray = b.firstSpray;
+    this.block.secondSpray = b.secondSpray;
+    this.block.thirdSpray = b.thirdSpray;
+    this.block.endDate = b.endDate;
+    this.block.isMessage = b.isMessage;
+    this.block.styleLengths = b.styleLengths;
+    this.block.data = b.data;
+    this.block.isBeingSelected = true;
+    this.block.isBeingEdited = b.isBeingEdited;
     this.showModal("isEditBlockModal");
   };
 
@@ -224,14 +251,21 @@ export default class BlockStore {
   @action
   updateBlock = () => {
     console.log("updateBlock");
+    this.isNewBlockModal = false;
+    this.isEditBlockModal = false;
     this.isDateModal = false;
     this.isSprayModal = false;
-    this.isEditBlockModal = false;
+    this.isStyleLengthModal = false;
     const block = { ...this.block };
-    const blocks = [...this.blocks];
+    // block.startDate = moment(block.startDate);
+    // block.firstSpray = moment(block.firstSpray);
+    // block.secondSpray = moment(block.secondSpray);
+    // block.thirdSpray = moment(block.thirdSpray);
+    // block.endDate = moment(block.endDate);
     block.isBeingEdited = false;
     block.styleLengths.forEach(sl => (sl.isEdit = false));
     const idx = this.blocks.findIndex(b => b.id === block.id);
+    const blocks = [...this.blocks];
     blocks.splice(idx, 1, new BlockModel(block));
     this.blocks = blocks;
     this.selectOneBlock(block.id);
@@ -339,13 +373,26 @@ export default class BlockStore {
 
   @action
   readFromLocalStorage = () => {
+    // console.log("readFromLocalStorage");
     const data = JSON.parse(
       window.localStorage.getItem("pollenTubeModelBlocks")
     );
     if (data) {
       this.blocks.clear();
       data.forEach(json => {
-        this.blocks.push(new BlockModel(json));
+        const block = { ...json };
+        block.startDate = block.startDate ? moment(block.startDate) : undefined;
+        block.firstSpray = block.firstSpray
+          ? moment(block.firstSpray)
+          : undefined;
+        block.secondSpray = block.secondSpray
+          ? moment(block.secondSpray)
+          : undefined;
+        block.thirdSpray = block.thirdSpray
+          ? moment(block.thirdSpray)
+          : undefined;
+        block.endDate = block.endDate ? moment(block.endDate) : undefined;
+        this.blocks.push(new BlockModel(block));
       });
     }
   };
