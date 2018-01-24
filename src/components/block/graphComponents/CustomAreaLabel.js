@@ -16,7 +16,7 @@ const CustomAreaLabel = props => {
           y={y}
           dy={-10}
           fill={isToday ? "black" : "#8c8c8c"}
-          fontSize={bpts.xs ? 9 : isToday ? 20 : 12}
+          fontSize={bpts.xs ? 9 : isToday ? 16 : 12}
           textAnchor="middle"
         >
           {value}%

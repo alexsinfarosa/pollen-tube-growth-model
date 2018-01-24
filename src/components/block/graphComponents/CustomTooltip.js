@@ -1,4 +1,5 @@
 import React from "react";
+import format from "date-fns/format";
 
 const CustomTooltip = props => {
   const { payload, unit } = props;
@@ -16,7 +17,7 @@ const CustomTooltip = props => {
         {obj && (
           <div>
             <div style={{ marginBottom: 8 }}>
-              <b>{obj.payload.date}</b>
+              <b>{format(obj.payload.date, "MMM DD HH:00")}</b>
             </div>
 
             <div style={{ color: obj.stroke }}>

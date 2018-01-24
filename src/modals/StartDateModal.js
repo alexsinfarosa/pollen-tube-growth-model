@@ -12,7 +12,7 @@ const StartDateModal = inject("app")(
     const margin = (width - 280 - 24) / 2;
 
     const disablePreviousSprayDates = (prev, curr) => {
-      if (curr) {
+      if (bl.startDate) {
         return curr.valueOf() < prev.valueOf() && curr;
       }
       return curr && curr.valueOf() > Date.now();
