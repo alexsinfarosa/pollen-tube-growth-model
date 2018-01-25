@@ -35,7 +35,7 @@ const CumulativeGrowthGraph = inject("app")(
           <ComposedChart
             syncId="ciccio"
             data={bl.modelDataUpTo100}
-            margin={{ top: 20, right: 20, left: -15, bottom: 20 }}
+            margin={{ top: 30, right: 20, left: -15, bottom: 15 }}
             style={{ background: "#fafafa", borderRadius: "5px" }}
           >
             <XAxis
@@ -69,7 +69,15 @@ const CumulativeGrowthGraph = inject("app")(
               }
               stroke="#8D6A9F"
               fill="#8D6A9F"
-              label={<CustomAreaLabel bl={bl} bpts={bpts} unit={"mm"} />}
+              label={
+                <CustomAreaLabel
+                  bl={bl}
+                  bpts={bpts}
+                  unit={"mm"}
+                  sIdx={bStore.startIndex}
+                  eIdx={bStore.endIndex}
+                />
+              }
             />
 
             <Area
@@ -81,7 +89,15 @@ const CumulativeGrowthGraph = inject("app")(
               }
               stroke="#CBBBD3"
               fill="#CBBBD3"
-              label={<CustomAreaLabel bl={bl} bpts={bpts} unit={"mm"} />}
+              label={
+                <CustomAreaLabel
+                  bl={bl}
+                  bpts={bpts}
+                  unit={"mm"}
+                  sIdx={bStore.startIndex}
+                  eIdx={bStore.endIndex}
+                />
+              }
             />
           </ComposedChart>
         </ResponsiveContainer>

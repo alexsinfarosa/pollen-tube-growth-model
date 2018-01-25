@@ -25,7 +25,7 @@ import { GraphWrapper } from "../../styles";
 
 const EmergenceGraph = inject("app")(
   observer(function EmergenceGraph({
-    app: { filteredBlocks },
+    app: { filteredBlocks, bStore },
     bl,
     breakpoints: bpts
   }) {
@@ -73,7 +73,15 @@ const EmergenceGraph = inject("app")(
               }
               stroke="#FFBC42"
               fill="#FFBC42"
-              label={<CustomAreaLabel bl={bl} bpts={bpts} unit={"%"} />}
+              label={
+                <CustomAreaLabel
+                  bl={bl}
+                  bpts={bpts}
+                  unit={"%"}
+                  sIdx={bStore.startIndex}
+                  eIdx={bStore.endIndex}
+                />
+              }
             />
             <Area
               type="monotone"
@@ -84,15 +92,25 @@ const EmergenceGraph = inject("app")(
               }
               stroke="#FFE0A9"
               fill="#FFE0A9"
-              label={<CustomAreaLabel bl={bl} bpts={bpts} unit={"%"} />}
+              label={
+                <CustomAreaLabel
+                  bl={bl}
+                  bpts={bpts}
+                  unit={"%"}
+                  sIdx={bStore.startIndex}
+                  eIdx={bStore.endIndex}
+                />
+              }
             />
             {filteredBlocks.length === 1 &&
               !bpts.xs && (
                 <Brush
-                  style={{ borderRadius: 10, marginTop: 5, paddingTop: 5 }}
+                  data={bl.modelDataUpTo100}
+                  style={{ borderRadius: 10 }}
                   stroke="#63A07F"
                   tickFormatter={x => bl.modelData[x].date}
                   height={bpts.xs ? 15 : 20}
+                  onChange={e => bStore.setRange(e)}
                 />
               )}
           </ComposedChart>

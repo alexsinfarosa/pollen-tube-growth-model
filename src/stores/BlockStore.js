@@ -350,6 +350,14 @@ export default class BlockStore {
     this.styleLength = undefined;
   };
 
+  @observable startIndex = 0;
+  @observable endIndex;
+  @action
+  setRange = ({ startIndex, endIndex }) => {
+    this.startIndex = startIndex;
+    this.endIndex = endIndex;
+  };
+
   // Local storage ----------------------------------------------------------------------
   @action
   writeToLocalStorage = () => {

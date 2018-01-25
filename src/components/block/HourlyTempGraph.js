@@ -30,7 +30,7 @@ const HourlyTempGraph = inject("app")(
           <LineChart
             syncId="ciccio"
             data={bl.modelDataUpTo100}
-            margin={{ top: 20, right: 20, left: -15, bottom: 20 }}
+            margin={{ top: 30, right: 20, left: -15, bottom: 15 }}
             style={{ background: "#fafafa", borderRadius: "5px" }}
           >
             <XAxis
@@ -59,7 +59,15 @@ const HourlyTempGraph = inject("app")(
               dataKey="Temperature"
               stroke="#63a07f"
               dot={false}
-              label={<CustomAreaLabel bl={bl} bpts={bpts} unit={"˚F"} />}
+              label={
+                <CustomAreaLabel
+                  bl={bl}
+                  bpts={bpts}
+                  unit={"˚F"}
+                  sIdx={bStore.startIndex}
+                  eIdx={bStore.endIndex}
+                />
+              }
             />
           </LineChart>
         </ResponsiveContainer>
