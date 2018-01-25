@@ -38,7 +38,7 @@ const Block = inject("app")(
             <SprayDateModal bl={bl} breakpoints={bpts} />
             <EditBlockModal bl={bl} breakpoints={bpts} />
             <StartDateModal bl={bl} breakpoints={bpts} />
-            <StyleLengthModal breakpoints={bpts} />
+            <StyleLengthModal bl={bl} breakpoints={bpts} />
 
             <BlockHeader bl={bl} breakpoints={bpts} />
 

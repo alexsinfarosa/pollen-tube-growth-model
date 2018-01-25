@@ -127,6 +127,7 @@ const EditBlockModal = inject("app")(
           <DatePicker
             name="startDate"
             showTime={{ format: "HH:00" }}
+            disabled={bl.startDate ? false : true}
             style={style}
             value={block.startDate ? moment(block.startDate) : undefined}
             allowClear={false}

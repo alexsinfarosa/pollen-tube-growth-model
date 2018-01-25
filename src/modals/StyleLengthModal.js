@@ -15,7 +15,7 @@ import {
 const RadioGroup = Radio.Group;
 
 const StyleLengthModal = inject("app")(
-  observer(function StyleLengthModal({ app: { bStore }, breakpoints }) {
+  observer(function StyleLengthModal({ app: { bStore }, breakpoints, bl }) {
     const {
       block,
       updateBlock,
@@ -88,8 +88,8 @@ const StyleLengthModal = inject("app")(
       );
     };
 
-    const average = block.avgStyleLength
-      ? `: ${block.avgStyleLength.toPrecision(4)} (mm)`
+    const average = bl.avgStyleLength
+      ? `: ${bl.avgStyleLength.toPrecision(4)} (mm)`
       : "";
 
     return (
@@ -180,7 +180,9 @@ const StyleLengthModal = inject("app")(
             </Col>
             <Col>
               <Table
-                rowClassName={record => (record.isEdit ? "selected" : null)}
+                rowClassName={record =>
+                  record.isEdit ? "table selected" : "table"
+                }
                 rowKey={record => record.idx}
                 loading={false}
                 dataSource={block.styleLengths.slice()}
