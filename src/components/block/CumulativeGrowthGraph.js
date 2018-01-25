@@ -29,8 +29,8 @@ const CumulativeGrowthGraph = inject("app")(
     breakpoints: bpts
   }) {
     return (
-      <GraphWrapper style={{ marginTop: 40 }}>
-        <h4>Cumulative Hourly Pollen Tube Growth (mm)</h4>
+      <GraphWrapper style={{ margin: "40px 0" }}>
+        <h4>Cumulative Hourly Pollen Tube Growth</h4>
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart
             syncId="ciccio"
@@ -50,7 +50,15 @@ const CumulativeGrowthGraph = inject("app")(
               tick={<CustomYLabel bpts={bpts} unit={"mm"} />}
             />
             <CartesianGrid strokeDasharray="3 3" vertical={false} />
-            <Tooltip content={<CustomTooltip unit={"mm"} />} />
+            <Tooltip
+              content={
+                <CustomTooltip
+                  unit={"mm"}
+                  name={"Cumulative HPTG"}
+                  val={"Cumulative Hourly Growth"}
+                />
+              }
+            />
             <Line dataKey="Average Style Length" stroke="#8D6A9F" dot={false} />
             <Area
               type="monotone"

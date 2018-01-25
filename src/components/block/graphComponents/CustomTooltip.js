@@ -1,8 +1,7 @@
 import React from "react";
 import format from "date-fns/format";
 
-const CustomTooltip = props => {
-  const { payload, unit } = props;
+const CustomTooltip = ({ payload, unit, name, val }) => {
   if (payload) {
     const obj = payload[0];
     return (
@@ -21,7 +20,7 @@ const CustomTooltip = props => {
             </div>
 
             <div style={{ color: obj.stroke }}>
-              Emergence: {obj.payload.Emergence}
+              {name}: {obj.payload[val]}
               {unit}
             </div>
           </div>

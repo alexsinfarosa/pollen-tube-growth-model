@@ -55,7 +55,15 @@ const EmergenceGraph = inject("app")(
               tick={<CustomYLabel bpts={bpts} unit={"%"} />}
             />
             <CartesianGrid strokeDasharray="3 3" vertical={false} />}
-            <Tooltip content={<CustomTooltip unit={"%"} />} />
+            <Tooltip
+              content={
+                <CustomTooltip
+                  unit={"%"}
+                  name={"Emergence"}
+                  val={"Emergence"}
+                />
+              }
+            />
             <Area
               type="monotone"
               dataKey={obj =>

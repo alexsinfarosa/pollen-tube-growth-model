@@ -25,7 +25,7 @@ const HourlyTempGraph = inject("app")(
   }) {
     return (
       <GraphWrapper>
-        <h4>Rounded Average Hourly Temperatures (˚F)</h4>
+        <h4>Rounded Average Hourly Temperatures</h4>
         <ResponsiveContainer width="100%" height="100%">
           <LineChart
             syncId="ciccio"
@@ -46,7 +46,15 @@ const HourlyTempGraph = inject("app")(
               tick={<CustomYLabel bpts={bpts} unit={"˚F"} />}
             />
             <CartesianGrid strokeDasharray="3 3" vertical={false} />
-            <Tooltip content={<CustomTooltip unit={"˚F"} />} />
+            <Tooltip
+              content={
+                <CustomTooltip
+                  unit={"˚F"}
+                  name={"RAH Temperature"}
+                  val={"Temperature"}
+                />
+              }
+            />
             <Line
               dataKey="Temperature"
               stroke="#63a07f"

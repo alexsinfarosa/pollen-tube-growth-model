@@ -19,7 +19,7 @@ const CustomAreaLabel = props => {
           fontSize={bpts.xs ? 9 : isToday ? 16 : 12}
           textAnchor="middle"
         >
-          {value}
+          {value === "Cumulative Hourly Growth" ? value.toPrecision(1) : value}
           {unit}
         </text>
         <circle
