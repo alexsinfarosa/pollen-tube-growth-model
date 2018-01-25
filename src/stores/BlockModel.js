@@ -90,11 +90,9 @@ export default class BlockModel {
   @computed
   get lastSelectableDate() {
     if (this.countDates === 0 || this.countDates === 1) {
-      console.log(this.startDate);
       return this.startDate;
     }
     if (this.countDates > 1) {
-      console.log(this.dates[this.dates.length - 1]);
       return this.dates[this.dates.length - 1];
     }
   }

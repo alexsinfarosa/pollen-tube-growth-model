@@ -48,10 +48,11 @@ export default class BlockStore {
 
   @computed
   get now() {
-    if (moment().diff(this.block.endDate) < 0) {
+    const endDate = moment(`${moment().year()}-07-01 23:00`);
+    if (endDate.isAfter(moment())) {
       return moment().startOf("hour");
     }
-    return this.block.endDate;
+    return endDate;
   }
 
   // style length
@@ -109,13 +110,15 @@ export default class BlockStore {
   @action
   toggleIsMessage = id => {
     const block = this.blocks.find(b => b.id === id);
-    this.block = block;
-    this.block.isMessage = !this.block.isMessage;
-    this.updateBlock();
+    block.isMessage = !block.isMessage;
+    const idx = this.blocks.findIndex(b => b.id === block.id);
+    this.blocks.splice(idx, 1, new BlockModel(block));
+    this.writeToLocalStorage();
   };
 
   @action
   selectBlock = (name, id) => {
+    this.selectOneBlock(id);
     this.showModal(name);
     const b = this.blocks.find(b => b.id === id);
     this.block.id = b.id;
@@ -195,6 +198,7 @@ export default class BlockStore {
   @action
   editBlock = id => {
     console.log("edit");
+    this.selectOneBlock(id);
     const b = this.blocks.find(b => b.id === id);
     this.block.id = b.id;
     this.block.name = b.name;
@@ -270,7 +274,6 @@ export default class BlockStore {
 
   @action
   selectAllBlocks = () => {
-    this.isMap = false;
     const areAllBlocksDisplayed = this.blocks.every(bl => bl.isBeingSelected);
     areAllBlocksDisplayed
       ? this.blocks.forEach(bl => (bl.isBeingSelected = false))

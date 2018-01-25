@@ -24,7 +24,11 @@ import StyleLengthModal from "modals/StyleLengthModal";
 import { Spin } from "antd";
 
 const Block = inject("app")(
-  observer(function Block({ app: { bpts, bStore }, bl, breakpoints }) {
+  observer(function Block({
+    app: { filteredBlocks, bpts, bStore },
+    bl,
+    breakpoints
+  }) {
     return (
       <BlockWrapper>
         {bStore.isLoading ? (
@@ -43,7 +47,9 @@ const Block = inject("app")(
                 {bl.isMessage && <Message bl={bl} breakpoints={bpts} />}
                 {bl.modelData && <EmergenceGraph bl={bl} breakpoints={bpts} />}
 
-                <ControlButtons bl={bl} breakpoints={bpts} />
+                {filteredBlocks.length === 1 && (
+                  <ControlButtons bl={bl} breakpoints={bpts} />
+                )}
 
                 {bStore.isMap && <USMap bl={bl} breakpoints={bpts} />}
                 {bStore.isTable && <GrowthTable bl={bl} />}

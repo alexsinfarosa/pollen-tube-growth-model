@@ -4,6 +4,7 @@ import { inject, observer } from "mobx-react";
 import CustomXLabel from "./graphComponents/CustomXLabel";
 import CustomYLabel from "./graphComponents/CustomYLabel";
 import CustomTooltip from "./graphComponents/CustomTooltip";
+import CustomAreaLabel from "./graphComponents/CustomAreaLabel";
 
 import {
   LineChart,
@@ -46,7 +47,12 @@ const HourlyTempGraph = inject("app")(
             />
             <CartesianGrid strokeDasharray="3 3" vertical={false} />
             <Tooltip content={<CustomTooltip unit={"˚F"} />} />
-            <Line dataKey="Temperature" stroke="#63a07f" dot={false} />
+            <Line
+              dataKey="Temperature"
+              stroke="#63a07f"
+              dot={false}
+              label={<CustomAreaLabel bl={bl} bpts={bpts} unit={"˚F"} />}
+            />
           </LineChart>
         </ResponsiveContainer>
       </GraphWrapper>
