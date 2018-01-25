@@ -26,7 +26,7 @@ const CustomAreaLabel = props => {
           className={isToday ? "pulse" : null}
           cx={x}
           cy={y}
-          r={isToday ? "14" : "3"}
+          r={isToday ? "16" : "3"}
           stroke={"#8c8c8c"}
           fill={"#8c8c8c"}
         />
