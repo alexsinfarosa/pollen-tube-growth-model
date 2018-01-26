@@ -1,10 +1,12 @@
-import { observable } from "mobx";
+import { observable, when, reaction, computed, action } from "mobx";
 import SubjectStore from "./SubjectStore";
 import StateStore from "./StateStore";
 import StationStore from "./StationStore";
 import BlockStore from "./BlockStore";
-
-// import format from "date-fns/format";
+import moment from "moment";
+// utils
+import { dailyToHourlyDates } from "utils/utils";
+import { loadACISData } from "utils/cleanFetchedData";
 
 export default class AppStore {
   fetch;
@@ -19,7 +21,33 @@ export default class AppStore {
     this.acisStates = new StateStore(this);
     this.acisStations = new StationStore(this);
     this.blockStore = new BlockStore(this);
+
+    when(() => this.acisStations.stations.length !== 0, () => this.loadData());
   }
+
+  @computed
+  get listOfStationsToFetch() {
+    const stationList = [...new Set(this.blocks.map(bl => bl.station.name))];
+    return stationList.map(name => this.stations.find(s => s.name === name));
+  }
+
+  @action
+  loadData = () => {
+    console.log("loadData");
+    this.listOfStationsToFetch.forEach(station => {
+      // CHANGE THIS...........................................................
+      const startSeason = moment(`${moment().year()}-01-01`);
+      loadACISData(station, startSeason, new Date()).then(res => {
+        this.blocks.forEach(block => {
+          if (block.station.id === station.id) {
+            block.data = dailyToHourlyDates(
+              Array.from(res.get("cStationClean"))
+            );
+          }
+        });
+      });
+    });
+  };
 
   get apples() {
     return this.subject.subjects;

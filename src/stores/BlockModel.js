@@ -1,7 +1,6 @@
 import { observable, computed } from "mobx";
 
 import moment from "moment";
-import getHours from "date-fns/get_hours";
 import format from "date-fns/format";
 import isEqual from "date-fns/is_equal";
 
@@ -68,6 +67,12 @@ export default class BlockModel {
   }
 
   @computed
+  get startOfSeason() {
+    // CHANGE THIS...........................................................
+    return moment(`${moment().year()}-01-01 00:00`);
+  }
+
+  @computed
   get now() {
     return moment().startOf("hour");
   }
@@ -107,7 +112,7 @@ export default class BlockModel {
 
   @computed
   get todayIdx() {
-    if (this.modelData) {
+    if (this.modelData.length !== 0) {
       return this.modelData.findIndex(obj =>
         isEqual(new Date(obj.date), new Date(this.now))
       );
@@ -116,28 +121,28 @@ export default class BlockModel {
 
   @computed
   get todayEmergence() {
-    if (this.modelData) {
+    if (this.modelData.length !== 0) {
       return this.modelData[this.todayIdx]["Emergence"];
     }
   }
 
   @computed
   get lastDayIdx() {
-    if (this.modelData) {
+    if (this.modelData.length !== 0) {
       return this.modelData.length - 1;
     }
   }
 
   @computed
   get lastDayEmergence() {
-    if (this.modelData) {
+    if (this.modelData.length !== 0) {
       return this.modelData[this.modelData.length - 1]["Emergence"];
     }
   }
 
   @computed
   get lastDate() {
-    if (this.modelData) {
+    if (this.modelData.length !== 0) {
       return this.modelData[this.modelData.length - 1].date;
     }
   }
@@ -191,8 +196,9 @@ export default class BlockModel {
   get modelData() {
     if (this.data.length !== 0) {
       if (this.startDate && this.avgStyleLength) {
-        const startHour = getHours(this.startDate);
-        const data = this.data.slice(startHour);
+        const a = moment(this.startDate);
+        const b = moment(this.startOfSeason);
+        const data = this.data.slice(Math.abs(a.diff(b, "hours")));
 
         // let cumulativeHrGrowth = 0;
         // let percentage = 0;
