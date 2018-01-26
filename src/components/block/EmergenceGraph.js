@@ -33,7 +33,7 @@ const EmergenceGraph = inject("app")(
       <GraphWrapper>
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart
-            syncId="ciccio"
+            syncId={filteredBlocks.length === 1 && !bpts.xs ? "ciccio" : null}
             data={bl.modelDataUpTo100}
             margin={{
               top: bpts.xs ? 20 : 30,
@@ -48,6 +48,7 @@ const EmergenceGraph = inject("app")(
               interval="preserveStart"
               axisLine={false}
               tick={<CustomXLabel bpts={bpts} />}
+              padding={{ left: 5, right: 5 }}
             />
             <YAxis
               hide={false}
@@ -106,7 +107,6 @@ const EmergenceGraph = inject("app")(
               !bpts.xs && (
                 <Brush
                   data={bl.modelDataUpTo100}
-                  style={{ borderRadius: 10 }}
                   stroke="#63A07F"
                   tickFormatter={x => bl.modelData[x].date}
                   height={bpts.xs ? 15 : 20}

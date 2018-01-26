@@ -388,6 +388,7 @@ export default class BlockStore {
           ? moment(block.thirdSpray)
           : undefined;
         block.endDate = block.endDate ? moment(block.endDate) : undefined;
+        block.isBeingSelected = true;
         this.blocks.push(new BlockModel(block));
       });
     }
