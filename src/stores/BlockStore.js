@@ -220,10 +220,10 @@ export default class BlockStore {
 
   fetchAndUploadData = () => {
     console.log("fetchAndUploadData");
-    this.isLoading = true;
     const block = { ...this.block };
     const blocks = [...this.blocks];
 
+    this.isLoading = true;
     loadACISData(block.station, block.startDate, this.now).then(res => {
       block.data = dailyToHourlyDates(Array.from(res.get("cStationClean")));
       const idx = this.blocks.findIndex(b => b.id === block.id);
@@ -232,24 +232,14 @@ export default class BlockStore {
       this.selectOneBlock(block.id);
       this.writeToLocalStorage();
       this.clearFields();
-      this.isNewBlockModal = false;
-      this.isEditBlockModal = false;
-      this.isDateModal = false;
-      this.isSprayModal = false;
-      this.isStyleLengthModal = false;
-      this.isLoading = false;
       message.success(`${block.name} block has been updated!`);
     });
+    this.isLoading = false;
   };
 
   @action
   updateBlock = () => {
     console.log("updateBlock");
-    this.isNewBlockModal = false;
-    this.isEditBlockModal = false;
-    this.isDateModal = false;
-    this.isSprayModal = false;
-    this.isStyleLengthModal = false;
     const block = { ...this.block };
     block.isBeingEdited = false;
     block.styleLengths.forEach(sl => (sl.isEdit = false));
@@ -375,21 +365,19 @@ export default class BlockStore {
     );
     if (data) {
       this.blocks.clear();
-      data.forEach(json => {
-        const block = { ...json };
-        block.startDate = block.startDate ? moment(block.startDate) : undefined;
-        block.firstSpray = block.firstSpray
-          ? moment(block.firstSpray)
-          : undefined;
-        block.secondSpray = block.secondSpray
-          ? moment(block.secondSpray)
-          : undefined;
-        block.thirdSpray = block.thirdSpray
-          ? moment(block.thirdSpray)
-          : undefined;
-        block.endDate = block.endDate ? moment(block.endDate) : undefined;
-        block.isBeingSelected = true;
-        this.blocks.push(new BlockModel(block));
+      data.forEach(jsonBlock => {
+        const b = { ...jsonBlock };
+        console.log(b.startOfSeason);
+        loadACISData(b.station, b.startDate, new Date()).then(res => {
+          b.data = dailyToHourlyDates(Array.from(res.get("cStationClean")));
+        });
+        b.startDate = b.startDate ? moment(b.startDate) : undefined;
+        b.firstSpray = b.firstSpray ? moment(b.firstSpray) : undefined;
+        b.secondSpray = b.secondSpray ? moment(b.secondSpray) : undefined;
+        b.thirdSpray = b.thirdSpray ? moment(b.thirdSpray) : undefined;
+        b.endDate = b.endDate ? moment(b.endDate) : undefined;
+        b.isBeingSelected = true;
+        this.blocks.push(new BlockModel(b));
       });
     }
   };

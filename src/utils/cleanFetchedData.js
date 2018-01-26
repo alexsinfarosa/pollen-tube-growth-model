@@ -20,7 +20,7 @@ export const loadACISData = (station, seasonStartDate, selectedDate) => {
       );
 
       if (isThisYear(selectedDate)) {
-        console.log("FORECAST DATA");
+        // console.log("FORECAST DATA");
         // if year of selectedDate is current year, replace missing values with forecast
         cStationTempsReplaced = cStationTemps.map(
           (t, i) => (t === "M" ? forecast.get(date)[i] : t)

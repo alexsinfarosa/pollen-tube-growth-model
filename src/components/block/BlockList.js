@@ -5,9 +5,9 @@ import Block from "components/block/Block";
 
 const BlockList = inject("app")(
   observer(function BlockList({ app: { bpts, filteredBlocks } }) {
-    const blockList = filteredBlocks.map(el => {
-      console.log(el);
-      return <Block key={el.id} bl={el} breakpoints={bpts} />;
+    const blockList = filteredBlocks.map(block => {
+      console.log(block);
+      return <Block key={block.id} bl={block} breakpoints={bpts} />;
     });
 
     return <div>{blockList}</div>;

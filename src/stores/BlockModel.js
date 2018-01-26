@@ -3,6 +3,7 @@ import { observable, computed } from "mobx";
 import moment from "moment";
 import format from "date-fns/format";
 import isEqual from "date-fns/is_equal";
+import getHours from "date-fns/get_hours";
 
 export default class BlockModel {
   id;
@@ -196,9 +197,12 @@ export default class BlockModel {
   get modelData() {
     if (this.data.length !== 0) {
       if (this.startDate && this.avgStyleLength) {
-        const a = moment(this.startDate);
-        const b = moment(this.startOfSeason);
-        const data = this.data.slice(Math.abs(a.diff(b, "hours")));
+        // const a = moment(this.startDate);
+        // const b = moment(this.startOfSeason);
+        // const data = this.data.slice(Math.abs(a.diff(b, "hours")));
+
+        const startHour = getHours(this.startDate);
+        const data = this.data.slice(startHour);
 
         // let cumulativeHrGrowth = 0;
         // let percentage = 0;
