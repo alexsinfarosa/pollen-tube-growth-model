@@ -75,7 +75,11 @@ export default class BlockModel {
 
   @computed
   get now() {
-    return moment().startOf("hour");
+    const endDate = moment(`${moment(this.startDate).year()}-07-01 23:00`);
+    if (endDate.isAfter(moment())) {
+      return moment().startOf("hour");
+    }
+    return endDate;
   }
 
   @computed
@@ -123,6 +127,7 @@ export default class BlockModel {
   @computed
   get todayEmergence() {
     if (this.modelData.length !== 0) {
+      console.log(this.todayIdx);
       return this.modelData[this.todayIdx]["Emergence"];
     }
   }
@@ -214,9 +219,11 @@ export default class BlockModel {
           const { date, temp } = arr;
           const { hrGrowth, temps } = this.variety;
 
-          const idx = temps.findIndex(t => t.toString() === temp);
-          let hourlyGrowth = hrGrowth[idx];
-          if (temp < 35 || temp > 106 || temp === "M") hourlyGrowth = 0;
+          let hourlyGrowth = 0;
+          if (temp > 34 && temp < 106 && temp !== "M") {
+            const idx = temps.findIndex(t => t.toString() === temp);
+            hourlyGrowth = hrGrowth[idx];
+          }
 
           const isOneOfTheDates = this.dates.some(d => isEqual(date, d));
           if (isOneOfTheDates) {

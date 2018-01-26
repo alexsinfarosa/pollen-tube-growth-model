@@ -48,7 +48,10 @@ export default class BlockStore {
 
   @computed
   get now() {
-    const endDate = moment(`${moment().year()}-07-01 23:00`);
+    const endDate = moment(
+      `${moment(this.block.startDate).year()}-07-01 23:00`
+    );
+
     if (endDate.isAfter(moment())) {
       return moment().startOf("hour");
     }
@@ -74,7 +77,7 @@ export default class BlockStore {
     firstSpray: undefined,
     secondSpray: undefined,
     thirdSpray: undefined,
-    endDate: moment(`${moment().year()}-07-01 23:00`),
+    endDate: undefined,
     isMessage: true,
     styleLengths: [],
     data: [],
@@ -145,13 +148,16 @@ export default class BlockStore {
     }
 
     if (
-      name === "startDate" ||
       name === "firstSpray" ||
       name === "secondSpray" ||
-      name === "thirdSpray" ||
-      name === "endDate"
+      name === "thirdSpray"
     ) {
       this.block[name] = moment(val).startOf("hour");
+    }
+
+    if (name === "startDate") {
+      this.block["startDate"] = moment(val).startOf("hour");
+      this.block["endDate"] = moment(`${moment(val).year()}-07-01 23:00`);
     }
 
     if (name === "variety") {
@@ -222,7 +228,11 @@ export default class BlockStore {
     console.log("fetchAndUploadData");
     const block = { ...this.block };
     const blocks = [...this.blocks];
-
+    this.isEditBlockModal = false;
+    this.isDateModal = false;
+    this.isSprayModal = false;
+    this.isStyleLengthModal = false;
+    this.isMap = false;
     this.isLoading = true;
     loadACISData(block.station, block.startDate, this.now).then(res => {
       block.data = dailyToHourlyDates(Array.from(res.get("cStationClean")));
@@ -250,6 +260,12 @@ export default class BlockStore {
     this.selectOneBlock(block.id);
     this.writeToLocalStorage();
     this.clearFields();
+    this.isNewBlockModal = false;
+    this.isEditBlockModal = false;
+    this.isDateModal = false;
+    this.isSprayModal = false;
+    this.isStyleLengthModal = false;
+    this.isMap = false;
     message.success(`${block.name} block has been updated!`);
   };
 
@@ -367,10 +383,11 @@ export default class BlockStore {
       this.blocks.clear();
       data.forEach(jsonBlock => {
         const b = { ...jsonBlock };
-        console.log(b.startOfSeason);
-        loadACISData(b.station, b.startDate, new Date()).then(res => {
-          b.data = dailyToHourlyDates(Array.from(res.get("cStationClean")));
-        });
+        if (b.startDate) {
+          loadACISData(b.station, b.startDate, this.now).then(res => {
+            b.data = dailyToHourlyDates(Array.from(res.get("cStationClean")));
+          });
+        }
         b.startDate = b.startDate ? moment(b.startDate) : undefined;
         b.firstSpray = b.firstSpray ? moment(b.firstSpray) : undefined;
         b.secondSpray = b.secondSpray ? moment(b.secondSpray) : undefined;

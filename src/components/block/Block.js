@@ -20,7 +20,6 @@ import EditBlockModal from "modals/EditBlockModal";
 import SprayDateModal from "modals/SprayDateModal";
 import StartDateModal from "modals/StartDateModal";
 import StyleLengthModal from "modals/StyleLengthModal";
-
 import { Spin } from "antd";
 
 const Block = inject("app")(
