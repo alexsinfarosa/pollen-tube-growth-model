@@ -14,6 +14,7 @@ import GrowthTable from "./GrowthTable";
 import CumulativeGrowthGraph from "./CumulativeGrowthGraph";
 import HourlyTempGraph from "./HourlyTempGraph";
 import Message from "./Message";
+import BlockSteps from "./BlockSteps";
 
 // Modals
 import EditBlockModal from "modals/EditBlockModal";
@@ -43,20 +44,24 @@ const Block = inject("app")(
 
             {bl.startDate && bl.avgStyleLength ? (
               <div>
-                {bl.isMessage && <Message bl={bl} breakpoints={bpts} />}
-                {bl.modelData && <EmergenceGraph bl={bl} breakpoints={bpts} />}
-
-                {filteredBlocks.length === 1 && (
-                  <ControlButtons bl={bl} breakpoints={bpts} />
-                )}
-
-                {bStore.isMap && <USMap bl={bl} breakpoints={bpts} />}
-                {bStore.isTable && <GrowthTable bl={bl} />}
-                {bStore.isGraph && (
-                  <HourlyTempGraph bl={bl} breakpoints={bpts} />
-                )}
-                {bStore.isGraph && (
-                  <CumulativeGrowthGraph bl={bl} breakpoints={bpts} />
+                {filteredBlocks.length === 1 ? (
+                  <div>
+                    {bl.isMessage && <Message bl={bl} breakpoints={bpts} />}
+                    {bl.modelData && (
+                      <EmergenceGraph bl={bl} breakpoints={bpts} />
+                    )}
+                    <ControlButtons bl={bl} breakpoints={bpts} />
+                    {bStore.isMap && <USMap bl={bl} breakpoints={bpts} />}
+                    {bStore.isTable && <GrowthTable bl={bl} />}
+                    {bStore.isGraph && (
+                      <HourlyTempGraph bl={bl} breakpoints={bpts} />
+                    )}
+                    {bStore.isGraph && (
+                      <CumulativeGrowthGraph bl={bl} breakpoints={bpts} />
+                    )}
+                  </div>
+                ) : (
+                  <BlockSteps bl={bl} breakpoints={bpts} />
                 )}
               </div>
             ) : (

@@ -4,6 +4,7 @@ import moment from "moment";
 import format from "date-fns/format";
 import isEqual from "date-fns/is_equal";
 import getHours from "date-fns/get_hours";
+import isThisYear from "date-fns/is_this_year";
 
 export default class BlockModel {
   id;
@@ -90,6 +91,48 @@ export default class BlockModel {
       this.secondSpray,
       this.thirdSpray
     ].filter(date => date);
+  }
+
+  @computed
+  get stepDates() {
+    let results = [];
+    console.log(this.datesIdxForGraph);
+    this.datesIdxForGraph.map(i => console.log(this.modelData[i].date));
+
+    this.dates.forEach((date, i) => {
+      let status = "wait";
+      if (i === this.dates.length - 1) status = "finish";
+      let name = "";
+      if (i === 0) name = "Start Date";
+      if (i === 1) name = "First Spray";
+      if (i === 2) name = "Second Spray";
+      if (i === 3) name = "Third Spray";
+      results.push({
+        name,
+        date,
+        status,
+        emergence: this.modelData[this.datesIdxForGraph[i]].Emergence
+      });
+    });
+
+    const today = {
+      name: "Today",
+      date: this.now,
+      status: "finish",
+      emergence: this.todayEmergence
+    };
+
+    if (isThisYear(this.now)) {
+      const forecast = {
+        name: "Forecast",
+        date: this.dateAtThreshold,
+        status: "finish",
+        emergence: this.modelData[this.idxAtThreshold].Emergence
+      };
+      return [...results, today, forecast];
+    }
+
+    return [...results, today];
   }
 
   @computed
@@ -229,6 +272,7 @@ export default class BlockModel {
           if (isOneOfTheDates) {
             cumulativeHrGrowthPartial = 0;
             percentagePartial = 0;
+            hourlyGrowth = 0;
           }
 
           cumulativeHrGrowthPartial += hourlyGrowth;
