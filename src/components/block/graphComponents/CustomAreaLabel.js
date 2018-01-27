@@ -9,6 +9,7 @@ const CustomAreaLabel = props => {
     new Date(bl.modelData[bl.todayIdx].date),
     new Date(bl.modelData[index + sIdx].date)
   );
+  // console.log(value);
   if (isEmergence && x !== null && y !== null) {
     return (
       <g>
@@ -20,7 +21,7 @@ const CustomAreaLabel = props => {
           fontSize={bpts.xs ? 9 : isToday ? 16 : 12}
           textAnchor="middle"
         >
-          {value === "Cumulative Hourly Growth" ? value.toPrecision(1) : value}
+          {unit === "mm" ? value.toPrecision(2) : value}
           {unit}
         </text>
         <circle

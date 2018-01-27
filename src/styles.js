@@ -180,7 +180,7 @@ export const BHeader = styled.div`
   color: #fff;
   padding: 8px 16px;
   border-radius: 4px;
-  margin-bottom: ${margin};
+  margin-bottom: 8px;
   font-size: 12px;
 
   @media (min-width: ${sm}) {
@@ -224,12 +224,20 @@ export const GraphWrapper = styled.div`
 
 export const MessageWrap = styled.div`
   font-size: 0.6rem;
+  margin-bottom: ${margin};
 
   @media (min-width: ${sm}) {
     font-size: 0.8rem;
+    margin-bottom: ${margin};
   }
 
   @media (min-width: ${md}) {
     font-size: 0.8rem;
+    margin-bottom: ${margin};
+  }
+
+  @media (min-width: ${lg}) {
+    font-size: 0.8rem;
+    margin-bottom: ${margin};
   }
 `;

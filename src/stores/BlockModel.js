@@ -96,9 +96,6 @@ export default class BlockModel {
   @computed
   get stepDates() {
     let results = [];
-    console.log(this.datesIdxForGraph);
-    this.datesIdxForGraph.map(i => console.log(this.modelData[i].date));
-
     this.dates.forEach((date, i) => {
       let status = "wait";
       if (i === this.dates.length - 1) status = "finish";
@@ -170,7 +167,6 @@ export default class BlockModel {
   @computed
   get todayEmergence() {
     if (this.modelData.length !== 0) {
-      console.log(this.todayIdx);
       return this.modelData[this.todayIdx]["Emergence"];
     }
   }
@@ -203,7 +199,7 @@ export default class BlockModel {
       let thold = 100;
       if (thold !== 80) {
         while (emergValues.lastIndexOf(thold) === -1) {
-          console.log("while loop");
+          // console.log("while loop");
           thold--;
         }
       }

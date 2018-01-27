@@ -45,7 +45,7 @@ const Message = props => {
     );
   }
 
-  if (count > 3) return null;
+  if (count === 0 || count > 3) return null;
 };
 
 export default Message;

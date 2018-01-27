@@ -1,7 +1,7 @@
 import React from "react";
 import { inject, observer } from "mobx-react";
 
-import { Steps, Popover, Icon } from "antd";
+import { Steps } from "antd";
 import format from "date-fns/format";
 import isEqual from "date-fns/is_equal";
 
@@ -56,6 +56,7 @@ const BlockSteps = inject("app")(
         direction={bpts.xs ? "vertical" : "horizontal"}
         size={bpts.xs ? "small" : "default"}
         current={99}
+        // style={{ background: "orange" }}
         // progressDot={customDot}
       >
         {BlockStep}

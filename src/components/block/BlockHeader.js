@@ -37,42 +37,40 @@ const BlockHeader = inject("app")(
           )}
           <Col>
             <Row type="flex" justify="space-between">
-              {bl.avgStyleLength &&
-                bl.startDate && (
-                  <Col>
-                    <Tooltip
-                      title={bl.isMessage ? "Hide Message" : "Display Message"}
-                    >
-                      <a style={{ color: "white" }}>
-                        <Icon
-                          style={{ marginRight: 4 }}
-                          onClick={() => bStore.toggleIsMessage(bl.id)}
-                          type={bl.isMessage ? "info-circle" : "info-circle-o"}
-                        />
-                      </a>
-                    </Tooltip>
-                  </Col>
-                )}
-              {bl.avgStyleLength &&
-                bl.startDate && (
-                  <Col>
-                    <Divider type="vertical" />
-                  </Col>
-                )}
+              <Col>
+                <Tooltip
+                  title={bl.isMessage ? "Hide Message" : "Display Message"}
+                >
+                  <a style={{ color: "white" }}>
+                    <Icon
+                      style={{ marginRight: 3 }}
+                      onClick={() => bStore.toggleIsMessage(bl.id)}
+                      type={bl.isMessage ? "info-circle" : "info-circle-o"}
+                    />
+                  </a>
+                </Tooltip>
+              </Col>
+
+              <Col>
+                <Divider type="vertical" />
+              </Col>
+
               <Col>
                 <Tooltip title="Edit block">
                   <a style={{ color: "white" }}>
                     <Icon
                       type="edit"
-                      style={{ marginRight: 4 }}
+                      style={{ marginRight: 3 }}
                       onClick={() => editBlock(bl.id)}
                     />
                   </a>
                 </Tooltip>
               </Col>
+
               <Col>
                 <Divider type="vertical" />
               </Col>
+
               <Col>
                 <Popconfirm
                   placement="left"
