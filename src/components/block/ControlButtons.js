@@ -23,7 +23,7 @@ const ControlButtons = inject("app")(
               icon={"calendar"}
               type="primary"
               shape={bpts.md ? null : "circle"}
-              size={bpts.xs ? "small" : "default"}
+              size={bpts.xs ? "default" : "default"}
               ghost={true}
               onClick={() => bStore.selectBlock("isDateModal", bl.id)}
             >
@@ -36,7 +36,7 @@ const ControlButtons = inject("app")(
             icon={false ? "loading" : "table"}
             type="primary"
             shape={bpts.md ? null : "circle"}
-            size={bpts.xs ? "small" : "default"}
+            size={bpts.xs ? "default" : "default"}
             ghost={bStore.isTable ? false : true}
             onClick={bStore.toggleTable}
           >
@@ -48,7 +48,7 @@ const ControlButtons = inject("app")(
             icon={"dot-chart"}
             type="primary"
             shape={bpts.md ? null : "circle"}
-            size={bpts.xs ? "small" : "default"}
+            size={bpts.xs ? "default" : "default"}
             ghost={bStore.isGraph ? false : true}
             onClick={bStore.toggleGraph}
           >
@@ -60,7 +60,7 @@ const ControlButtons = inject("app")(
             icon={"environment-o"}
             type="primary"
             shape={bpts.md ? null : "circle"}
-            size={bpts.xs ? "small" : "default"}
+            size={bpts.xs ? "default" : "default"}
             ghost={bStore.isMap ? false : true}
             onClick={bStore.toggleMap}
           >
