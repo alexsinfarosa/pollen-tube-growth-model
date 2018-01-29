@@ -1,12 +1,6 @@
 import React from "react";
 import { inject, observer } from "mobx-react";
 
-import isAfter from "date-fns/is_after";
-import isBefore from "date-fns/is_before";
-import addHours from "date-fns/add_hours";
-import subHours from "date-fns/sub_hours";
-import moment from "moment";
-
 import CustomXLabel from "./graphComponents/CustomXLabel";
 import CustomYLabel from "./graphComponents/CustomYLabel";
 import CustomTooltip from "./graphComponents/CustomTooltip";
@@ -18,7 +12,6 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  Brush,
   ComposedChart,
   Area
 } from "recharts";

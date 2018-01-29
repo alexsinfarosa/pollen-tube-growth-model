@@ -7,7 +7,7 @@ const Step = Steps.Step;
 const Instructions = inject("app")(
   observer(function Instructions({ app }) {
     return (
-      <Row style={{ maxWidth: 700, margin: "32px auto" }}>
+      <Row style={{ maxWidth: 700, margin: "16px auto" }}>
         <Col>
           <p>
             <b>The pollen tube growth model (PTGM)</b> was developed at Virginia

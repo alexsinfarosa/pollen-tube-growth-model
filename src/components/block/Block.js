@@ -21,13 +21,13 @@ import EditBlockModal from "modals/EditBlockModal";
 import SprayDateModal from "modals/SprayDateModal";
 import StartDateModal from "modals/StartDateModal";
 import StyleLengthModal from "modals/StyleLengthModal";
-import { Spin } from "antd";
+import { Spin, Progress } from "antd";
 
 const Block = inject("app")(
   observer(function Block({
-    app: { filteredBlocks, bpts, bStore },
+    app: { filteredBlocks, bStore },
     bl,
-    breakpoints
+    breakpoints: bpts
   }) {
     return (
       <BlockWrapper>
@@ -61,7 +61,29 @@ const Block = inject("app")(
                     )}
                   </div>
                 ) : (
-                  <BlockSteps bl={bl} breakpoints={bpts} />
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center"
+                    }}
+                  >
+                    <BlockSteps bl={bl} breakpoints={bpts} />
+                    {bpts.xs && (
+                      <div
+                        style={{
+                          textAlign: "center",
+                          width: "100%"
+                        }}
+                      >
+                        <Progress
+                          type="circle"
+                          percent={bl.todayEmergence}
+                          width={80}
+                        />
+                      </div>
+                    )}
+                  </div>
                 )}
               </div>
             ) : (

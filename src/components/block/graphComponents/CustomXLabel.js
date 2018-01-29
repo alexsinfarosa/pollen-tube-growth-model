@@ -9,7 +9,7 @@ const CustomXLabel = props => {
         x={0}
         y={0}
         dy={12}
-        fontSize={bpts.xs ? 8 : 11}
+        fontSize={bpts.xs ? 10 : 11}
         textAnchor="middle"
         fill="#666"
         transform="rotate(-10)"

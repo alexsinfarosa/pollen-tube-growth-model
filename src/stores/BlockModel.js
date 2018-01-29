@@ -1,9 +1,6 @@
 import { observable, computed } from "mobx";
 
 import moment from "moment";
-// import format from "date-fns/format";
-import isEqual from "date-fns/is_equal";
-import isAfter from "date-fns/is_after";
 import getHours from "date-fns/get_hours";
 import isThisYear from "date-fns/is_this_year";
 
@@ -138,11 +135,8 @@ export default class BlockModel {
         }
 
         if (moment(date).isSame(moment(this.startDate))) name = "Start";
-
         if (moment(date).isSame(moment(this.firstSpray))) name = "1st Spray";
-
         if (moment(date).isSame(moment(this.secondSpray))) name = "2nd Spray";
-
         if (moment(date).isSame(moment(this.thirdSpray))) name = "3rd Spray";
 
         cumulativeHrGrowth += hourlyGrowth;
@@ -184,32 +178,12 @@ export default class BlockModel {
       let thold = 100;
       if (thold !== 80) {
         while (emergValues.lastIndexOf(thold) === -1) {
-          // console.log("while loop");
           thold--;
         }
       }
       return emergValues.lastIndexOf(thold);
     }
   }
-
-  // @computed
-  // get dateAtThreshold() {
-  //   return this.preData[this.idxAtThreshold].date;
-  // }
-
-  // @computed
-  // get datesWithTodayAndForecast() {
-  //   return [
-  //     this.startDate,
-  //     this.firstSpray,
-  //     this.secondSpray,
-  //     this.thirdSpray,
-  //     this.now,
-  //     this.dateAtThreshold
-  //   ]
-  //     .filter(res => res)
-  //     .map(d => moment(d).valueOf());
-  // }
 
   @computed
   get modelData() {
@@ -219,7 +193,7 @@ export default class BlockModel {
           obj.isSelected = true;
           obj.name = "Forecast";
         }
-        if (obj.date) return obj;
+        return obj;
       });
     }
   }

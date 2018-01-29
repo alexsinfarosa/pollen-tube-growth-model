@@ -9,7 +9,7 @@ const CustomYLabel = props => {
         y={y}
         dy={bpts.xs ? 2 : 5}
         dx={bpts.xs ? -8 : -15}
-        fontSize={bpts.xs ? 8 : 11}
+        fontSize={bpts.xs ? 10 : 11}
         textAnchor="middle"
         fill="#666"
       >

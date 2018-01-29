@@ -2,7 +2,7 @@ import React from "react";
 import isEqual from "date-fns/is_equal";
 
 const CustomAreaLabel = props => {
-  const { x, y, value, index, bl, bpts, unit, sIdx } = props;
+  const { x, y, value, index, bl, bpts, unit } = props;
 
   const indecesForGraph = bl.datesIdxForGraph.map(i => i);
   const isEmergence = indecesForGraph.some(idx => idx === index);
@@ -16,7 +16,7 @@ const CustomAreaLabel = props => {
           y={y}
           dy={-10}
           fill={isToday ? "black" : "#8c8c8c"}
-          fontSize={bpts.xs ? 9 : isToday ? 16 : 12}
+          fontSize={bpts.xs ? 12 : isToday ? 16 : 12}
           textAnchor="middle"
         >
           {unit === "mm" ? value.toPrecision(2) : value}

@@ -15,7 +15,7 @@ const fontMd = "18px";
 // paddings
 const padding = "8px";
 const paddingSm = "16px";
-const paddingMd = "24px";
+// const paddingMd = "24px";
 // margins
 const margin = "16px";
 const marginSm = "32px";
@@ -53,10 +53,10 @@ export const ColMb = styled.div`
 
 export const Header = Row.extend`
   background: #1da57a;
-  margin-bottom: ${margin};
+  margin-bottom: ${marginSm};
 
   @media (min-width: ${sm}) {
-    margin-bottom: ${margin};
+    margin-bottom: ${marginSm};
   }
 
   @media (min-width: ${md}) {
@@ -71,7 +71,7 @@ export const SubHeader = styled.div`
   color: white;
 
   @media (min-width: ${sm}) {
-    font-size: ${fontSm};
+    font-size: ${fontMd};
     padding: ${padding};
     justify-content: flex-start;
   }
@@ -181,7 +181,7 @@ export const BHeader = styled.div`
   padding: 8px 16px;
   border-radius: 4px;
   margin-bottom: 8px;
-  font-size: 12px;
+  font-size: 13px;
 
   @media (min-width: ${sm}) {
     font-size: ${fontSm};
@@ -223,7 +223,7 @@ export const GraphWrapper = styled.div`
 `;
 
 export const MessageWrap = styled.div`
-  font-size: 0.6rem;
+  font-size: 0.7rem;
   margin-bottom: ${margin};
 
   @media (min-width: ${sm}) {
