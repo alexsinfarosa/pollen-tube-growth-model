@@ -73,7 +73,6 @@ const EditBlockModal = inject("app")(
 
     return (
       <Modal
-        width={400}
         style={{ top: 32 }}
         closable={false}
         maskClosable={false}

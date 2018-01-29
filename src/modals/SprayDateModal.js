@@ -23,7 +23,7 @@ const SprayDateModal = inject("app")(
 
     return (
       <Modal
-        width={280}
+        // width={280}
         closable={false}
         footer={null}
         visible={bStore.isSprayModal}
