@@ -1,12 +1,13 @@
 import React from "react";
-import isEqual from "date-fns/is_equal";
+
+import moment from "moment";
 
 const CustomAreaLabel = props => {
   const { x, y, value, index, bl, bpts, unit } = props;
-
-  const indecesForGraph = bl.datesIdxForGraph.map(i => i);
-  const isEmergence = indecesForGraph.some(idx => idx === index);
-  const isToday = isEqual(new Date(bl.now), new Date(bl.modelData[index].date));
+  const isEmergence = bl.modelDataOfSelectedDates
+    .slice(1)
+    .some(obj => obj.index === index);
+  const isToday = moment(bl.now).isSame(bl.modelData[index].date);
 
   if (isEmergence && x !== null && y !== null) {
     return (

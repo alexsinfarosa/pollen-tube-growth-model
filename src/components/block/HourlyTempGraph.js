@@ -35,7 +35,7 @@ const HourlyTempGraph = inject("app")(
           >
             <XAxis
               dataKey="date"
-              interval="preserveStart"
+              interval={"preserveStartEnd"}
               axisLine={false}
               tick={<CustomXLabel bpts={bpts} />}
             />

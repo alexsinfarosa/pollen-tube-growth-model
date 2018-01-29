@@ -79,7 +79,8 @@ const Block = inject("app")(
                         <Progress
                           type="circle"
                           percent={bl.todayEmergence}
-                          width={80}
+                          width={60}
+                          format={e => (e >= 100 ? "Spray!" : `${e}%`)}
                         />
                       </div>
                     )}

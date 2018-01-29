@@ -6,6 +6,8 @@ import CustomYLabel from "./graphComponents/CustomYLabel";
 import CustomTooltip from "./graphComponents/CustomTooltip";
 import CustomAreaLabel from "./graphComponents/CustomAreaLabel";
 
+import isThisYear from "date-fns/is_this_year";
+
 import {
   Line,
   XAxis,
@@ -36,7 +38,7 @@ const CumulativeGrowthGraph = inject("app")(
           >
             <XAxis
               dataKey="date"
-              interval="preserveStart"
+              interval={"preserveStartEnd"}
               axisLine={false}
               tick={<CustomXLabel bpts={bpts} />}
             />
@@ -57,36 +59,33 @@ const CumulativeGrowthGraph = inject("app")(
             />
             <Line dataKey="avgSL" stroke="#8D6A9F" dot={false} />
 
-            <Area
-              type="monotone"
-              dataKey={o => (o.index <= bl.todayIdx ? o.cHrGrowth : null)}
-              stroke={"#8D6A9F"}
-              fill={"#8D6A9F"}
-              label={
-                <CustomAreaLabel
-                  bl={bl}
-                  bpts={bpts}
-                  unit={"mm"}
-                  sIdx={bStore.startIndex}
-                  eIdx={bStore.endIndex}
-                />
-              }
-            />
-            <Area
-              type="monotone"
-              dataKey={o => (o.index >= bl.todayIdx ? o.cHrGrowth : null)}
-              stroke={"#CBBBD3"}
-              fill={"#CBBBD3"}
-              label={
-                <CustomAreaLabel
-                  bl={bl}
-                  bpts={bpts}
-                  unit={"mm"}
-                  sIdx={bStore.startIndex}
-                  eIdx={bStore.endIndex}
-                />
-              }
-            />
+            {isThisYear(bl.startDate) && (
+              <Area
+                type="monotone"
+                dataKey={o => (o.index <= bl.todayIdx ? o.cHrGrowth : null)}
+                stroke={"#8D6A9F"}
+                fill={"#8D6A9F"}
+                label={<CustomAreaLabel bl={bl} bpts={bpts} unit={"mm"} />}
+              />
+            )}
+            {isThisYear(bl.startDate) && (
+              <Area
+                type="monotone"
+                dataKey={o => (o.index >= bl.todayIdx ? o.cHrGrowth : null)}
+                stroke={"#CBBBD3"}
+                fill={"#CBBBD3"}
+                label={<CustomAreaLabel bl={bl} bpts={bpts} unit={"mm"} />}
+              />
+            )}
+            {!isThisYear(bl.startDate) && (
+              <Area
+                type="monotone"
+                dataKey={"emergence"}
+                stroke={"#8D6A9F"}
+                fill={"#8D6A9F"}
+                label={<CustomAreaLabel bl={bl} bpts={bpts} unit={"%"} />}
+              />
+            )}
           </ComposedChart>
         </ResponsiveContainer>
       </GraphWrapper>

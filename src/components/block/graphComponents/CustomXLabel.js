@@ -8,11 +8,11 @@ const CustomXLabel = props => {
       <text
         x={0}
         y={0}
-        dy={12}
+        dy={16}
         fontSize={bpts.xs ? 10 : 11}
         textAnchor="middle"
         fill="#666"
-        transform="rotate(-10)"
+        transform="rotate(-15)"
       >
         {format(payload.value, "MM-DD HH:00")}
       </text>

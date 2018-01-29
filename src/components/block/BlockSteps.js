@@ -42,7 +42,7 @@ const BlockSteps = inject("app")(
       );
     };
 
-    const BlockStep = bl.modelDataOfSelectedDates.map(obj => {
+    const BlockStep = bl.modelDataOfSelectedDates.map((obj, i) => {
       const isToday = moment(obj.date).isSame(moment(bl.now));
       return (
         <Steps.Step

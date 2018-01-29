@@ -37,24 +37,28 @@ const BlockHeader = inject("app")(
           )}
           <Col>
             <Row type="flex" justify="space-between">
-              {bl.dates.length < 4 && (
-                <Col>
-                  <Tooltip
-                    title={bl.isMessage ? "Hide Message" : "Display Message"}
-                  >
-                    <a style={{ color: "white" }}>
-                      <Icon
-                        style={{ marginRight: 3 }}
-                        onClick={() => bStore.toggleIsMessage(bl.id)}
-                        type={bl.isMessage ? "info-circle" : "info-circle-o"}
-                      />
-                    </a>
-                  </Tooltip>
-                </Col>
-              )}
+              {bl.dates.length < 4 &&
+                bl.avgStyleLength &&
+                bl.startDate && (
+                  <Col>
+                    <Tooltip
+                      title={bl.isMessage ? "Hide Message" : "Display Message"}
+                    >
+                      <a style={{ color: "white" }}>
+                        <Icon
+                          style={{ marginRight: 3 }}
+                          onClick={() => bStore.toggleIsMessage(bl.id)}
+                          type={bl.isMessage ? "info-circle" : "info-circle-o"}
+                        />
+                      </a>
+                    </Tooltip>
+                  </Col>
+                )}
 
               {!breakpoints.xs &&
-                bl.dates.length < 4 && (
+                bl.dates.length < 4 &&
+                bl.avgStyleLength &&
+                bl.startDate && (
                   <Col>
                     <Divider type="vertical" />
                   </Col>

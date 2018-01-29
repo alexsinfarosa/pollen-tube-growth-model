@@ -5,6 +5,7 @@ import CustomXLabel from "./graphComponents/CustomXLabel";
 import CustomYLabel from "./graphComponents/CustomYLabel";
 import CustomTooltip from "./graphComponents/CustomTooltip";
 import CustomAreaLabel from "./graphComponents/CustomAreaLabel";
+import isThisYear from "date-fns/is_this_year";
 
 import {
   XAxis,
@@ -39,8 +40,9 @@ const EmergenceGraph = inject("app")(
           >
             <XAxis
               dataKey="date"
-              interval="preserveStart"
+              interval={"preserveStartEnd"}
               axisLine={false}
+              scale="utcTime"
               tick={<CustomXLabel bpts={bpts} />}
               padding={{ left: 5, right: 5 }}
             />
@@ -59,20 +61,33 @@ const EmergenceGraph = inject("app")(
                 />
               }
             />
-            <Area
-              type="monotone"
-              dataKey={o => (o.index <= bl.todayIdx ? o.emergence : null)}
-              stroke={"#FFBC42"}
-              fill={"#FFBC42"}
-              label={<CustomAreaLabel bl={bl} bpts={bpts} unit={"%"} />}
-            />
-            <Area
-              type="monotone"
-              dataKey={o => (o.index >= bl.todayIdx ? o.emergence : null)}
-              stroke={"#FFE0A9"}
-              fill={"#FFE0A9"}
-              label={<CustomAreaLabel bl={bl} bpts={bpts} unit={"%"} />}
-            />
+            {isThisYear(bl.startDate) && (
+              <Area
+                type="monotone"
+                dataKey={o => (o.index <= bl.todayIdx ? o.emergence : null)}
+                stroke={"#FFBC42"}
+                fill={"#FFBC42"}
+                label={<CustomAreaLabel bl={bl} bpts={bpts} unit={"%"} />}
+              />
+            )}
+            {isThisYear(bl.startDate) && (
+              <Area
+                type="monotone"
+                dataKey={o => (o.index >= bl.todayIdx ? o.emergence : null)}
+                stroke={"#FFE0A9"}
+                fill={"#FFE0A9"}
+                label={<CustomAreaLabel bl={bl} bpts={bpts} unit={"%"} />}
+              />
+            )}
+            {!isThisYear(bl.startDate) && (
+              <Area
+                type="monotone"
+                dataKey={"emergence"}
+                stroke={"#FFBC42"}
+                fill={"#FFBC42"}
+                label={<CustomAreaLabel bl={bl} bpts={bpts} unit={"%"} />}
+              />
+            )}
           </ComposedChart>
         </ResponsiveContainer>
       </GraphWrapper>

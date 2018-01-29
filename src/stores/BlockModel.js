@@ -85,14 +85,14 @@ export default class BlockModel {
   // to deselect dates in the DatePicker
   @computed
   get lastSelectableDate() {
-    if (this.datesIdxForGraph) {
+    if (this.modelDataOfSelectedDates) {
       if (
-        this.datesIdxForGraph.length === 0 ||
-        this.datesIdxForGraph.length === 1
+        this.modelDataOfSelectedDates.length === 0 ||
+        this.modelDataOfSelectedDates.length === 1
       ) {
         return this.startDate;
       }
-      if (this.datesIdxForGraph.length > 1) {
+      if (this.modelDataOfSelectedDates.length > 1) {
         return this.dates[this.dates.length - 1];
       }
     }
@@ -159,15 +159,19 @@ export default class BlockModel {
 
   @computed
   get todayIdx() {
-    if (this.preData) {
-      return this.preData.find(obj => obj.name === "Now").index;
+    if (isThisYear(this.startDate)) {
+      if (this.preData) {
+        return this.preData.find(obj => obj.name === "Now").index;
+      }
     }
   }
 
   @computed
   get todayEmergence() {
-    if (this.preData) {
-      return this.preData.find(obj => obj.name === "Now").emergence;
+    if (isThisYear(this.startDate)) {
+      if (this.preData) {
+        return this.preData.find(obj => obj.name === "Now").emergence;
+      }
     }
   }
 
@@ -186,6 +190,13 @@ export default class BlockModel {
   }
 
   @computed
+  get lastDayIdx() {
+    if (this.preData) {
+      return this.preData.length - 1;
+    }
+  }
+
+  @computed
   get modelData() {
     if (this.preData) {
       return this.preData.map((obj, i) => {
@@ -193,9 +204,24 @@ export default class BlockModel {
           obj.isSelected = true;
           obj.name = "Forecast";
         }
+
+        if (i === this.lastDayIdx && !isThisYear(this.startDate)) {
+          obj.isSelected = true;
+          obj.name = "End Season";
+        }
+
+        if (
+          obj.name === "1st Spray" ||
+          obj.name === "2nd Spray" ||
+          obj.name === "3rd Spray"
+        ) {
+          obj.emergence = this.preData[i - 1].emergence;
+          obj.cHrGrowth = this.preData[i - 1].cHrGrowth;
+        }
         return obj;
       });
     }
+    return this.preData;
   }
 
   @computed
@@ -206,29 +232,14 @@ export default class BlockModel {
   }
 
   @computed
-  get datesIdxForGraph() {
-    if (this.modelData) {
-      const arr = this.modelDataOfSelectedDates.map(obj => obj.index);
-      if (isThisYear(this.startDate) && this.todayEmergence < 100) {
-        const startAndSprays = arr.slice(1, -2);
-        const startAndSpraysMinusOne = startAndSprays.map(i => i - 1);
-        const nowAndForecast = arr.slice(-2);
-        return [...startAndSpraysMinusOne, ...nowAndForecast];
-      }
-
-      const startAndSprays = arr.slice(1, -1);
-      const startAndSpraysMinusOne = startAndSprays.map(i => i - 1);
-      const now = arr.slice(-1);
-      return [...startAndSpraysMinusOne, ...now];
-    }
-  }
-
-  @computed
   get modelDataUpTo100() {
-    if (this.todayEmergence < 100) {
-      return this.modelData.slice(0, this.idxAtThreshold + 1);
-    } else {
-      return this.modelData;
+    if (isThisYear(this.startDate)) {
+      if (this.todayEmergence < 100) {
+        return this.modelData.slice(0, this.idxAtThreshold + 1);
+      } else {
+        return this.modelData;
+      }
     }
+    return this.modelData;
   }
 }

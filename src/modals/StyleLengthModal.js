@@ -38,8 +38,8 @@ const StyleLengthModal = inject("app")(
         title: "#",
         dataIndex: "idx",
         key: "idx",
-        width: "30%",
-        sorter: (a, b) => a.idx - b.idx
+        width: "30%"
+        // sorter: (a, b) => a.idx - b.idx
         // sortOrder: "descend"
       },
       {

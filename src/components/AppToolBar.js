@@ -82,7 +82,7 @@ const AppToolBar = inject("app")(
             // size={bpts.xs ? "small" : "default"}
             style={{
               width: bpts.xs ? 160 : "100%",
-              minWidth: bpts.xs ? 255 : null
+              minWidth: bpts.xs ? 220 : null
             }}
             placeholder={`Block List`}
             onChange={id => bStore.selectOneBlock(id)}
