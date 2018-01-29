@@ -49,8 +49,9 @@ const HourlyTempGraph = inject("app")(
             <Tooltip
               content={
                 <CustomTooltip
+                  bpts={bpts}
                   unit={"˚F"}
-                  name={"RAH Temperature"}
+                  name={"RAH Temp."}
                   val={"temperature"}
                 />
               }

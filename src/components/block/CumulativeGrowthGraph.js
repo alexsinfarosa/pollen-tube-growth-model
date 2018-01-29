@@ -51,6 +51,7 @@ const CumulativeGrowthGraph = inject("app")(
             <Tooltip
               content={
                 <CustomTooltip
+                  bpts={bpts}
                   unit={"mm"}
                   name={"Cumulative HPTG"}
                   val={"cHrGrowth"}
