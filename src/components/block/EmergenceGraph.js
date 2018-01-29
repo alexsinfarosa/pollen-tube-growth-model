@@ -55,6 +55,7 @@ const EmergenceGraph = inject("app")(
             <Tooltip
               content={
                 <CustomTooltip
+                  bpts={bpts}
                   unit={"%"}
                   name={"Emergence"}
                   val={"emergence"}

@@ -1,13 +1,14 @@
 import React from "react";
 import format from "date-fns/format";
 
-const CustomTooltip = ({ payload, unit, name, val }) => {
+const CustomTooltip = ({ payload, unit, name, val, bpts }) => {
   if (payload) {
     const obj = payload[0];
     return (
       <div
         style={{
-          padding: 8,
+          fontSize: bpts.xs ? 10 : 14,
+          padding: bpts.xs ? 2 : 8,
           background: "white",
           border: "1px solid #ededed",
           borderRadius: 4
@@ -15,8 +16,12 @@ const CustomTooltip = ({ payload, unit, name, val }) => {
       >
         {obj && (
           <div>
-            <div style={{ marginBottom: 8 }}>
-              <b>{format(obj.payload.date, "MMM Do HH:00")}</b>
+            <div style={{ marginBottom: bpts.xs ? 2 : 8 }}>
+              <b>
+                {bpts.xs
+                  ? format(obj.payload.date, "MM/DD HH:00")
+                  : format(obj.payload.date, "MMM Do HH:00")}
+              </b>
             </div>
 
             <div style={{ color: obj.stroke }}>
