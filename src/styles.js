@@ -98,6 +98,7 @@ export const SubHeaderRight = SubHeader.extend`
 export const ControlBarWrapper = styled.div`
   display: flex;
   justify-content: space-between;
+  margin-bottom: 8px;
 
   @media (min-width: ${sm}) {
     justify-content: space-between;

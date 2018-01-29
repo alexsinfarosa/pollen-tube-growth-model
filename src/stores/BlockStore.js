@@ -246,9 +246,9 @@ export default class BlockStore {
       this.selectOneBlock(block.id);
       this.writeToLocalStorage();
       this.clearFields();
+      this.isLoading = false;
       message.success(`${block.name} block has been updated!`);
     });
-    this.isLoading = false;
   };
 
   @action
@@ -371,7 +371,7 @@ export default class BlockStore {
   // Local storage ----------------------------------------------------------------------
   @action
   writeToLocalStorage = () => {
-    // this.block.data = [];
+    this.block.data = [];
     window.localStorage.setItem(
       "pollenTubeModelBlocks",
       JSON.stringify(this.blocks)
@@ -386,11 +386,13 @@ export default class BlockStore {
     );
     if (data) {
       this.blocks.clear();
+      this.isLoading = true;
       data.forEach(jsonBlock => {
         const b = { ...jsonBlock };
         if (b.startDate) {
           loadACISData(b.station, b.startDate, this.now).then(res => {
             b.data = dailyToHourlyDates(Array.from(res.get("cStationClean")));
+            this.isLoading = false;
           });
         }
         b.startDate = b.startDate ? moment(b.startDate) : undefined;

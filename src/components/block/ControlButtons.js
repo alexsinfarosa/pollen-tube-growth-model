@@ -14,6 +14,7 @@ const ControlButtons = inject("app")(
     if (count === 2) sprayButtonLabel = "Set 2nd Spray";
     if (count === 3) sprayButtonLabel = "Set 3rd Spray";
 
+    console.log(bStore.isTable);
     return (
       <ControlBarWrapper>
         {bl.dates.length < 4 && (
@@ -32,7 +33,7 @@ const ControlButtons = inject("app")(
         )}
         <Col span={6} style={{ textAlign: "center" }}>
           <Button
-            icon={"table"}
+            icon={false ? "loading" : "table"}
             type="primary"
             shape={bpts.md ? null : "circle"}
             size={bpts.xs ? "small" : "default"}

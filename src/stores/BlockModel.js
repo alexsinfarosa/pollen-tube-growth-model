@@ -55,6 +55,8 @@ export default class BlockModel {
     this.isBeingEdited = isBeingEdited;
   }
 
+  @observable bIsLoading = false;
+
   @computed
   get avgStyleLength() {
     if (this.styleLengths.length !== 0) {

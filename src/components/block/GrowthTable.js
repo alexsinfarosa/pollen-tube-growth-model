@@ -65,8 +65,8 @@ const GrowthTable = inject("app")(
         dataSource={bl.modelData}
         columns={columns}
         pagination={false}
+        loading={bl.isTable}
         rowKey={bl => bl.date}
-        loading={bStore.modelData}
         scroll={{ y: "35vh" }}
         bordered={true}
       />
