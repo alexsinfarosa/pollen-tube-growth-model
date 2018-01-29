@@ -3,19 +3,20 @@ import { inject, observer } from "mobx-react";
 
 import { Steps } from "antd";
 import format from "date-fns/format";
-import isEqual from "date-fns/is_equal";
+// import isEqual from "date-fns/is_equal";
+import moment from "moment";
 
 const BlockSteps = inject("app")(
-  observer(function BlockSteps({ app, bStore, bl, breakpoints: bpts }) {
-    const Title = ({ obj }) => {
-      const isToday = isEqual(new Date(obj.date), new Date(bl.now));
+  observer(function BlockSteps({ app, bl, breakpoints: bpts }) {
+    const Title = ({ obj, isToday }) => {
       return (
-        <small style={{ color: isToday ? "black" : null }}>{obj.name}</small>
+        <small style={{ fontSize: "0.8rem", color: isToday ? "black" : null }}>
+          {obj.name}
+        </small>
       );
     };
 
-    const Description = ({ obj }) => {
-      const isToday = isEqual(new Date(obj.date), new Date(bl.now));
+    const Description = ({ obj, isToday }) => {
       return (
         <small style={{ color: isToday ? "black" : null }}>
           {format(obj.date, "YY/MM/DD HH:00")}
@@ -23,34 +24,37 @@ const BlockSteps = inject("app")(
       );
     };
 
-    const Emergence = ({ obj, bpts, bl }) => {
-      const isToday = isEqual(new Date(obj.date), new Date(bl.now));
+    const Emergence = ({ obj, bpts, isToday }) => {
       return (
         <div
           style={{
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            fontSize: bpts.xs ? "0.7rem" : "0.9rem",
+            fontSize: "0.8rem",
             color: isToday ? "black" : null
           }}
         >
-          {obj.emergence}%
+          {bpts.xs
+            ? `${obj.emergence}%`
+            : obj.index === 0 ? null : `${obj.emergence}%`}
         </div>
       );
     };
 
-    const BlockStep = bl.stepDates.map(obj => {
+    const BlockStep = bl.modelDataOfSelectedDates.map(obj => {
+      const isToday = moment(obj.date).isSame(moment(bl.now));
       return (
         <Steps.Step
           key={obj.date}
           status={"wait"}
-          title={<Title obj={obj} />}
-          description={<Description obj={obj} />}
-          icon={<Emergence bpts={bpts} bl={bl} obj={obj} />}
+          title={<Title obj={obj} isToday={isToday} />}
+          description={<Description obj={obj} isToday={isToday} />}
+          icon={<Emergence bpts={bpts} obj={obj} isToday={isToday} />}
         />
       );
     });
+
     return (
       <Steps
         direction={bpts.xs ? "vertical" : "horizontal"}

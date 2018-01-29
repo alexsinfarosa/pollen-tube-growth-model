@@ -1,8 +1,9 @@
 import { observable, computed } from "mobx";
 
 import moment from "moment";
-import format from "date-fns/format";
+// import format from "date-fns/format";
 import isEqual from "date-fns/is_equal";
+import isAfter from "date-fns/is_after";
 import getHours from "date-fns/get_hours";
 import isThisYear from "date-fns/is_this_year";
 
@@ -69,12 +70,6 @@ export default class BlockModel {
   }
 
   @computed
-  get startOfSeason() {
-    // CHANGE THIS...........................................................
-    return moment(`${moment().year()}-01-01 00:00`);
-  }
-
-  @computed
   get now() {
     const endDate = moment(`${moment(this.startDate).year()}-07-01 23:00`);
     if (endDate.isAfter(moment())) {
@@ -85,117 +80,107 @@ export default class BlockModel {
 
   @computed
   get dates() {
-    return [
-      this.startDate,
-      this.firstSpray,
-      this.secondSpray,
-      this.thirdSpray
-    ].filter(date => date);
+    return [this.startDate, this.firstSpray, this.secondSpray, this.thirdSpray]
+      .filter(res => res)
+      .map(d => moment(d).valueOf());
   }
 
-  @computed
-  get stepDates() {
-    let results = [];
-    this.dates.forEach((date, i) => {
-      let status = "wait";
-      if (i === this.dates.length - 1) status = "finish";
-      let name = "";
-      if (i === 0) name = "Start Date";
-      if (i === 1) name = "First Spray";
-      if (i === 2) name = "Second Spray";
-      if (i === 3) name = "Third Spray";
-      results.push({
-        name,
-        date,
-        status,
-        emergence: this.modelData[this.datesIdxForGraph[i]].Emergence
-      });
-    });
-
-    const today = {
-      name: "Today",
-      date: this.now,
-      status: "finish",
-      emergence: this.todayEmergence
-    };
-
-    if (isThisYear(this.now)) {
-      const forecast = {
-        name: "Forecast",
-        date: this.dateAtThreshold,
-        status: "finish",
-        emergence: this.modelData[this.idxAtThreshold].Emergence
-      };
-      return [...results, today, forecast];
-    }
-
-    return [...results, today];
-  }
-
-  @computed
-  get countDates() {
-    return this.dates.length;
-  }
-
+  // to deselect dates in the DatePicker
   @computed
   get lastSelectableDate() {
-    if (this.countDates === 0 || this.countDates === 1) {
-      return this.startDate;
-    }
-    if (this.countDates > 1) {
-      return this.dates[this.dates.length - 1];
+    if (this.datesIdxForGraph) {
+      if (
+        this.datesIdxForGraph.length === 0 ||
+        this.datesIdxForGraph.length === 1
+      ) {
+        return this.startDate;
+      }
+      if (this.datesIdxForGraph.length > 1) {
+        return this.dates[this.dates.length - 1];
+      }
     }
   }
 
   @computed
-  get lastOfDates() {
-    if (this.dates.length !== 0) {
-      return moment(this.dates[this.dates.length - 1]);
+  get preData() {
+    if (this.startDate && this.avgStyleLength) {
+      const startHour = getHours(this.startDate);
+      const data = this.data.slice(startHour);
+
+      let cumulativeHrGrowth = 0;
+      let percentage = 0;
+
+      return data.map((arr, i) => {
+        const { date, temp } = arr;
+        const { hrGrowth, temps } = this.variety;
+
+        let hourlyGrowth = 0;
+        if (temp > 34 && temp < 106 && temp !== "M") {
+          const idx = temps.findIndex(t => t.toString() === temp);
+          hourlyGrowth = hrGrowth[idx];
+        }
+
+        let isSelected = false;
+        const isOneOfTheDates = this.dates.some(
+          d => moment(date).valueOf() === d
+        );
+        if (isOneOfTheDates) {
+          cumulativeHrGrowth = 0;
+          percentage = 0;
+          hourlyGrowth = 0;
+          isSelected = true;
+        }
+
+        let name = "";
+        if (moment(date).isSame(moment().startOf("hour"))) {
+          isSelected = true;
+          name = "Now";
+        }
+
+        if (moment(date).isSame(moment(this.startDate))) name = "Start";
+
+        if (moment(date).isSame(moment(this.firstSpray))) name = "1st Spray";
+
+        if (moment(date).isSame(moment(this.secondSpray))) name = "2nd Spray";
+
+        if (moment(date).isSame(moment(this.thirdSpray))) name = "3rd Spray";
+
+        cumulativeHrGrowth += hourlyGrowth;
+        percentage = cumulativeHrGrowth / this.avgStyleLength * 100;
+
+        return {
+          index: i,
+          date,
+          name,
+          hourlyGrowth,
+          isSelected,
+          temperature: isNaN(Number(temp)) ? "No Data" : Number(temp),
+          cHrGrowth: Number(cumulativeHrGrowth.toFixed(3)),
+          emergence: Number(percentage.toFixed(0)),
+          avgSL: Number(this.avgStyleLength)
+        };
+      });
     }
-    return undefined;
   }
 
   @computed
   get todayIdx() {
-    if (this.modelData.length !== 0) {
-      return this.modelData.findIndex(obj =>
-        isEqual(new Date(obj.date), new Date(this.now))
-      );
+    if (this.preData) {
+      return this.preData.find(obj => obj.name === "Now").index;
     }
   }
 
   @computed
   get todayEmergence() {
-    if (this.modelData.length !== 0) {
-      return this.modelData[this.todayIdx]["Emergence"];
-    }
-  }
-
-  @computed
-  get lastDayIdx() {
-    if (this.modelData.length !== 0) {
-      return this.modelData.length - 1;
-    }
-  }
-
-  @computed
-  get lastDayEmergence() {
-    if (this.modelData.length !== 0) {
-      return this.modelData[this.modelData.length - 1]["Emergence"];
-    }
-  }
-
-  @computed
-  get lastDate() {
-    if (this.modelData.length !== 0) {
-      return this.modelData[this.modelData.length - 1].date;
+    if (this.preData) {
+      return this.preData.find(obj => obj.name === "Now").emergence;
     }
   }
 
   @computed
   get idxAtThreshold() {
     if (this.todayEmergence < 100) {
-      const emergValues = this.modelData.map(obj => obj.Emergence);
+      const emergValues = this.preData.map(obj => obj.emergence);
       let thold = 100;
       if (thold !== 80) {
         while (emergValues.lastIndexOf(thold) === -1) {
@@ -207,90 +192,60 @@ export default class BlockModel {
     }
   }
 
+  // @computed
+  // get dateAtThreshold() {
+  //   return this.preData[this.idxAtThreshold].date;
+  // }
+
+  // @computed
+  // get datesWithTodayAndForecast() {
+  //   return [
+  //     this.startDate,
+  //     this.firstSpray,
+  //     this.secondSpray,
+  //     this.thirdSpray,
+  //     this.now,
+  //     this.dateAtThreshold
+  //   ]
+  //     .filter(res => res)
+  //     .map(d => moment(d).valueOf());
+  // }
+
   @computed
-  get dateAtThreshold() {
-    if (this.idxAtThreshold) {
-      return this.modelData[this.idxAtThreshold].date;
+  get modelData() {
+    if (this.preData) {
+      return this.preData.map((obj, i) => {
+        if (i === this.idxAtThreshold) {
+          obj.isSelected = true;
+          obj.name = "Forecast";
+        }
+        if (obj.date) return obj;
+      });
     }
   }
 
   @computed
-  get datesForGraph() {
-    // returns an array of dates with the same format as modelData.date
+  get modelDataOfSelectedDates() {
     if (this.modelData) {
-      const dates = [...this.dates, this.now, this.dateAtThreshold];
-      // console.log(dates);
-      return dates.map(date => format(date, "YYYY-MM-DD HH:00"));
+      return this.modelData.filter(day => day.isSelected);
     }
   }
 
   @computed
   get datesIdxForGraph() {
-    if (this.datesForGraph) {
-      const idxArr = this.datesForGraph
-        .map(date => this.modelData.findIndex(obj => obj.date === date))
-        .map(date => date - 1);
-      idxArr[0] = idxArr[0] + 1;
-      idxArr[idxArr.length - 1] = idxArr[idxArr.length - 1] + 1;
-      idxArr[idxArr.length - 2] = idxArr[idxArr.length - 2] + 1;
-      return [...idxArr.slice(0, -1), this.idxAtThreshold];
-    }
-  }
-
-  @computed
-  get modelData() {
-    if (this.data.length !== 0) {
-      if (this.startDate && this.avgStyleLength) {
-        // const a = moment(this.startDate);
-        // const b = moment(this.startOfSeason);
-        // const data = this.data.slice(Math.abs(a.diff(b, "hours")));
-
-        const startHour = getHours(this.startDate);
-        const data = this.data.slice(startHour);
-
-        // let cumulativeHrGrowth = 0;
-        // let percentage = 0;
-
-        let cumulativeHrGrowthPartial = 0;
-        let percentagePartial = 0;
-
-        return data.map((arr, i) => {
-          const { date, temp } = arr;
-          const { hrGrowth, temps } = this.variety;
-
-          let hourlyGrowth = 0;
-          if (temp > 34 && temp < 106 && temp !== "M") {
-            const idx = temps.findIndex(t => t.toString() === temp);
-            hourlyGrowth = hrGrowth[idx];
-          }
-
-          const isOneOfTheDates = this.dates.some(d => isEqual(date, d));
-          if (isOneOfTheDates) {
-            cumulativeHrGrowthPartial = 0;
-            percentagePartial = 0;
-            hourlyGrowth = 0;
-          }
-
-          cumulativeHrGrowthPartial += hourlyGrowth;
-          percentagePartial =
-            cumulativeHrGrowthPartial / this.avgStyleLength * 100;
-
-          // cumulativeHrGrowth += hourlyGrowth;
-          // percentage = cumulativeHrGrowth / this.avgStyleLength * 100;
-
-          return {
-            date,
-            Date: format(date, "MMM DD HH:00"),
-            HourlyGrowth: hourlyGrowth,
-            Temperature: isNaN(Number(temp)) ? "No Data" : Number(temp),
-            "Cumulative Hourly Growth": Number(
-              cumulativeHrGrowthPartial.toFixed(3)
-            ),
-            Emergence: Number(percentagePartial.toFixed(0)),
-            "Average Style Length": Number(this.avgStyleLength)
-          };
-        });
+    if (this.modelData) {
+      const arr = this.modelDataOfSelectedDates.map(obj => obj.index);
+      if (isThisYear(this.startDate) && this.todayEmergence < 100) {
+        const startAndSprays = arr.slice(1, -2);
+        const startAndSpraysMinusOne = startAndSprays.map(i => i - 1);
+        const nowAndForecast = arr.slice(-2);
+        return [...startAndSpraysMinusOne, ...nowAndForecast];
       }
+
+      const startAndSprays = arr.slice(1, -1);
+      const startAndSpraysMinusOne = startAndSprays.map(i => i - 1);
+      const now = arr.slice(-1);
+      return [...startAndSpraysMinusOne, ...now];
     }
   }
 

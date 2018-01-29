@@ -142,7 +142,7 @@ const EditBlockModal = inject("app")(
           <DatePicker
             name="firstSpray"
             showTime={{ format: "HH:00" }}
-            disabled={bl.countDates > 1 ? false : true}
+            disabled={bl.dates.length > 1 ? false : true}
             style={style}
             value={block.firstSpray ? moment(block.firstSpray) : undefined}
             allowClear={false}
@@ -157,7 +157,7 @@ const EditBlockModal = inject("app")(
           <DatePicker
             name="secondSpray"
             showTime={{ format: "HH:00" }}
-            disabled={bl.countDates > 2 ? false : true}
+            disabled={bl.dates.length > 2 ? false : true}
             style={style}
             value={block.secondSpray ? moment(block.secondSpray) : undefined}
             allowClear={false}
@@ -174,7 +174,7 @@ const EditBlockModal = inject("app")(
           <DatePicker
             name="thirdSpray"
             showTime={{ format: "HH:00" }}
-            disabled={bl.countDates > 1 ? false : true}
+            disabled={bl.dates.length > 3 ? false : true}
             style={style}
             value={block.thirdSpray ? moment(block.thirdSpray) : undefined}
             allowClear={false}
@@ -191,15 +191,13 @@ const EditBlockModal = inject("app")(
           <DatePicker
             name="endDate"
             showTime={{ format: "HH:00" }}
-            disabled={bl.countDates > 1 ? false : true}
+            // disabled={bl.countDates > 1 ? false : true}
             style={style}
             value={block.endDate ? moment(block.endDate) : undefined}
             allowClear={false}
             format="MMM Do YYYY, HH:00"
             placeholder={`Select Date and Time`}
-            disabledDate={curr =>
-              disablePreviousSprayDates(bl.lastSelectableDate, curr)
-            }
+            // disabledDate={curr => disablePreviousSprayDates(undefined, curr)}
             showToday={true}
             onChange={date => bStore.addField("endDate", date)}
           />

@@ -56,11 +56,11 @@ export const Header = Row.extend`
   margin-bottom: ${margin};
 
   @media (min-width: ${sm}) {
-    margin-bottom: ${marginSm};
+    margin-bottom: ${margin};
   }
 
   @media (min-width: ${md}) {
-    margin-bottom: ${marginMd};
+    margin-bottom: ${marginSm};
   }
 `;
 
@@ -72,13 +72,13 @@ export const SubHeader = styled.div`
 
   @media (min-width: ${sm}) {
     font-size: ${fontSm};
-    padding: ${paddingSm};
+    padding: ${padding};
     justify-content: flex-start;
   }
 
   @media (min-width: ${md}) {
     font-size: ${fontMd};
-    padding: ${paddingMd};
+    padding: ${paddingSm};
     justify-content: flex-start;
   }
 `;

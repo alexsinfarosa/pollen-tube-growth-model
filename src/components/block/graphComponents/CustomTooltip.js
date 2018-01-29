@@ -28,7 +28,6 @@ const CustomTooltip = ({ payload, unit, name, val }) => {
       </div>
     );
   }
-  return null;
 };
 
 export default CustomTooltip;

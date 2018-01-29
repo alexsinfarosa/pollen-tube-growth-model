@@ -37,55 +37,66 @@ const BlockHeader = inject("app")(
           )}
           <Col>
             <Row type="flex" justify="space-between">
-              <Col>
-                <Tooltip
-                  title={bl.isMessage ? "Hide Message" : "Display Message"}
-                >
-                  <a style={{ color: "white" }}>
-                    <Icon
-                      style={{ marginRight: 3 }}
-                      onClick={() => bStore.toggleIsMessage(bl.id)}
-                      type={bl.isMessage ? "info-circle" : "info-circle-o"}
-                    />
-                  </a>
-                </Tooltip>
-              </Col>
-
-              <Col>
-                <Divider type="vertical" />
-              </Col>
-
-              <Col>
-                <Tooltip title="Edit block">
-                  <a style={{ color: "white" }}>
-                    <Icon
-                      type="edit"
-                      style={{ marginRight: 3 }}
-                      onClick={() => editBlock(bl.id)}
-                    />
-                  </a>
-                </Tooltip>
-              </Col>
-
-              <Col>
-                <Divider type="vertical" />
-              </Col>
-
-              <Col>
-                <Popconfirm
-                  placement="left"
-                  title="Are you sure？"
-                  okText="Yes"
-                  cancelText="No"
-                  onConfirm={() => removeBlock(bl.id)}
-                >
-                  <Tooltip title="Delete block">
+              {bl.dates.length < 4 && (
+                <Col>
+                  <Tooltip
+                    title={bl.isMessage ? "Hide Message" : "Display Message"}
+                  >
                     <a style={{ color: "white" }}>
-                      <Icon type="delete" />
+                      <Icon
+                        style={{ marginRight: 3 }}
+                        onClick={() => bStore.toggleIsMessage(bl.id)}
+                        type={bl.isMessage ? "info-circle" : "info-circle-o"}
+                      />
                     </a>
                   </Tooltip>
-                </Popconfirm>
-              </Col>
+                </Col>
+              )}
+
+              {!breakpoints.xs &&
+                bl.dates.length < 4 && (
+                  <Col>
+                    <Divider type="vertical" />
+                  </Col>
+                )}
+
+              {!breakpoints.xs && (
+                <Col>
+                  <Tooltip title="Edit block">
+                    <a style={{ color: "white" }}>
+                      <Icon
+                        type="edit"
+                        style={{ marginRight: 3 }}
+                        onClick={() => editBlock(bl.id)}
+                      />
+                    </a>
+                  </Tooltip>
+                </Col>
+              )}
+
+              {!breakpoints.xs && (
+                <Col>
+                  <Divider type="vertical" />
+                </Col>
+              )}
+
+              {!breakpoints.xs && (
+                <Col>
+                  <Popconfirm
+                    placement="left"
+                    title="Are you sure？"
+                    okText="Yes"
+                    cancelText="No"
+                    onConfirm={() => removeBlock(bl.id)}
+                  >
+                    <Tooltip title="Delete block">
+                      <a style={{ color: "white" }}>
+                        <Icon type="delete" />
+                      </a>
+                    </Tooltip>
+                  </Popconfirm>
+                </Col>
+              )}
             </Row>
           </Col>
         </Row>

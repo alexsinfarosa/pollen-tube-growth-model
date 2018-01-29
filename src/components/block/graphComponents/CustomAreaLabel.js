@@ -3,13 +3,11 @@ import isEqual from "date-fns/is_equal";
 
 const CustomAreaLabel = props => {
   const { x, y, value, index, bl, bpts, unit, sIdx } = props;
-  const indecesForGraph = bl.datesIdxForGraph.map(i => i - props.sIdx);
-  const isEmergence = indecesForGraph.slice(1).some(idx => idx === index);
-  const isToday = isEqual(
-    new Date(bl.modelData[bl.todayIdx].date),
-    new Date(bl.modelData[index + sIdx].date)
-  );
-  // console.log(value);
+
+  const indecesForGraph = bl.datesIdxForGraph.map(i => i);
+  const isEmergence = indecesForGraph.some(idx => idx === index);
+  const isToday = isEqual(new Date(bl.now), new Date(bl.modelData[index].date));
+
   if (isEmergence && x !== null && y !== null) {
     return (
       <g>
@@ -25,12 +23,12 @@ const CustomAreaLabel = props => {
           {unit}
         </text>
         <circle
-          className={isToday ? "pulse" : null}
+          // className={isToday ? "pulse" : null}
           cx={x}
           cy={y}
-          r={isToday ? "16" : "3"}
-          stroke={"#8c8c8c"}
-          fill={"#8c8c8c"}
+          r={isToday ? "4" : "3"}
+          stroke={isToday ? "black" : "#8c8c8c"}
+          fill={isToday ? "black" : "#8c8c8c"}
         />
       </g>
     );

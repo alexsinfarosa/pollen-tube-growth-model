@@ -1,4 +1,5 @@
 import React from "react";
+import format from "date-fns/format";
 
 const CustomXLabel = props => {
   const { x, y, payload, bpts } = props;
@@ -13,7 +14,7 @@ const CustomXLabel = props => {
         fill="#666"
         transform="rotate(-10)"
       >
-        {payload.value}
+        {format(payload.value, "MM-DD HH:00")}
       </text>
     </g>
   );

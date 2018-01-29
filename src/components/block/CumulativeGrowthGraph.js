@@ -39,7 +39,7 @@ const CumulativeGrowthGraph = inject("app")(
             style={{ background: "#fafafa", borderRadius: "5px" }}
           >
             <XAxis
-              dataKey="Date"
+              dataKey="date"
               interval="preserveStart"
               axisLine={false}
               tick={<CustomXLabel bpts={bpts} />}
@@ -55,20 +55,17 @@ const CumulativeGrowthGraph = inject("app")(
                 <CustomTooltip
                   unit={"mm"}
                   name={"Cumulative HPTG"}
-                  val={"Cumulative Hourly Growth"}
+                  val={"cHrGrowth"}
                 />
               }
             />
-            <Line dataKey="Average Style Length" stroke="#8D6A9F" dot={false} />
+            <Line dataKey="avgSL" stroke="#8D6A9F" dot={false} />
+
             <Area
               type="monotone"
-              dataKey={obj =>
-                isBefore(new Date(obj.date), new Date(addHours(bl.now, 1)))
-                  ? obj["Cumulative Hourly Growth"]
-                  : null
-              }
-              stroke="#8D6A9F"
-              fill="#8D6A9F"
+              dataKey={o => (o.index <= bl.todayIdx ? o.cHrGrowth : null)}
+              stroke={"#8D6A9F"}
+              fill={"#8D6A9F"}
               label={
                 <CustomAreaLabel
                   bl={bl}
@@ -79,16 +76,11 @@ const CumulativeGrowthGraph = inject("app")(
                 />
               }
             />
-
             <Area
               type="monotone"
-              dataKey={obj =>
-                isAfter(new Date(obj.date), new Date(subHours(bl.now, 1)))
-                  ? obj["Cumulative Hourly Growth"]
-                  : null
-              }
-              stroke="#CBBBD3"
-              fill="#CBBBD3"
+              dataKey={o => (o.index >= bl.todayIdx ? o.cHrGrowth : null)}
+              stroke={"#CBBBD3"}
+              fill={"#CBBBD3"}
               label={
                 <CustomAreaLabel
                   bl={bl}

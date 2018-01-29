@@ -1,9 +1,7 @@
 import React from "react";
 import { inject, observer } from "mobx-react";
 import { Table } from "antd";
-// import isBefore from "date-fns/is_before";
 import format from "date-fns/format";
-import { getTime } from "date-fns";
 
 //columns for the growth table
 const columns = [
@@ -18,8 +16,8 @@ const columns = [
   },
   {
     title: "Air Temp (˚F)",
-    dataIndex: "Temperature",
-    key: "Temperature",
+    dataIndex: "temperature",
+    key: "temperature",
     width: "20%"
   },
   {
@@ -28,15 +26,15 @@ const columns = [
     children: [
       {
         title: "Hourly",
-        dataIndex: "HourlyGrowth",
-        key: "HourlyGrowth",
+        dataIndex: "hourlyGrowth",
+        key: "hourlyGrowth",
         width: "20%",
         render: d => Number(d).toFixed(2)
       },
       {
         title: "Accumulated",
-        dataIndex: "Cumulative Hourly Growth",
-        key: "Cumulative Hourly Growth",
+        dataIndex: "cHrGrowth",
+        key: "cHrGrowth",
         width: "20%",
         render: d => Number(d).toFixed(2)
       }
@@ -44,8 +42,8 @@ const columns = [
   },
   {
     title: "% of Target",
-    dataIndex: "Emergence",
-    key: "Emergence",
+    dataIndex: "emergence",
+    key: "emergence",
     width: "20%",
     render: perc => Number(perc).toFixed(0)
   }
@@ -53,25 +51,22 @@ const columns = [
 
 const GrowthTable = inject("app")(
   observer(function GrowthTable({ app: { bStore }, bl }) {
-    const dates = bl.datesForGraph.map(d => getTime(d));
-
-    const sprayDateRow = date => {
-      if (dates.includes(getTime(date))) {
+    const sprayDateRow = rec => {
+      if (rec.isSelected) {
         return "table hilight";
       }
       return "table";
     };
-
     return (
       <Table
         style={{ margin: "16px auto" }}
-        rowClassName={rec => sprayDateRow(rec.date)}
+        rowClassName={rec => sprayDateRow(rec)}
         size="middle"
         dataSource={bl.modelData}
         columns={columns}
         pagination={false}
         rowKey={bl => bl.date}
-        loading={bStore.isLoading}
+        loading={bStore.modelData}
         scroll={{ y: "35vh" }}
         bordered={true}
       />

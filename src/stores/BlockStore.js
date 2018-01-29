@@ -160,6 +160,10 @@ export default class BlockStore {
       this.block["endDate"] = moment(`${moment(val).year()}-07-01 23:00`);
     }
 
+    if (name === "endDate") {
+      this.block["endDate"] = moment(val).startOf("hour");
+    }
+
     if (name === "variety") {
       this.block[name] = this.app.apples.get(val);
     }
@@ -367,6 +371,7 @@ export default class BlockStore {
   // Local storage ----------------------------------------------------------------------
   @action
   writeToLocalStorage = () => {
+    // this.block.data = [];
     window.localStorage.setItem(
       "pollenTubeModelBlocks",
       JSON.stringify(this.blocks)

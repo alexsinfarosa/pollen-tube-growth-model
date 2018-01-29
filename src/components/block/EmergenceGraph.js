@@ -5,6 +5,7 @@ import isAfter from "date-fns/is_after";
 import isBefore from "date-fns/is_before";
 import addHours from "date-fns/add_hours";
 import subHours from "date-fns/sub_hours";
+import moment from "moment";
 
 import CustomXLabel from "./graphComponents/CustomXLabel";
 import CustomYLabel from "./graphComponents/CustomYLabel";
@@ -33,7 +34,7 @@ const EmergenceGraph = inject("app")(
       <GraphWrapper>
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart
-            syncId={filteredBlocks.length === 1 && !bpts.xs ? "ciccio" : null}
+            syncId={filteredBlocks.length === 1 ? "ciccio" : null}
             data={bl.modelDataUpTo100}
             margin={{
               top: bpts.xs ? 20 : 30,
@@ -44,7 +45,7 @@ const EmergenceGraph = inject("app")(
             style={{ background: "#fafafa", borderRadius: "5px" }}
           >
             <XAxis
-              dataKey="Date"
+              dataKey="date"
               interval="preserveStart"
               axisLine={false}
               tick={<CustomXLabel bpts={bpts} />}
@@ -61,58 +62,24 @@ const EmergenceGraph = inject("app")(
                 <CustomTooltip
                   unit={"%"}
                   name={"Emergence"}
-                  val={"Emergence"}
+                  val={"emergence"}
                 />
               }
             />
             <Area
               type="monotone"
-              dataKey={obj =>
-                isBefore(new Date(obj.date), new Date(addHours(bl.now, 1)))
-                  ? obj.Emergence
-                  : null
-              }
-              stroke="#FFBC42"
-              fill="#FFBC42"
-              label={
-                <CustomAreaLabel
-                  bl={bl}
-                  bpts={bpts}
-                  unit={"%"}
-                  sIdx={bStore.startIndex}
-                  eIdx={bStore.endIndex}
-                />
-              }
+              dataKey={o => (o.index <= bl.todayIdx ? o.emergence : null)}
+              stroke={"#FFBC42"}
+              fill={"#FFBC42"}
+              label={<CustomAreaLabel bl={bl} bpts={bpts} unit={"%"} />}
             />
             <Area
               type="monotone"
-              dataKey={obj =>
-                isAfter(new Date(obj.date), new Date(subHours(bl.now, 1)))
-                  ? obj.Emergence
-                  : null
-              }
-              stroke="#FFE0A9"
-              fill="#FFE0A9"
-              label={
-                <CustomAreaLabel
-                  bl={bl}
-                  bpts={bpts}
-                  unit={"%"}
-                  sIdx={bStore.startIndex}
-                  eIdx={bStore.endIndex}
-                />
-              }
+              dataKey={o => (o.index >= bl.todayIdx ? o.emergence : null)}
+              stroke={"#FFE0A9"}
+              fill={"#FFE0A9"}
+              label={<CustomAreaLabel bl={bl} bpts={bpts} unit={"%"} />}
             />
-            {filteredBlocks.length === 1 &&
-              !bpts.xs && (
-                <Brush
-                  data={bl.modelDataUpTo100}
-                  stroke="#63A07F"
-                  tickFormatter={x => bl.modelData[x].date}
-                  height={bpts.xs ? 15 : 20}
-                  onChange={e => bStore.setRange(e)}
-                />
-              )}
           </ComposedChart>
         </ResponsiveContainer>
       </GraphWrapper>

@@ -34,7 +34,7 @@ const HourlyTempGraph = inject("app")(
             style={{ background: "#fafafa", borderRadius: "5px" }}
           >
             <XAxis
-              dataKey="Date"
+              dataKey="date"
               interval="preserveStart"
               axisLine={false}
               tick={<CustomXLabel bpts={bpts} />}
@@ -51,12 +51,12 @@ const HourlyTempGraph = inject("app")(
                 <CustomTooltip
                   unit={"˚F"}
                   name={"RAH Temperature"}
-                  val={"Temperature"}
+                  val={"temperature"}
                 />
               }
             />
             <Line
-              dataKey="Temperature"
+              dataKey="temperature"
               stroke="#63a07f"
               dot={false}
               label={
