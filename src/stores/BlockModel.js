@@ -70,11 +70,12 @@ export default class BlockModel {
 
   @computed
   get now() {
-    const endDate = moment(`${moment(this.startDate).year()}-07-01 23:00`);
-    if (endDate.isAfter(moment())) {
+    // const endDate = moment(`${moment(this.startDate).year()}-07-01 23:00`);
+    if (isThisYear(this.startDate) && this.endDate.isAfter(moment())) {
       return moment().startOf("hour");
     }
-    return endDate;
+
+    return this.endDate;
   }
 
   @computed
@@ -163,7 +164,8 @@ export default class BlockModel {
   get todayIdx() {
     if (isThisYear(this.startDate)) {
       if (this.preData) {
-        return this.preData.find(obj => obj.name === "Now").index;
+        const now = this.preData.find(obj => obj.name === "Now");
+        if (now) return now.index;
       }
     }
   }
@@ -172,7 +174,9 @@ export default class BlockModel {
   get todayEmergence() {
     if (isThisYear(this.startDate)) {
       if (this.preData) {
-        return this.preData.find(obj => obj.name === "Now").emergence;
+        const now = this.preData.find(obj => obj.name === "Now");
+        if (now) return now.emergence;
+        return 0;
       }
     }
   }
@@ -243,5 +247,10 @@ export default class BlockModel {
       }
     }
     return this.modelData;
+  }
+
+  @computed
+  get isThereNow() {
+    return this.modelDataUpTo100.some(o => o.name === "Now");
   }
 }

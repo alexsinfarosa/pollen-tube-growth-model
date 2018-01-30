@@ -12,6 +12,7 @@ import { message } from "antd";
 import BlockModel from "./BlockModel";
 
 import moment from "moment";
+import isThisYear from "date-fns/is_this_year";
 
 export default class BlockStore {
   app;
@@ -49,18 +50,6 @@ export default class BlockStore {
   // radioValue
   @observable radioValue = "";
   @action setRadioValue = d => (this.radioValue = d);
-
-  @computed
-  get now() {
-    const endDate = moment(
-      `${moment(this.block.startDate).year()}-07-01 23:00`
-    );
-
-    if (endDate.isAfter(moment())) {
-      return moment().startOf("hour");
-    }
-    return endDate;
-  }
 
   // style length
   @observable styleLength;
@@ -242,7 +231,14 @@ export default class BlockStore {
     this.isStyleLengthModal = false;
     this.isMap = false;
     this.isLoading = true;
-    loadACISData(block.station, block.startDate, this.now).then(res => {
+    let endDate = block.endDate;
+    if (
+      isThisYear(block.startDate) &&
+      moment(block.endDate).isAfter(moment())
+    ) {
+      endDate = moment().startOf("hour");
+    }
+    loadACISData(block.station, block.startDate, endDate).then(res => {
       block.data = dailyToHourlyDates(Array.from(res.get("cStationClean")));
       const idx = this.blocks.findIndex(b => b.id === block.id);
       blocks.splice(idx, 1, new BlockModel(block));
@@ -395,7 +391,12 @@ export default class BlockStore {
         const b = { ...jsonBlock };
         if (b.startDate) {
           this.isLoading = true;
-          loadACISData(b.station, b.startDate, this.now).then(res => {
+          let endDate = moment(b.endDate);
+          if (isThisYear(b.startDate) && moment(b.endDate).isAfter(moment())) {
+            endDate = moment().startOf("hour");
+          }
+          console.log(endDate);
+          loadACISData(b.station, b.startDate, endDate).then(res => {
             b.data = dailyToHourlyDates(Array.from(res.get("cStationClean")));
             this.isLoading = false;
           });

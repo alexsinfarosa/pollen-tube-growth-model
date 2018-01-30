@@ -14,7 +14,6 @@ const ControlButtons = inject("app")(
     if (count === 2) sprayButtonLabel = "Set 2nd Spray";
     if (count === 3) sprayButtonLabel = "Set 3rd Spray";
 
-    console.log(bStore.isTable);
     return (
       <ControlBarWrapper>
         {bl.dates.length < 4 && (
