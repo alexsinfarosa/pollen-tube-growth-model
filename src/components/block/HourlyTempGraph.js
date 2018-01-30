@@ -24,7 +24,7 @@ const HourlyTempGraph = inject("app")(
     breakpoints: bpts
   }) {
     return (
-      <GraphWrapper>
+      <GraphWrapper style={{ margin: "40px 0" }}>
         <h4>Rounded Average Hourly Temperatures</h4>
         <ResponsiveContainer width="100%" height="100%">
           <LineChart
