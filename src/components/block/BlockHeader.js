@@ -7,6 +7,8 @@ import { BHeader } from "styles";
 // antd
 import { Row, Col, Tooltip, Icon, Popconfirm, Divider } from "antd";
 
+import isThisYear from "date-fns/is_this_year";
+
 const BlockHeader = inject("app")(
   observer(function BlockHeader({
     app: { bStore, stations, isLoading },
@@ -39,7 +41,8 @@ const BlockHeader = inject("app")(
             <Row type="flex" justify="space-between">
               {bl.dates.length < 4 &&
                 bl.avgStyleLength &&
-                bl.startDate && (
+                bl.startDate &&
+                isThisYear(bl.startDate) && (
                   <Col>
                     <Tooltip
                       title={bl.isMessage ? "Hide Message" : "Display Message"}
@@ -58,7 +61,8 @@ const BlockHeader = inject("app")(
               {!breakpoints.xs &&
                 bl.dates.length < 4 &&
                 bl.avgStyleLength &&
-                bl.startDate && (
+                bl.startDate &&
+                isThisYear(bl.startDate) && (
                   <Col>
                     <Divider type="vertical" />
                   </Col>

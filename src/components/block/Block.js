@@ -22,6 +22,8 @@ import StartDateModal from "modals/StartDateModal";
 import StyleLengthModal from "modals/StyleLengthModal";
 import { Spin, Progress } from "antd";
 
+import isThisYear from "date-fns/is_this_year";
+
 const Block = inject("app")(
   observer(function Block({
     app: { filteredBlocks, bStore },
@@ -43,7 +45,10 @@ const Block = inject("app")(
 
             {bl.startDate && bl.avgStyleLength ? (
               <div>
-                {bl.isMessage && <Message bl={bl} breakpoints={bpts} />}
+                {bl.isMessage &&
+                  isThisYear(bl.startDate) && (
+                    <Message bl={bl} breakpoints={bpts} />
+                  )}
                 {filteredBlocks.length === 1 ? (
                   <div>
                     {bl.modelData && (
