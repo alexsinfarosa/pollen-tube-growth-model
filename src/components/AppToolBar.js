@@ -37,7 +37,12 @@ const AppToolBar = inject("app")(
     });
 
     return (
-      <Row type="flex" style={{ marginBottom: 32 }}>
+      <Row
+        type="flex"
+        justify="space-between"
+        align="middle"
+        style={{ marginBottom: 32 }}
+      >
         <Col>
           <Row type="flex">
             <Button
@@ -92,8 +97,7 @@ const AppToolBar = inject("app")(
           <Select
             // size={bpts.xs ? "small" : "default"}
             style={{
-              width: bpts.xs ? 160 : "100%",
-              minWidth: bpts.xs ? 220 : null
+              width: bpts.xs ? 160 : "100%"
             }}
             placeholder={`Block List`}
             onChange={id => bStore.selectOneBlock(id)}
