@@ -42,6 +42,10 @@ export default class BlockStore {
     this.block.startDate = undefined;
   };
 
+  @observable isInstructions = false;
+  @action
+  toggleIsInstructions = d => (this.isInstructions = !this.isInstructions);
+
   // radioValue
   @observable radioValue = "";
   @action setRadioValue = d => (this.radioValue = d);

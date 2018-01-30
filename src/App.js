@@ -33,9 +33,11 @@ class App extends Component {
 
           <Main>
             <AppToolBar breakpoints={bpts} />
-            {!deSelectAllBlocks &&
-              filteredBlocks.length !== 1 && <Instructions />}
-            <BlockList />
+            {bStore.blocks.length !== 0 && !bStore.isInstructions ? (
+              <BlockList />
+            ) : (
+              <Instructions />
+            )}
           </Main>
         </MatchMediaProvider>
       </div>
