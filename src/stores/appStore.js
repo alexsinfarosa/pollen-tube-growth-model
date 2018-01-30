@@ -93,6 +93,12 @@ export default class AppStore {
     return this.blockStore.isLoading;
   }
 
+  get deSelectAllBlocks() {
+    const areAllBlocksDisplayed = this.blocks.every(bl => bl.isBeingSelected);
+    console.log(areAllBlocksDisplayed);
+    return areAllBlocksDisplayed;
+  }
+
   @observable
   bpts = {
     xs: "(max-width: 575px)",

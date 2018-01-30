@@ -18,7 +18,7 @@ import NewBlockModal from "modals/NewBlockModal";
 @observer
 class App extends Component {
   render() {
-    const { bpts, bStore } = this.props.app;
+    const { bpts, bStore, deSelectAllBlocks, filteredBlocks } = this.props.app;
     return (
       <div>
         <MatchMediaProvider breakpoints={bpts}>
@@ -33,7 +33,9 @@ class App extends Component {
 
           <Main>
             <AppToolBar breakpoints={bpts} />
-            {bStore.blocks.length !== 0 ? <BlockList /> : <Instructions />}
+            {!deSelectAllBlocks &&
+              filteredBlocks.length !== 1 && <Instructions />}
+            <BlockList />
           </Main>
         </MatchMediaProvider>
       </div>

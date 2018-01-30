@@ -28,6 +28,11 @@ const CustomTooltip = ({ payload, unit, name, val, bpts }) => {
               {name}: {obj.payload[val]}
               {unit}
             </div>
+            {name === "Emergence" && (
+              <div>
+                "Cumulative HrG:" {obj.payload.cHrGrowth.toPrecision(3)}mm
+              </div>
+            )}
           </div>
         )}
       </div>

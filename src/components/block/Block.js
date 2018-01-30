@@ -56,9 +56,6 @@ const Block = inject("app")(
                     {bStore.isGraph && (
                       <HourlyTempGraph bl={bl} breakpoints={bpts} />
                     )}
-                    {bStore.isGraph && (
-                      <CumulativeGrowthGraph bl={bl} breakpoints={bpts} />
-                    )}
                   </div>
                 ) : (
                   <div

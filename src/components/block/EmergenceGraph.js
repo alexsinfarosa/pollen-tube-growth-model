@@ -14,7 +14,9 @@ import {
   Tooltip,
   ResponsiveContainer,
   ComposedChart,
-  Area
+  Area,
+  Line,
+  ReferenceLine
 } from "recharts";
 import { GraphWrapper } from "../../styles";
 
@@ -47,6 +49,7 @@ const EmergenceGraph = inject("app")(
               padding={{ left: 5, right: 5 }}
             />
             <YAxis
+              yAxisId="1"
               hide={false}
               axisLine={false}
               tick={<CustomYLabel bpts={bpts} unit={"%"} />}
@@ -64,6 +67,7 @@ const EmergenceGraph = inject("app")(
             />
             {isThisYear(bl.startDate) && (
               <Area
+                yAxisId="1"
                 type="monotone"
                 dataKey={o => (o.index <= bl.todayIdx ? o.emergence : null)}
                 stroke={"#FFBC42"}
@@ -73,6 +77,7 @@ const EmergenceGraph = inject("app")(
             )}
             {isThisYear(bl.startDate) && (
               <Area
+                yAxisId="1"
                 type="monotone"
                 dataKey={o => (o.index >= bl.todayIdx ? o.emergence : null)}
                 stroke={"#FFE0A9"}
@@ -82,6 +87,7 @@ const EmergenceGraph = inject("app")(
             )}
             {!isThisYear(bl.startDate) && (
               <Area
+                yAxisId="1"
                 type="monotone"
                 dataKey={"emergence"}
                 stroke={"#FFBC42"}
