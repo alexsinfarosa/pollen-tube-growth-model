@@ -389,11 +389,12 @@ export default class BlockStore {
       window.localStorage.getItem("pollenTubeModelBlocks")
     );
     if (data) {
+      // console.log(data);
       this.blocks.clear();
-      this.isLoading = true;
       data.forEach(jsonBlock => {
         const b = { ...jsonBlock };
         if (b.startDate) {
+          this.isLoading = true;
           loadACISData(b.station, b.startDate, this.now).then(res => {
             b.data = dailyToHourlyDates(Array.from(res.get("cStationClean")));
             this.isLoading = false;

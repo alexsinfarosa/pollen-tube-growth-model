@@ -18,7 +18,7 @@ import NewBlockModal from "modals/NewBlockModal";
 @observer
 class App extends Component {
   render() {
-    const { bpts, bStore, deSelectAllBlocks, filteredBlocks } = this.props.app;
+    const { bpts, bStore } = this.props.app;
     return (
       <div>
         <MatchMediaProvider breakpoints={bpts}>

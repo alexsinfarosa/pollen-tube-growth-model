@@ -11,7 +11,6 @@ import ControlButtons from "./ControlButtons";
 import DateStyleLengthBar from "./DateStyleLengthBar";
 import USMap from "./USMap";
 import GrowthTable from "./GrowthTable";
-import CumulativeGrowthGraph from "./CumulativeGrowthGraph";
 import HourlyTempGraph from "./HourlyTempGraph";
 import Message from "./Message";
 import BlockSteps from "./BlockSteps";

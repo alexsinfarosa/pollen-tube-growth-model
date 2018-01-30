@@ -3,7 +3,7 @@ import { inject, observer } from "mobx-react";
 import getYear from "date-fns/get_year";
 
 import { Col } from "styles";
-import { Row, Button, Badge, Select, Icon } from "antd";
+import { Row, Button, Badge, Select } from "antd";
 const { Option, OptGroup } = Select;
 
 const AppToolBar = inject("app")(

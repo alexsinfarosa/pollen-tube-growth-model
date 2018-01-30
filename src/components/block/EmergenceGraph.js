@@ -14,9 +14,7 @@ import {
   Tooltip,
   ResponsiveContainer,
   ComposedChart,
-  Area,
-  Line,
-  ReferenceLine
+  Area
 } from "recharts";
 import { GraphWrapper } from "../../styles";
 
