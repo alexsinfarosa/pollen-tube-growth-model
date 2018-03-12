@@ -28,6 +28,7 @@ const StartDateModal = inject("app")(
       }
     };
 
+    console.log(bStore.block.startDate);
     return (
       <Modal
         // width={280}
@@ -56,7 +57,9 @@ const StartDateModal = inject("app")(
           }
           showToday={true}
           onChange={date => bStore.addField(sprayButtonLabel, date)}
-          onOk={bStore.fetchAndUploadData}
+          onOk={() =>
+            bStore.block.startDate ? bStore.fetchAndUploadData() : null
+          }
         />
       </Modal>
     );

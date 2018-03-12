@@ -135,6 +135,6 @@ export default async (station, seasonStartDate, selectedDate) => {
   );
 
   results.set("forecast", forecastData);
-  console.log(results);
+  // console.log(results);
   return results;
 };

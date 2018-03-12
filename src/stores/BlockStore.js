@@ -136,6 +136,7 @@ export default class BlockStore {
 
   @action
   addField = (name, val) => {
+    // console.log(name, val);
     if (name === "name") {
       this.block[name] = val.charAt(0).toUpperCase() + val.slice(1);
     }
@@ -200,7 +201,7 @@ export default class BlockStore {
 
   @action
   editBlock = id => {
-    console.log("edit");
+    // console.log("edit");
     this.selectOneBlock(id);
     const b = this.blocks.find(b => b.id === id);
     this.block.id = b.id;
