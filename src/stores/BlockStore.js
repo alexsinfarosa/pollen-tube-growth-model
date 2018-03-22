@@ -223,7 +223,7 @@ export default class BlockStore {
   };
 
   fetchAndUploadData = () => {
-    console.log("fetchAndUploadData");
+    // console.log("fetchAndUploadData");
     const block = { ...this.block };
     const blocks = [...this.blocks];
     this.isEditBlockModal = false;
@@ -254,7 +254,7 @@ export default class BlockStore {
 
   @action
   updateBlock = () => {
-    console.log("updateBlock");
+    // console.log("updateBlock");
     const block = { ...this.block };
     block.isBeingEdited = false;
     block.styleLengths.forEach(sl => (sl.isEdit = false));

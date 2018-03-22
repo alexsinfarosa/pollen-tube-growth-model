@@ -28,7 +28,6 @@ const StartDateModal = inject("app")(
       }
     };
 
-    console.log(bStore.block.startDate);
     return (
       <Modal
         // width={280}
