@@ -396,7 +396,7 @@ export default class BlockStore {
           if (isThisYear(b.startDate) && moment(b.endDate).isAfter(moment())) {
             endDate = moment().startOf("hour");
           }
-          console.log(endDate);
+          // console.log(endDate);
           loadACISData(b.station, b.startDate, endDate).then(res => {
             b.data = dailyToHourlyDates(Array.from(res.get("cStationClean")));
             this.isLoading = false;
