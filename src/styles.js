@@ -54,6 +54,7 @@ export const ColMb = styled.div`
 export const Header = Row.extend`
   background: #1da57a;
   margin-bottom: ${marginSm};
+  justify-content: flex-start;
 
   @media (min-width: ${sm}) {
     margin-bottom: ${marginSm};
@@ -65,7 +66,7 @@ export const Header = Row.extend`
 `;
 
 export const SubHeader = styled.div`
-  font-size: ${fontSm};
+  font-size: 14px;
   padding: ${padding};
   letter-spacing: 1px;
   color: white;
