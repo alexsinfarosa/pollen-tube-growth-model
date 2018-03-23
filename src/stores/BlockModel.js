@@ -116,8 +116,7 @@ export default class BlockModel {
 
         let hourlyGrowth = 0;
         if (temp > 34 && temp < 106 && temp !== "M") {
-          console.log(temp);
-          const idx = temps.findIndex(t => t === temp); // before was t.toString()???
+          const idx = temps.findIndex(t => t === Number(temp)); // before was t.toString()???
           hourlyGrowth = hrGrowth[idx];
         }
 
