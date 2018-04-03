@@ -54,7 +54,7 @@ const ControlButtons = inject("app")(
             {bpts.md ? "Growth Graph" : null}
           </Button>
         </Col>
-        <Col span={6} style={{ textAlign: "center" }}>
+        {/*<Col span={6} style={{ textAlign: "center" }}>
           <Button
             icon={"environment-o"}
             type="primary"
@@ -65,7 +65,7 @@ const ControlButtons = inject("app")(
           >
             {bpts.md ? "Stations Map" : null}
           </Button>
-        </Col>
+      </Col>*/}
       </ControlBarWrapper>
     );
   })

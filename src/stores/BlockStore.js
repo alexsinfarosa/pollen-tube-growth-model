@@ -146,7 +146,9 @@ export default class BlockStore {
       name === "secondSpray" ||
       name === "thirdSpray"
     ) {
-      this.block[name] = moment(val).startOf("hour");
+      val
+        ? (this.block[name] = moment(val).startOf("hour"))
+        : (this.block[name] = undefined);
     }
 
     if (name === "startDate") {

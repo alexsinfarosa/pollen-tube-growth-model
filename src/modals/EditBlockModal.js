@@ -144,12 +144,16 @@ const EditBlockModal = inject("app")(
             disabled={bl.dates.length > 1 ? false : true}
             style={style}
             value={block.firstSpray ? moment(block.firstSpray) : undefined}
-            allowClear={false}
+            allowClear={true}
             format="MMM Do YYYY, HH:00"
             placeholder={`Select Date and Time`}
             disabledDate={curr => disablePreviousSprayDates(bl.startDate, curr)}
             showToday={true}
-            onChange={date => bStore.addField("firstSpray", date)}
+            onChange={date =>
+              date === null
+                ? bStore.addField("firstSpray", undefined)
+                : bStore.addField("firstSpray", date)
+            }
           />
 
           <label>Second Spray: </label>
@@ -159,14 +163,18 @@ const EditBlockModal = inject("app")(
             disabled={bl.dates.length > 2 ? false : true}
             style={style}
             value={block.secondSpray ? moment(block.secondSpray) : undefined}
-            allowClear={false}
+            allowClear={true}
             format="MMM Do YYYY, HH:00"
             placeholder={`Select Date and Time`}
             disabledDate={curr =>
               disablePreviousSprayDates(bl.firstSpray, curr)
             }
             showToday={true}
-            onChange={date => bStore.addField("secondSpray", date)}
+            onChange={date =>
+              date === null
+                ? bStore.addField("secondSpray", undefined)
+                : bStore.addField("secondSpray", date)
+            }
           />
 
           <label>Third Spray: </label>
@@ -176,14 +184,18 @@ const EditBlockModal = inject("app")(
             disabled={bl.dates.length > 3 ? false : true}
             style={style}
             value={block.thirdSpray ? moment(block.thirdSpray) : undefined}
-            allowClear={false}
+            allowClear={true}
             format="MMM Do YYYY, HH:00"
             placeholder={`Select Date and Time`}
             disabledDate={curr =>
               disablePreviousSprayDates(bl.secondSpray, curr)
             }
             showToday={true}
-            onChange={date => bStore.addField("thirdSpray", date)}
+            onChange={date =>
+              date === null
+                ? bStore.addField("thirdSpray", undefined)
+                : bStore.addField("thirdSpray", date)
+            }
           />
 
           <label>End Date: </label>

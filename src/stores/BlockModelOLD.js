@@ -3,7 +3,6 @@ import { observable, computed } from "mobx";
 import moment from "moment";
 import getHours from "date-fns/get_hours";
 import isThisYear from "date-fns/is_this_year";
-import format from "date-fns/format";
 
 export default class BlockModel {
   id;
@@ -81,16 +80,9 @@ export default class BlockModel {
 
   @computed
   get dates() {
-    const res = [
-      this.startDate,
-      this.firstSpray,
-      this.secondSpray,
-      this.thirdSpray
-    ]
+    return [this.startDate, this.firstSpray, this.secondSpray, this.thirdSpray]
       .filter(res => res)
-      .map(date => format(date, "YYYY-MM-DD HH:00"));
-    // console.log(res);
-    return res;
+      .map(d => moment(d).valueOf());
   }
 
   // to deselect dates in the DatePicker
@@ -129,8 +121,9 @@ export default class BlockModel {
         }
 
         let isSelected = false;
-        const isOneOfTheDates = this.dates.some(d => d === date);
-
+        const isOneOfTheDates = this.dates.some(
+          d => moment(date).valueOf() === d
+        );
         if (isOneOfTheDates) {
           cumulativeHrGrowth = 0;
           percentage = 0;
@@ -139,7 +132,7 @@ export default class BlockModel {
         }
 
         let name = "";
-        if (date === format(new Date(), "YYYY-MM-DD HH:00")) {
+        if (moment(date).isSame(moment().startOf("hour"))) {
           isSelected = true;
           name = "Now";
         }
@@ -234,14 +227,12 @@ export default class BlockModel {
         return obj;
       });
     }
-    // console.log(this.preData);
     return this.preData;
   }
 
   @computed
   get modelDataOfSelectedDates() {
     if (this.modelData) {
-      // console.log(this.modelData.filter(day => day.isSelected));
       return this.modelData.filter(day => day.isSelected);
     }
   }
