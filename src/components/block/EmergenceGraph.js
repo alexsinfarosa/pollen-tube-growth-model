@@ -93,17 +93,6 @@ const EmergenceGraph = inject("app")(
                 label={<CustomAreaLabel bl={bl} bpts={bpts} unit={"%"} />}
               />
             )}
-            {isThisYear(bl.startDate) &&
-              !bl.isThereNow && (
-                <Area
-                  yAxisId="1"
-                  type="monotone"
-                  dataKey={"emergence"}
-                  stroke={"#FFBC42"}
-                  fill={"#FFBC42"}
-                  label={<CustomAreaLabel bl={bl} bpts={bpts} unit={"%"} />}
-                />
-              )}
           </ComposedChart>
         </ResponsiveContainer>
       </GraphWrapper>

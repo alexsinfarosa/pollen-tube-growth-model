@@ -63,7 +63,11 @@ const EditBlockModal = inject("app")(
           <Button
             disabled={!bStore.areRequiredFieldsSet}
             type="primary"
-            onClick={bStore.fetchAndUploadData}
+            onClick={
+              bl.startDate && bl.avgStyleLength
+                ? bStore.fetchAndUploadData
+                : bStore.updateBlock
+            }
           >
             Update Block
           </Button>

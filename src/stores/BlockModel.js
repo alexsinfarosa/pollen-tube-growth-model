@@ -172,7 +172,7 @@ export default class BlockModel {
     if (isThisYear(this.startDate)) {
       if (this.preData) {
         const now = this.preData.find(obj => obj.name === "Now");
-        if (now) return now.index;
+        return now ? now.index : 0;
       }
     }
   }

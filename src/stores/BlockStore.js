@@ -164,6 +164,7 @@ export default class BlockStore {
       this.block[name] = this.app.apples.get(val);
     }
     if (name === "state") {
+      this.block["station"] = undefined;
       this.block[name] = this.app.states.find(s => s.postalCode === val);
     }
     if (name === "station") {
@@ -187,6 +188,7 @@ export default class BlockStore {
       this.selectOneBlock(block.id);
       this.writeToLocalStorage();
       this.clearFields();
+      this.isInstructions = false;
       message.success(`${block.name} block has been created!`);
     }
   };
