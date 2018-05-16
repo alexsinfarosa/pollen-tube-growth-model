@@ -6,6 +6,16 @@ import format from "date-fns/format";
 // import airport from "assets/airport.svg";
 // import airportGray from "assets/airportGray.svg";
 
+import {
+  isBefore,
+  startOfDay,
+  addHours,
+  setHours,
+  setMinutes,
+  setSeconds,
+  isEqual
+} from "date-fns";
+
 // PRE FETCHING ---------------------------------------------------------
 export const matchIconsToStations = (station, state) => {
   const protocol = window.location.protocol;
@@ -236,6 +246,26 @@ export const dailyToHourlyDates = arr => {
       });
     });
   });
+  console.log(results);
+  return results;
+};
+
+export const dailyToHourlyDatesNEW = (sdate, edate) => {
+  let startDay = startOfDay(sdate);
+  let endDay = setHours(edate, 23);
+  endDay = setMinutes(endDay, 0);
+  endDay = setSeconds(endDay, 0);
+  // console.log(startDay, endDay);
+  let results = [];
+  results.push(startDay);
+
+  while (isBefore(startDay, endDay)) {
+    startDay = addHours(startDay, 1);
+    if (isBefore(startDay, endDay) || isEqual(startDay, endDay)) {
+      results.push(startDay);
+    }
+  }
+  // console.log(results);
   return results;
 };
 

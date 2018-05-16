@@ -2,7 +2,7 @@ import { observable, action, computed, when } from "mobx";
 // import { toJS } from "mobx";
 
 // utils
-import { dailyToHourlyDates } from "utils/utils";
+import { dailyToHourlyDates, dailyToHourlyDatesNEW } from "utils/utils";
 import { loadACISData } from "utils/cleanFetchedData";
 
 // antd
@@ -19,6 +19,7 @@ export default class BlockStore {
   constructor(app) {
     this.app = app;
     when(() => this.blocks.length === 0, () => this.readFromLocalStorage());
+    dailyToHourlyDatesNEW("2018/05/04", "2018/05/16");
   }
 
   // Loading...

@@ -119,15 +119,15 @@ export default class BlockModel {
       let percentage = 0;
 
       return data.map((arr, i) => {
-        const { date, temp } = arr;
+        let { date, temp } = arr;
         const { hrGrowth, temps } = this.variety;
+        temp = Math.round(parseFloat(temp));
 
         let hourlyGrowth = 0;
-        if (temp > 34 && temp < 106 && temp !== "M") {
-          const idx = temps.findIndex(t => t === Number(temp)); // before was t.toString()???
+        if ((temp > 34 && temp < 106) || isNaN(temp)) {
+          const idx = temps.findIndex(t => t === temp);
           hourlyGrowth = hrGrowth[idx];
         }
-
         let isSelected = false;
         const isOneOfTheDates = this.dates.some(d => d === date);
 
@@ -250,11 +250,17 @@ export default class BlockModel {
   get modelDataUpTo100() {
     if (isThisYear(this.startDate)) {
       if (this.todayEmergence < 100) {
+        console.log("One");
+        console.log(this.modelData.slice(0, this.idxAtThreshold + 1));
         return this.modelData.slice(0, this.idxAtThreshold + 1);
       } else {
+        console.log("Two");
+        console.log(this.modelData);
         return this.modelData;
       }
     }
+    console.log("Three");
+    console.log(this.modelData);
     return this.modelData;
   }
 
