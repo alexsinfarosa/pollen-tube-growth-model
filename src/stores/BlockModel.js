@@ -7,20 +7,34 @@ import format from "date-fns/format";
 
 export default class BlockModel {
   id;
-  @observable name;
-  @observable variety;
-  @observable state;
-  @observable station;
-  @observable startDate;
-  @observable firstSpray;
-  @observable secondSpray;
-  @observable thirdSpray;
-  @observable endDate;
-  @observable isMessage = true;
-  @observable styleLengths = [];
-  @observable data = [];
-  @observable isBeingSelected = false;
-  @observable isBeingEdited = false;
+  @observable
+  name;
+  @observable
+  variety;
+  @observable
+  state;
+  @observable
+  station;
+  @observable
+  startDate;
+  @observable
+  firstSpray;
+  @observable
+  secondSpray;
+  @observable
+  thirdSpray;
+  @observable
+  endDate;
+  @observable
+  isMessage = true;
+  @observable
+  styleLengths = [];
+  @observable
+  data = [];
+  @observable
+  isBeingSelected = false;
+  @observable
+  isBeingEdited = false;
 
   constructor({
     id,
@@ -56,7 +70,8 @@ export default class BlockModel {
     this.isBeingEdited = isBeingEdited;
   }
 
-  @observable bIsLoading = false;
+  @observable
+  bIsLoading = false;
 
   @computed
   get avgStyleLength() {
@@ -150,7 +165,7 @@ export default class BlockModel {
         if (moment(date).isSame(moment(this.thirdSpray))) name = "3rd Spray";
 
         cumulativeHrGrowth += hourlyGrowth;
-        percentage = cumulativeHrGrowth / this.avgStyleLength * 100;
+        percentage = (cumulativeHrGrowth / this.avgStyleLength) * 100;
 
         return {
           index: i,
@@ -250,17 +265,17 @@ export default class BlockModel {
   get modelDataUpTo100() {
     if (isThisYear(this.startDate)) {
       if (this.todayEmergence < 100) {
-        console.log("One");
-        console.log(this.modelData.slice(0, this.idxAtThreshold + 1));
+        // console.log("One");
+        // console.log(this.modelData.slice(0, this.idxAtThreshold + 1));
         return this.modelData.slice(0, this.idxAtThreshold + 1);
       } else {
-        console.log("Two");
-        console.log(this.modelData);
+        // console.log("Two");
+        // console.log(this.modelData);
         return this.modelData;
       }
     }
-    console.log("Three");
-    console.log(this.modelData);
+    // console.log("Three");
+    // console.log(this.modelData);
     return this.modelData;
   }
 

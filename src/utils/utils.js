@@ -246,7 +246,7 @@ export const dailyToHourlyDates = arr => {
       });
     });
   });
-  console.log(results);
+  // console.log(results);
   return results;
 };
 

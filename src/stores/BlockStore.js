@@ -2,7 +2,7 @@ import { observable, action, computed, when } from "mobx";
 // import { toJS } from "mobx";
 
 // utils
-import { dailyToHourlyDates, dailyToHourlyDatesNEW } from "utils/utils";
+import { dailyToHourlyDates } from "utils/utils";
 import { loadACISData } from "utils/cleanFetchedData";
 
 // antd
@@ -19,45 +19,63 @@ export default class BlockStore {
   constructor(app) {
     this.app = app;
     when(() => this.blocks.length === 0, () => this.readFromLocalStorage());
-    dailyToHourlyDatesNEW("2018/05/04", "2018/05/16");
+    // dailyToHourlyDatesNEW("2018/05/04", "2018/05/16");
   }
 
   // Loading...
-  @observable isLoading = false;
+  @observable
+  isLoading = false;
 
   // Modals
-  @observable isNewBlockModal = false;
-  @observable isEditBlockModal = false;
-  @observable isDateModal = false;
-  @observable isSprayModal = false;
-  @observable isStyleLengthModal = false;
-  @observable isMap = false;
-  @action toggleMap = () => (this.isMap = !this.isMap);
-  @observable isTable = false;
-  @action toggleTable = () => (this.isTable = !this.isTable);
-  @observable isGraph = false;
-  @action toggleGraph = () => (this.isGraph = !this.isGraph);
-  @action showModal = name => (this[name] = true);
+  @observable
+  isNewBlockModal = false;
+  @observable
+  isEditBlockModal = false;
+  @observable
+  isDateModal = false;
+  @observable
+  isSprayModal = false;
+  @observable
+  isStyleLengthModal = false;
+  @observable
+  isMap = false;
+  @action
+  toggleMap = () => (this.isMap = !this.isMap);
+  @observable
+  isTable = false;
+  @action
+  toggleTable = () => (this.isTable = !this.isTable);
+  @observable
+  isGraph = false;
+  @action
+  toggleGraph = () => (this.isGraph = !this.isGraph);
+  @action
+  showModal = name => (this[name] = true);
   @action
   hideModal = (name, id) => {
     this[name] = false;
     this.block.startDate = undefined;
   };
 
-  @observable isInstructions = false;
+  @observable
+  isInstructions = false;
   @action
   toggleIsInstructions = d => (this.isInstructions = !this.isInstructions);
 
   // radioValue
-  @observable radioValue = "";
-  @action setRadioValue = d => (this.radioValue = d);
+  @observable
+  radioValue = "";
+  @action
+  setRadioValue = d => (this.radioValue = d);
 
   // style length
-  @observable styleLength;
+  @observable
+  styleLength;
   setStyleLength = d => (this.styleLength = d);
 
   // blocks
-  @observable blocks = [];
+  @observable
+  blocks = [];
 
   // block
   @observable
@@ -296,7 +314,8 @@ export default class BlockStore {
       : this.blocks.forEach(bl => (bl.isBeingSelected = true));
   };
 
-  @action cancelButton = () => this.clearFields();
+  @action
+  cancelButton = () => this.clearFields();
 
   // Style length ---------------------------------------------------------------------
   @action
@@ -366,8 +385,10 @@ export default class BlockStore {
     this.styleLength = undefined;
   };
 
-  @observable startIndex = 0;
-  @observable endIndex;
+  @observable
+  startIndex = 0;
+  @observable
+  endIndex;
   @action
   setRange = ({ startIndex, endIndex }) => {
     this.startIndex = startIndex;
