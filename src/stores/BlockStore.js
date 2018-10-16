@@ -172,7 +172,7 @@ export default class BlockStore {
 
     if (name === "startDate") {
       this.block["startDate"] = moment(val).startOf("hour");
-      this.block["endDate"] = moment(`${moment(val).year()}-07-01 23:00`);
+      this.block["endDate"] = moment(`${moment(val).year()}-12-31 23:00`);
     }
 
     if (name === "endDate") {
