@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
-import registerServiceWorker from "./registerServiceWorker";
+// import registerServiceWorker from "./registerServiceWorker";
 
 // Mobx
 import { Provider } from "mobx-react";
@@ -25,7 +25,7 @@ const render = Component => {
   );
 };
 
-registerServiceWorker();
+// registerServiceWorker();
 
 // Render once
 render(App);
