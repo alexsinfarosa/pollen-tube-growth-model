@@ -2,7 +2,7 @@
   "name": "pollen-tube-growth-model",
   "version": "0.1.0",
   "author": "alexsinfarosa <as898@cornell.edu>",
-  "homepage": "http://ptgm.newa.cornell.edu/",
+  "homepage": "http://ptgm.newa.cornell.edu/pollen-tube-growth-modelV2/",
   "description": "NEWA Pollen Tube Growth Model",
   "private": true,
   "dependencies": {
