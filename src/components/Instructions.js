@@ -44,6 +44,26 @@ const Instructions = inject("app")(
             Occasionally, a third application is necessary.
           </p>
 
+          <p>
+            Additional information about the Pollen Tube Growth Model and bloom
+            thinning in the Eastern U.S. can be found in this{" "}
+            <a
+              href="https://cornell.app.box.com/file/430622158418"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Fruit Quarterly article{" "}
+            </a>
+            and this{" "}
+            <a
+              href="https://cornell.app.box.com/file/430620498436"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Penn State Extension publication
+            </a>
+          </p>
+
           <h4>References</h4>
           <div style={{ marginBottom: 16 }}>
             Yoder, K.S., G.M. Peck, L.D. Combs, and R.E. Byers. 2013. Using a
