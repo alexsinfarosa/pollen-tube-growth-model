@@ -48,7 +48,7 @@ const Instructions = inject("app")(
             Additional information about the Pollen Tube Growth Model and bloom
             thinning in the Eastern U.S. can be found in this{" "}
             <a
-              href="https://cornell.app.box.com/file/430622158418"
+              href="http://nyshs.org/wp-content/uploads/2019/05/Peck-Pages-from-NYFQ-BOOK-WInter-2018.1-27-19-4.pdf"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -56,7 +56,7 @@ const Instructions = inject("app")(
             </a>
             and this{" "}
             <a
-              href="https://cornell.app.box.com/file/430620498436"
+              href="https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=2&ved=2ahUKEwjBipSg34niAhXBSt8KHeJTAnAQFjABegQIBBAC&url=https%3A%2F%2Fextension.psu.edu%2Fdownloadable%2Fdownload%2Fsample%2Fsample_id%2F3246%2F&usg=AOvVaw2ugQkcl6-xKESpELye0tgd"
               target="_blank"
               rel="noopener noreferrer"
             >
