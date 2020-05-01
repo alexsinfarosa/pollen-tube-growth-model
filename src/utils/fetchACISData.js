@@ -1,14 +1,14 @@
 import axios from "axios";
 import {
   michiganIdAdjustment,
-  networkTemperatureAdjustment
+  networkTemperatureAdjustment,
 } from "utils/utils";
 
 import format from "date-fns/format";
 import addDays from "date-fns/add_days";
 
 const protocol = window.location.protocol;
-const formatDate = date => format(date, "YYYY-MM-DD");
+const formatDate = (date) => format(date, "YYYY-MM-DD");
 
 // Fetch current station hourly data --------------------------------------------------
 const fetchHourlyCurrentStationData = (
@@ -22,20 +22,17 @@ const fetchHourlyCurrentStationData = (
     edate: formatDate(selectedDate),
     elems: [
       // temperature
-      networkTemperatureAdjustment(station.network)
-    ]
+      networkTemperatureAdjustment(station.network),
+    ],
   };
-
-  // console.log(params);
 
   return axios
     .post(`${protocol}//data.nrcc.rcc-acis.org/StnData`, params)
-    .then(res => {
+    .then((res) => {
       const data = res.data.data;
-      // console.log(data);
       return new Map(data);
     })
-    .catch(err => {
+    .catch((err) => {
       console.log("Failed to load ACIS data", err);
     });
 };
@@ -50,36 +47,34 @@ const fetchHourlySisterStationData = (sid, seasonStartDate, selectedDate) => {
     edate: formatDate(selectedDate),
     elems: [
       // temperature
-      networkTemperatureAdjustment(sisNetwork)
-    ]
+      networkTemperatureAdjustment(sisNetwork),
+    ],
   };
 
   // console.log(params);
 
   return axios
     .post(`${protocol}//data.nrcc.rcc-acis.org/StnData`, params)
-    .then(res => {
+    .then((res) => {
       const data = res.data.data;
       // console.log(data);
       return new Map(data);
     })
-    .catch(err => {
+    .catch((err) => {
       console.log("Failed to load ACIS data", err);
     });
 };
 
 // Get sister station Id and network -------------------------------------------
-const getSisterStationIdAndNetwork = station => {
+const getSisterStationIdAndNetwork = (station) => {
   return axios(
-    `${protocol}//newa2.nrcc.cornell.edu/newaUtil/stationSisterInfo/${
-      station.id
-    }/${station.network}`
+    `${protocol}//newa2.nrcc.cornell.edu/newaUtil/stationSisterInfo/${station.id}/${station.network}`
   )
-    .then(res => {
+    .then((res) => {
       // console.log(res.data);
       return res.data.temp;
     })
-    .catch(err => {
+    .catch((err) => {
       console.log("Failed to load sister station's id and network", err);
     });
 };
@@ -94,12 +89,12 @@ const fetchHourlyForcestData = (station, seasonStartDate, selectedDate) => {
         station.network
       }/temp/${formatDate(seasonStartDate)}/${formatDate(plusFiveDays)}`
     )
-    .then(res => {
+    .then((res) => {
       const data = res.data.data;
       // console.log(data);
       return new Map(data);
     })
-    .catch(err => {
+    .catch((err) => {
       console.log("Failed to load hourly forecast data", err);
     });
 };

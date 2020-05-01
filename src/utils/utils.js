@@ -13,7 +13,7 @@ import {
   setHours,
   setMinutes,
   setSeconds,
-  isEqual
+  isEqual,
 } from "date-fns";
 
 // PRE FETCHING ---------------------------------------------------------
@@ -35,6 +35,7 @@ export const matchIconsToStations = (station, state) => {
     network === "miwx" ||
     network === "oardc" ||
     network === "nysm" ||
+    network === "nwon" ||
     ((network === "cu_log" || network === "culog") && station.state !== "NY")
   ) {
     return station.state === postalCode || postalCode === "ALL"
@@ -56,21 +57,23 @@ export const matchIconsToStations = (station, state) => {
 };
 
 // Handling Temperature parameter and Michigan network id adjustment
-export const networkTemperatureAdjustment = network => {
+export const networkTemperatureAdjustment = (network) => {
   // Handling different temperature parameter for each network
-  if (
-    network === "newa" ||
-    network === "icao" ||
-    network === "njwx" ||
-    network === "oardc"
-  ) {
-    return "23";
-  } else if (
-    network === "miwx" ||
-    (network === "cu_log" || network === "culog")
-  ) {
-    return "126";
-  }
+  // if (
+  //   network === "newa" ||
+  //   network === "icao" ||
+  //   network === "njwx" ||
+  //   network === "oardc"
+  // ) {
+  //   return "23";
+  // } else if (
+  //   network === "miwx" ||
+  //   network === "cu_log" ||
+  //   network === "culog"
+  // ) {
+  //   return "126";
+  // }
+  return vXDef[network]["temp"];
 };
 
 export const vXDef = {
@@ -83,7 +86,7 @@ export const vXDef = {
     wdir: 130,
     srad: 132,
     st4i: 120,
-    sm4i: 65
+    sm4i: 65,
   },
   icao: { pcpn: 5, temp: 23, rhum: 24, wspd: 28, wdir: 27, dwpt: 22 },
   cu_log: {
@@ -93,7 +96,7 @@ export const vXDef = {
     lwet: 118,
     wspd: 128,
     wdir: 130,
-    srad: 132
+    srad: 132,
   },
   culog: {
     pcpn: 5,
@@ -102,7 +105,7 @@ export const vXDef = {
     lwet: 118,
     wspd: 128,
     wdir: 130,
-    srad: 132
+    srad: 132,
   },
   njwx: { pcpn: 5, temp: 23, rhum: 24, wspd: 28, wdir: 27, srad: 149 },
   miwx: { pcpn: 5, temp: 126, rhum: 143, lwet: 118, srad: 132 },
@@ -114,7 +117,7 @@ export const vXDef = {
     wspd: 28,
     wdir: 27,
     srad: 132,
-    st4i: 120
+    st4i: 120,
   },
   nysm: {
     pcpn: 5,
@@ -124,16 +127,25 @@ export const vXDef = {
     wdir: 27,
     srad: 132,
     st4i: 120,
-    sm2i: 104
-  }
+    sm2i: 104,
+  },
+  nwon: {
+    pcpn: 5,
+    temp: 23,
+    rhum: 24,
+    lwet: 118,
+    wspd: 28,
+    wdir: 27,
+    srad: 132,
+  },
 };
 
 // Handling Relative Humidity Adjustment
-export const networkHumidityAdjustment = network =>
+export const networkHumidityAdjustment = (network) =>
   network === "miwx" ? "143" : "24";
 
 // Handling Michigan state ID adjustment
-export const michiganIdAdjustment = station => {
+export const michiganIdAdjustment = (station) => {
   if (
     station.state === "MI" &&
     station.network === "miwx" &&
@@ -152,7 +164,7 @@ export const avgTwoStringNumbers = (a, b) => {
   return Math.round((aNum + bNum) / 2).toString();
 };
 
-export const replaceNonConsecutiveMissingValues = arr => {
+export const replaceNonConsecutiveMissingValues = (arr) => {
   return arr.map((t, i) => {
     if (i === 0 && t === "M") {
       return arr[i + 1];
@@ -168,8 +180,8 @@ export const replaceNonConsecutiveMissingValues = arr => {
 
 // Returns rh array containing new values.
 // The new values are calculated according to the equation below.
-export const RHAdjustment = arr => {
-  return arr.map(e => {
+export const RHAdjustment = (arr) => {
+  return arr.map((e) => {
     if (e !== "M") {
       return Math.round(parseFloat(e) / (0.0047 * parseFloat(e) + 0.53));
     } else {
@@ -179,18 +191,18 @@ export const RHAdjustment = arr => {
 };
 
 // Returns average of all the values in array
-export const average = data => {
+export const average = (data) => {
   // handling the case for T and W
   if (data.length === 0) return 0;
 
   //  calculating average
-  let results = data.map(e => parseFloat(e));
+  let results = data.map((e) => parseFloat(e));
   return Math.round(results.reduce((acc, val) => acc + val, 0) / data.length);
 };
 
 // Returns array with elements above the second argument of the function
 export const aboveValue = (data, value) => {
-  return data.map(e => {
+  return data.map((e) => {
     if (e > value) {
       return e;
     }
@@ -200,7 +212,7 @@ export const aboveValue = (data, value) => {
 
 // Returns array with elements equal to and above the second argument of the function
 export const aboveEqualToValue = (data, value) => {
-  return data.map(e => {
+  return data.map((e) => {
     if (e >= value) {
       return e;
     }
@@ -208,8 +220,8 @@ export const aboveEqualToValue = (data, value) => {
   });
 };
 
-export const delay = t => {
-  return new Promise(res => {
+export const delay = (t) => {
+  return new Promise((res) => {
     setTimeout(res, t);
   });
 };
@@ -233,7 +245,7 @@ export const roundDate = (date, duration, method) => {
 //   return results;
 // };
 
-export const dailyToHourlyDates = arr => {
+export const dailyToHourlyDates = (arr) => {
   let results = [];
   arr.forEach((date, d) => {
     date[1].forEach((temp, h) => {
@@ -242,7 +254,7 @@ export const dailyToHourlyDates = arr => {
       // console.log(date, `${date[0]} ${hour}:00`);
       results.push({
         date: `${date[0]} ${hour}:00`,
-        temp
+        temp,
       });
     });
   });
@@ -269,15 +281,15 @@ export const dailyToHourlyDatesNEW = (sdate, edate) => {
   return results;
 };
 
-export const formatDate = date => {
+export const formatDate = (date) => {
   return format(date, "MM/DD/YY HH:00");
 };
 
-export const IncrementTemp = data => {
-  return data.map(arr => {
+export const IncrementTemp = (data) => {
+  return data.map((arr) => {
     return [
       arr[0],
-      arr[1].map(t => (t === "M" ? t : (Number(t) + 30).toString()))
+      arr[1].map((t) => (t === "M" ? t : (Number(t) + 30).toString())),
     ];
   });
 };
@@ -290,10 +302,10 @@ const range = (start, end) => {
   return result;
 };
 
-export const disableFutureHrs = date => {
+export const disableFutureHrs = (date) => {
   return range(0, 24).splice(moment(date).hour() + 1);
 };
 
-export const disablePastHrs = date => {
+export const disablePastHrs = (date) => {
   return range(0, 24).splice(0, moment(date).hour() + 1);
 };

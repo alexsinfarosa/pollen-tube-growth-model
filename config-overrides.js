@@ -12,10 +12,11 @@ module.exports = function override(config, env) {
   );
   // change importing css to less
   config = rewireLess.withLoaderOptions({
+    javascriptEnabled: true,
     modifyVars: {
       "@primary-color": "#1DA57A",
-      "@font-family": "'Roboto', sans-serif"
-    }
+      "@font-family": "'Roboto', sans-serif",
+    },
   })(config, env);
 
   // use the MobX rewire
