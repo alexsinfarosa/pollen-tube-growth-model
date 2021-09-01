@@ -27,7 +27,7 @@
     "react-scripts": "1.1.0",
     "recharts": "^1.0.0-beta.9",
     "styled-components": "^3.0.2",
-    "tar": "^4.4.2"
+    "tar": "^4.4.18"
   },
   "scripts": {
     "start": "react-app-rewired start",
