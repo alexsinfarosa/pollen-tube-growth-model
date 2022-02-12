@@ -3335,11 +3335,9 @@ flatten@^1.0.2:
   integrity sha1-2uRqnXj74lKSJYzB54CkHZXAN4I=
 
 follow-redirects@^1.2.5:
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.4.0.tgz#a146a3a5d402201c7a3e6128643f0e336d212b10"
-  integrity sha512-SLUmsiaGeQa2qgJJzJgHpQ6lARP3uyVr0SkMryJmoE86XvUeM7RkYD5FT0rNyjCV5zHlNUpcp3l/6oUkqMEOqg==
-  dependencies:
-    debug "^3.1.0"
+  version "1.14.8"
+  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.14.8.tgz#016996fb9a11a100566398b1c6839337d7bfa8fc"
+  integrity sha512-1x0S9UVJHsQprFcEC/qnNzBLcIxsjAV905f/UkQxbclCsoTWlacCNOpQa/anodLl2uaEKFhfWOvM2Qg77+15zA==
 
 for-in@^1.0.1:
   version "1.0.2"
@@ -5403,6 +5401,11 @@ moment@2.x, moment@^2.19.3:
   version "2.20.1"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.20.1.tgz#d6eb1a46cbcc14a2b2f9434112c1ff8907f313fd"
   integrity sha512-Yh9y73JRljxW5QxN08Fner68eFLxM5ynNOAw2LbIB1YAGeQzZT8QFSUvkAz609Zf+IHhhaUxqZK8dG3W/+HEvg==
+
+moment@^2.18.1:
+  version "2.29.1"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.1.tgz#b2be769fa31940be9eeea6469c075e35006fa3d3"
+  integrity sha512-kHmoybcPV8Sqy59DwNDY3Jefr64lK/by/da0ViFcuA4DH0vQg5Q6Ze5VimxkfQNSC+Mls/Kx53s7TjP1RhFEDQ==
 
 ms@2.0.0:
   version "2.0.0"
